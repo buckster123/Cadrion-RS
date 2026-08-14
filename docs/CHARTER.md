@@ -195,3 +195,5 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-14** — **H3-6 truck BREP spike:** optional `--kernel truck-brep` (`--features truck-brep`)
   wires upstream `truck-modeling`/`truck-shapeops` for box+boolean+tessellate. `parity_eligible` still
   false; default unchanged. G1 partial (no STEP). Apache-2.0 pins in `docs/LICENSING.md`.
+- **2026-08-14** — **H3-7 OCCT parity depth:** `fillet-occt` + `13_filleted_l` (union+fillet golden);
+  cone remains Unsupported (no stand-in). `docs/OCCT_PARITY.md`. Default CI still OCCT-free.

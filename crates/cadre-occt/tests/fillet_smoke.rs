@@ -63,6 +63,17 @@ fn unknown_edge_index_diagnostic() {
 }
 
 #[test]
+fn cone_is_unsupported_no_cylinder_standin() {
+    let mut k = OcctKernel::new();
+    let err = k
+        .cone(10.0, 20.0, Placement::at(Point3::ORIGIN))
+        .unwrap_err();
+    assert_eq!(err.code(), "CADRE-E-UNSUPPORTED");
+    let msg = err.to_string();
+    assert!(msg.contains("cone"), "diagnostic should name cone: {msg}");
+}
+
+#[test]
 fn star_fillet_and_chamfer_roundtrip() {
     let src = r#"
 P = params(fillet_r=1.5, cham=1.0)

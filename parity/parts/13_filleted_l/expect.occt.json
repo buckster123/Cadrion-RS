@@ -1,0 +1,34 @@
+{
+  "bbox_mm": {
+    "max": [
+      40.0,
+      10.0,
+      40.0
+    ],
+    "min": [
+      -2.220446049250313e-16,
+      -10.0,
+      -2.220446049250313e-16
+    ]
+  },
+  "bbox_tol_mm": 2.0,
+  "description": "OCCT golden (H4 fillet/chamfer) for 13_filleted_l",
+  "edges_min": 1,
+  "faces_min": 46,
+  "id": "13_filleted_l",
+  "label": "filleted_l",
+  "params": {
+    "fillet_r": 1.0,
+    "leg": 40.0,
+    "thick": 6.0,
+    "width": 20.0
+  },
+  "required_ops": [
+    "box",
+    "boolean",
+    "fillet",
+    "label"
+  ],
+  "volume_mm3": 8794.01393809855,
+  "volume_tol_frac": 0.12
+}

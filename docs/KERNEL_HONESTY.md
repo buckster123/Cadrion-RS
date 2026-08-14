@@ -45,3 +45,4 @@ Agents needing cone solids on OCCT: wait for real MakeCone binding (Horizon-3+ O
 ## Related
 
 - [`TRUCK.md`](TRUCK.md) · [`METRICS.md`](METRICS.md) · [`CHARTER.md`](CHARTER.md) D4
+- [`OCCT_PARITY.md`](OCCT_PARITY.md) — H3-7 local OCCT suites + cone/sphere honesty

@@ -26,6 +26,7 @@ Diagnostics carry `refs: ["#e0", …]` (stable explorer order) + shape id + hint
 |------|-----|
 | `11_filleted_plate` | box + hole cut + all-edge fillet |
 | `12_chamfered_brick` | box + all-edge chamfer |
+| `13_filleted_l` | **H3-7** two-plate L union + fillet |
 
 ```sh
 CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadre-occt --test fillet_smoke
