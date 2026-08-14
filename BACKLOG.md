@@ -94,14 +94,14 @@ Priority suggestions when resuming:
 | H3-2 | Live harness frontier score | blocked — backends down |
 | H3-3 | MCP surface depth (dims/assembly/sdf) | ✅ PR #48 |
 | H3-4 | Assembly / OQ-4 bite | ✅ PR #49 |
-| H3-5 | PMI → viewer overlay | ✅ this slice |
-| H3-6 | Truck BREP spike (bid G1) | next |
-| H3-7 | OCCT parity depth | pending |
+| H3-5 | PMI → viewer overlay | ✅ PR #50 |
+| H3-6 | Truck BREP spike (bid G1) | ✅ this slice |
+| H3-7 | OCCT parity depth | next |
 | H3-8 | DFM / OQ-6 governance seed | pending |
 | H3-9 | Migrator / WASM polish | pending |
 | H3-10 | OQ-1 name decision packet | pending |
 
-Default when resuming with no pref: **H3-6**.
+Default when resuming with no pref: **H3-7**.
 
 ## Post-v1 parking (still deferred)
 

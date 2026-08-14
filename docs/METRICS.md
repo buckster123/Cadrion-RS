@@ -35,6 +35,7 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 | 47 | MCP H3-3 | dims + assembly + sdf tools | **green** | 9 tools tools/list |
 | 48 | Assembly H3-4 | kinematics + emit-robot | **green** | lid_hinge → URDF path |
 | 49 | PMI H3-5 | viewer dim overlay | **green** | view --once drawing.json + canvas chips |
+| 50 | Truck H3-6 | upstream truck-brep spike | **green** | box+cut+mesh; parity_eligible false |
 | A1 | OCCT cone | no silent cylinder | **green** | H3-1 fail-closed |
 | A2 | truck-seed label | version JSON tag | **green** | truck_implementation field |
 | A3 | H3-2 frontier | live LLM score | **blocked** | ApexRouter backends all down 2026-08-06 |

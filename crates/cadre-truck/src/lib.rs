@@ -3,8 +3,10 @@
 //! **Honesty:**
 //! - `parity_eligible() == false` always — never Parity-10 claims
 //! - never the CLI default (`mock` / optional `occt` remain)
-//! - analytic CSG approximations (not the upstream `truck` B-rep crate yet)
-//! - STEP I/O unsupported; tessellate is a coarse bbox mesh
+//! - default: analytic CSG seed (not upstream truck)
+//! - optional `brep` feature: upstream truck-modeling + shapeops (H3-6 spike)
+//! - STEP I/O unsupported on seed; spike tessellate is real triangulation
+//! - `parity_eligible() == false` always
 //!
 //! Seed for a future pure-Rust path — not a promotion candidate until OCCT still
 //! wins agent loops and a real B-rep stack is wired.
@@ -311,8 +313,16 @@ impl GeomKernel for TruckKernel {
     }
 }
 
+#[cfg(feature = "brep")]
+mod brep;
+#[cfg(feature = "brep")]
+pub use brep::TruckBrepKernel;
+
 /// Crate version.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+/// Whether this build compiled the H3-6 upstream truck spike.
+pub const BREP_SPIKE: bool = cfg!(feature = "brep");
 
 #[cfg(test)]
 mod tests {

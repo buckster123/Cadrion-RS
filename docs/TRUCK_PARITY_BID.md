@@ -23,7 +23,7 @@ crate.
 | STEP R/W | unsupported |
 | Tessellate | coarse **bbox** mesh |
 | Sphere / cone / mirror / patterns | not on this kernel path |
-| Upstream `truck` crates | **not a dependency** |
+| Upstream `truck` crates | **not** a default dependency; optional `brep` feature pins 0.6/0.4 |
 
 See also: [`docs/TRUCK.md`](TRUCK.md).
 
@@ -47,7 +47,7 @@ Legend: **Y** = real enough for agent fab loops · **~** = approximate / honesty
 |------------|------|------|-------------------|----------------|
 | box / cyl | Y | Y | Y | Y |
 | sphere / cone | Y (IR) | Y | N | Y (parts 05+) |
-| boolean BREP | ~ IR | Y | N (volume math) | Y |
+| boolean BREP | ~ IR | Y | N seed / **Y spike** (`truck-shapeops`) | Y |
 | fillet | N | Y | N | Y (parts 11+) |
 | chamfer | N | Y | N | Y |
 | translate / rotate / mirror | IR | Y | N on kernel | Y |
@@ -56,7 +56,7 @@ Legend: **Y** = real enough for agent fab loops · **~** = approximate / honesty
 | STEP read | N | Y | N | useful |
 | topology snapshot (faces/edges) | IR analytic | mesh/topo | weak Approx | Y for inspect |
 | measure / PMI dims | via IR topo | via OCCT topo | weak | Y |
-| tessellate for snapshot/GLB | coarse | real | bbox only | Y for viz |
+| tessellate for snapshot/GLB | coarse | real | bbox seed / **triangulation spike** | Y for viz |
 | volume/facts accuracy | analytic | mesh-approx | analytic/approx | amber OK if disclosed |
 | LGPL / link hygiene | n/a | LGPL-2.1 occt | pure MIT/Apache seed | dual-license path if truck crates added |
 
@@ -122,7 +122,7 @@ Legend: **Y** = real enough for agent fab loops · **~** = approximate / honesty
 
 | # | Criterion | Met? |
 |---|-----------|------|
-| N1 | Real BREP booleans | **No** |
+| N1 | Real BREP booleans | **Partial (H3-6)** — spike `and`/`or`/`cut`; not suite-proven |
 | N2 | STEP primary artifact path | **No** |
 | N3 | Fillet path or honest permanent skip policy in suite | **No** |
 | N4 | Parity suite green under truck | **No** |
@@ -135,13 +135,13 @@ Legend: **Y** = real enough for agent fab loops · **~** = approximate / honesty
 
 | # | Criterion |
 |---|-----------|
-| G1 | BREP boolean + tessellate + STEP write demonstrated on ≥ parts 01–04 class geometry |
+| G1 | BREP boolean + tessellate + STEP write on ≥ parts 01–04 class (**H3-6 partial:** boolean+mesh; no STEP) |
 | G2 | `parity_eligible` still false until G3 |
 | G3 | Documented suite (`parts1-10` truck or explicit subset) green in CI optional job |
 | G4 | Fillet: implemented **or** CHARTER + suite mark fillets OCCT-only forever |
 | G5 | Agent loop smoke: build → inspect dims → snapshot without fake success |
 | G6 | Dated CHARTER amendment for any default or parity flip |
-| G7 | License + supply-chain pin review for truck crates |
+| G7 | License + supply-chain pin review (**H3-6 started:** Apache-2.0 truck-modeling 0.6 / shapeops 0.4 / meshalgo 0.4) |
 
 Promotion target earliest: **Horizon-3** (not H2).
 
@@ -152,27 +152,27 @@ Promotion target earliest: **Horizon-3** (not H2).
 - No default flip in this PR / H2-10  
 - No `parity_eligible() = true`  
 - No silent volume-as-boolean “wins”  
-- No claiming upstream truck integration before Cargo.toml depends on it  
+- No claiming upstream truck integration before Cargo.toml depends on it
+  (H3-6: optional `brep` feature **does** depend — seed path still does not)  
 - No blocking main CI on truck parity  
 
 ---
 
-## 6. Recommended next engineering (optional Horizon-3 seeds)
+## 6. Recommended next engineering
 
-1. Spike branch: `truck-modeling` box + boolean cut + mesh export behind `--kernel truck`  
-2. Keep analytic seed as `TruckSeedKernel` if dual paths needed during migration  
-3. Golden: single STEP from truck vs OCCT volume delta report (honesty band)  
-4. Only then draft Parity-truck suite  
-
----
+1. ~~Spike: `truck-modeling` box + boolean cut + mesh~~ **done H3-6** (`--kernel truck-brep`)
+2. Seed remains `--kernel truck` (analytic)
+3. Golden: single STEP from truck vs OCCT volume delta (still open — G1 remainder)
+4. Only then draft Parity-truck suite
 
 ## 7. Sign-off
 
 | Role | Statement |
 |------|-----------|
 | H2-10 exit | Evidence pack complete |
+| H3-6 spike | Upstream truck wired behind feature; default/parity **unchanged NO-GO** |
 | Default kernel | unchanged (`mock` / optional `occt`) |
 | Parity-10 | OCCT + mock paths only |
 | Reopen | when G1–G7 met + CHARTER amendment |
 
-*Prepared 2026-08-06 · Cadre-RS Horizon-2 close-out.*
+*Prepared 2026-08-06 · H3-6 update 2026-08-14.*

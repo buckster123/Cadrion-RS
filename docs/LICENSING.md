@@ -26,8 +26,18 @@ SPDX on packages: `license.workspace = true` → `MIT OR Apache-2.0`.
 
 ## Third-party Rust crates
 
-Pulled via crates.io under their own licenses (MIT/Apache-heavy). `cargo license` (optional
-dev tool) can regenerate an SBOM-style list at release time:
+Pulled via crates.io under their own licenses (MIT/Apache-heavy).
+
+**H3-6 truck spike (optional `cadre-truck` feature `brep`):**
+
+| Crate | Pin | License |
+|-------|-----|---------|
+| `truck-modeling` | 0.6 | Apache-2.0 |
+| `truck-shapeops` | 0.4 | Apache-2.0 |
+| `truck-meshalgo` | 0.4 | Apache-2.0 |
+
+Not in default CLI/MCP binaries. No copyleft contamination of default path.
+
 
 ```sh
 cargo install cargo-license

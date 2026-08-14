@@ -8,7 +8,8 @@ Binding fences so agents do not treat amber geometry as gold.
 |--------|-----|-----------------|------|--------|------|-------|
 | **mock** | default | yes (mock suites) | no (`.ir.json`) | Unsupported | **true analytic** volume πr²h/3 | CI default |
 | **occt** | `--kernel occt` / `--features occt` | yes (occt suites) | yes | yes | **Unsupported** (H3-1; no cylinder stand-in) | LGPL lane |
-| **truck** | `--kernel truck` | **always false** | no | Unsupported | Unsupported | **truck-seed** analytic CSG — **not** upstream truck BREP |
+| **truck** | `--kernel truck` | **always false** | no | Unsupported | Unsupported | **truck-seed** analytic CSG |
+| **truck-brep** | `--kernel truck-brep` + `--features truck-brep` | **always false** | no | Unsupported | Unsupported | H3-6 upstream truck spike |
 
 ## Suite fences
 
@@ -37,9 +38,9 @@ Agents needing cone solids on OCCT: wait for real MakeCone binding (Horizon-3+ O
 
 ## Truck naming
 
-- CLI flag / `backend_id`: `truck` (stable)
-- Implementation tag: **`truck-seed-analytic-csg`** (`cadre version --json` → `kernels.truck_implementation`)
-- Bid: [`TRUCK_PARITY_BID.md`](TRUCK_PARITY_BID.md) — default **NO-GO**
+- CLI flag / `backend_id`: `truck` (seed) or `truck-brep` (H3-6 spike)
+- Implementation tag: **`truck-seed-analytic-csg`** + `truck_brep_spike` bool
+- Bid: [`TRUCK_PARITY_BID.md`](TRUCK_PARITY_BID.md) — default **NO-GO** (H3-6 does not flip)
 
 ## Related
 
