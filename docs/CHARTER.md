@@ -134,6 +134,8 @@ From PRD §16 — still unresolved; do not silently assume answers in code:
    `assembly emit-robot` → URDF path. **AP242 STEP joint entities still open.**
 5. ~~**OQ-5** Whether MCP `write_source`/`read_source` default on for local stdio or HTTP-only.~~ **Resolved 2026-08-05 (H7):** stdio `write_source` **OFF** by default; HTTP **ON** by default; override via `CADRE_MCP_WRITE_SOURCE`. `read_source` on both. See amendments + `cadre://doc/write-source-policy`.
 6. **OQ-6** Vendor-profile governance for community DFM rulepack updates.
+   **Partial (H3-8):** `cadre.dfm_profile` / `cadre.dfm_override` v1 + fail-closed `base_version`
+   pin. Not a registry. See `docs/DFM_GOVERNANCE.md`.
 7. ~~**OQ-7** MCP transport: official SDK vs house hand-rolled (see D17).~~ **Resolved 2026-08-06 (H2-2):** **stay hand-rolled**. No dual stack. Compliance matrix + reopen criteria in `docs/MCP_SDK.md`. `initialize.serverInfo.implementation = "hand-rolled"`.
 
 ---
@@ -197,3 +199,5 @@ Dated entries. A decision changes here first, then in the code.
   false; default unchanged. G1 partial (no STEP). Apache-2.0 pins in `docs/LICENSING.md`.
 - **2026-08-14** — **H3-7 OCCT parity depth:** `fillet-occt` + `13_filleted_l` (union+fillet golden);
   cone remains Unsupported (no stand-in). `docs/OCCT_PARITY.md`. Default CI still OCCT-free.
+- **2026-08-14** — **H3-8 DFM / OQ-6 seed:** versioned `cadre.dfm_profile` + community override
+  (`base_version` pin, fail-closed drift). `docs/DFM_GOVERNANCE.md`.

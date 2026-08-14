@@ -49,6 +49,7 @@ Id prefixes `octoprint:` / `octo:` auto-select backend.
 
 ## Honesty
 
-- Profiles are versioned data, not live vendor quotes  
-- OctoPrint API can drift; not a full plugin host  
+- Profiles are versioned data, not live vendor quotes
+- Overrides: `docs/DFM_GOVERNANCE.md` (H3-8) — pin `base_version` or fail
+- OctoPrint API can drift; not a full plugin host
 - Gates never skipped for demos

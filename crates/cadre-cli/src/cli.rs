@@ -553,6 +553,9 @@ pub struct FabCheckArgs {
     /// Optional external profile JSON file.
     #[arg(long)]
     pub profile_file: Option<PathBuf>,
+    /// Community override JSON (pins base@version; fail-closed on drift).
+    #[arg(long)]
+    pub override_file: Option<PathBuf>,
     /// FlatPart JSON file (overrides width/height/…).
     #[arg(long)]
     pub part_json: Option<PathBuf>,

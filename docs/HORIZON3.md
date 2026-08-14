@@ -144,7 +144,7 @@ Three pillars:
 5. Default next = next unchecked H3-N  
 6. Truck work must cite bid G-criteria in PR  
 
-**Default next if “cook on” with no pref:** **H3-8 DFM / OQ-6 governance seed** (H3-2 when backends healthy).
+**Default next if “cook on” with no pref:** **H3-9 Migrator / WASM polish** (H3-2 when backends healthy).
 
 ---
 
@@ -157,7 +157,7 @@ Three pillars:
 - [x] **H3-5** PMI → viewer overlay  
 - [x] **H3-6** Truck BREP spike (G1)  
 - [x] **H3-7** OCCT parity depth  
-- [ ] **H3-8** DFM / OQ-6 governance seed  
+- [x] **H3-8** DFM / OQ-6 governance seed  
 - [ ] **H3-9** Migrator / WASM polish  
 - [ ] **H3-10** OQ-1 name decision packet  
 

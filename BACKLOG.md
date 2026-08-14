@@ -96,12 +96,12 @@ Priority suggestions when resuming:
 | H3-4 | Assembly / OQ-4 bite | ✅ PR #49 |
 | H3-5 | PMI → viewer overlay | ✅ PR #50 |
 | H3-6 | Truck BREP spike (bid G1) | ✅ PR #51 |
-| H3-7 | OCCT parity depth | ✅ this slice |
-| H3-8 | DFM / OQ-6 governance seed | next |
-| H3-9 | Migrator / WASM polish | pending |
+| H3-7 | OCCT parity depth | ✅ PR #52 |
+| H3-8 | DFM / OQ-6 governance seed | ✅ this slice |
+| H3-9 | Migrator / WASM polish | next |
 | H3-10 | OQ-1 name decision packet | pending |
 
-Default when resuming with no pref: **H3-8**.
+Default when resuming with no pref: **H3-9**.
 
 ## Post-v1 parking (still deferred)
 
