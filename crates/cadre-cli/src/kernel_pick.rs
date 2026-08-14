@@ -18,6 +18,8 @@ pub enum KernelBox {
     #[cfg(feature = "occt")]
     Occt(cadre_occt::OcctKernel),
     Truck(cadre_truck::TruckKernel),
+    #[cfg(feature = "truck-brep")]
+    TruckBrep(cadre_truck::TruckBrepKernel),
 }
 
 impl KernelBox {
@@ -27,6 +29,8 @@ impl KernelBox {
             #[cfg(feature = "occt")]
             Self::Occt(k) => k,
             Self::Truck(k) => k,
+            #[cfg(feature = "truck-brep")]
+            Self::TruckBrep(k) => k,
         }
     }
 
@@ -36,6 +40,8 @@ impl KernelBox {
             #[cfg(feature = "occt")]
             Self::Occt(_) => "occt",
             Self::Truck(_) => "truck",
+            #[cfg(feature = "truck-brep")]
+            Self::TruckBrep(_) => "truck-brep",
         }
     }
 
@@ -45,6 +51,8 @@ impl KernelBox {
             #[cfg(feature = "occt")]
             Self::Occt(k) => k.backend_version().to_string(),
             Self::Truck(k) => k.backend_version().to_string(),
+            #[cfg(feature = "truck-brep")]
+            Self::TruckBrep(k) => k.backend_version().to_string(),
         }
     }
 }
@@ -53,6 +61,27 @@ pub fn open_kernel(id: KernelId) -> Result<KernelBox, (ExitCode, serde_json::Val
     match id {
         KernelId::Mock => Ok(KernelBox::Mock(MockKernel::new())),
         KernelId::Truck => Ok(KernelBox::Truck(cadre_truck::TruckKernel::new())),
+        KernelId::TruckBrep => {
+            #[cfg(feature = "truck-brep")]
+            {
+                Ok(KernelBox::TruckBrep(cadre_truck::TruckBrepKernel::new()))
+            }
+            #[cfg(not(feature = "truck-brep"))]
+            {
+                Err((
+                    ExitCode::Usage,
+                    serde_json::json!({
+                        "ok": false,
+                        "diagnostics": [{
+                            "code": "CADRE-E-KERNEL-UNAVAILABLE",
+                            "severity": "error",
+                            "message": "truck-brep kernel not compiled into this binary",
+                            "hint": "rebuild with: cargo build -p cadre-cli --features truck-brep"
+                        }]
+                    }),
+                ))
+            }
+        }
         KernelId::Occt => {
             #[cfg(feature = "occt")]
             {

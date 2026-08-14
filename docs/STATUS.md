@@ -14,10 +14,10 @@
 - Binary: `cadre` (`~/.local/bin/cadre` for Hermes MCP)
 
 ## Next board
-**Active:** [`docs/HORIZON3.md`](HORIZON3.md). Default next: **H3-6** (H3-2 blocked backends).  
+**Active:** [`docs/HORIZON3.md`](HORIZON3.md). Default next: **H3-7** (H3-2 blocked backends).  
 **Archive:** H2 + H1 boards.
 
-H3-1…H3-5 · PMI canvas overlay · next truck BREP spike …  
+H3-1…H3-6 · truck-brep spike (G1 partial) · next OCCT depth …  
 
 ## Crate map (as-built)
 | Crate | Role |
@@ -36,7 +36,7 @@ H3-1…H3-5 · PMI canvas overlay · next truck BREP spike …
 | cadre-robot | URDF/SRDF/SDF + urdf-rs + jog |
 | cadre-fab | DXF, DFM (laser/pcb/waterjet), slicer, Bambu/Klipper/OctoPrint |
 | cadre-harness | agent10 scripted + live `--cmd` / `@oracle` |
-| cadre-truck | experimental pure-Rust kernel (NON-PARITY) |
+| cadre-truck | experimental kernel: seed CSG + optional H3-6 truck-brep |
 | cadre-sdf | experimental secondary SDF sample (never modeling) |
 | cadre-wasm | WASM mock IR escape hatch (H2-1) |
 | cadre-cli | clap binary |

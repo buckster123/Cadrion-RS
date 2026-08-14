@@ -97,11 +97,15 @@ fn resolve_topology(
     ir: &FeatureIr,
 ) -> Result<(TopologySnapshot, &'static str), (ExitCode, serde_json::Value)> {
     match cli.kernel {
-        crate::cli::KernelId::Mock | crate::cli::KernelId::Truck => topology_from_ir(ir)
+        crate::cli::KernelId::Mock
+        | crate::cli::KernelId::Truck
+        | crate::cli::KernelId::TruckBrep => topology_from_ir(ir)
             .map(|s| {
                 (
                     s,
-                    if matches!(cli.kernel, crate::cli::KernelId::Truck) {
+                    if matches!(cli.kernel, crate::cli::KernelId::TruckBrep) {
+                        "truck-brep-ir-fallback"
+                    } else if matches!(cli.kernel, crate::cli::KernelId::Truck) {
                         "truck-analytic-nonparity"
                     } else {
                         "ir-analytic"
@@ -176,6 +180,7 @@ fn refs(cli: &Cli, target: std::path::PathBuf, facts: bool, sets: &[String]) -> 
                 crate::cli::KernelId::Mock => "mock",
                 crate::cli::KernelId::Occt => "occt",
                 crate::cli::KernelId::Truck => "truck",
+                crate::cli::KernelId::TruckBrep => "truck-brep",
             },
         },
     });

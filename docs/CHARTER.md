@@ -192,3 +192,6 @@ Dated entries. A decision changes here first, then in the code.
   suite/kernel fences in `docs/KERNEL_HONESTY.md`; version JSON `truck_implementation=truck-seed-analytic-csg`.
 - **2026-08-06** — **H3-4 OQ-4 partial:** `assembly emit-kinematics` / `emit-robot` bridge CAD joints →
   robot IR (mm→m). Not AP242. See `docs/JOINTS.md`.
+- **2026-08-14** — **H3-6 truck BREP spike:** optional `--kernel truck-brep` (`--features truck-brep`)
+  wires upstream `truck-modeling`/`truck-shapeops` for box+boolean+tessellate. `parity_eligible` still
+  false; default unchanged. G1 partial (no STEP). Apache-2.0 pins in `docs/LICENSING.md`.
