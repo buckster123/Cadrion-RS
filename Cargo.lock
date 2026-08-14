@@ -694,6 +694,7 @@ dependencies = [
 name = "cadre-wasm"
 version = "0.1.0"
 dependencies = [
+ "cadre-inspect",
  "cadre-kernel",
  "cadre-lang",
  "getrandom 0.4.3",

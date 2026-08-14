@@ -38,10 +38,11 @@ wasm-pack build crates/cadre-wasm --target web --features browser -- --no-defaul
 | `info` | — | capabilities |
 | `build` | `{source, set?, name?}` | IR + mock facts |
 | `facts_ir` | `{ir}` | mock facts from IR JSON |
+| `inspect_ir` | `{ir}` | IR-analytic `inspect_refs` (H3-9; not OCCT) |
 
-Native Rust: `cadre_wasm::build_json` / `facts_ir_json` / `info_json`.
+Native Rust: `cadre_wasm::build_json` / `facts_ir_json` / `inspect_ir_json` / `info_json`.
 
-With `--features browser`: wasm-bindgen exports `info`, `build`, `facts_ir` as strings.
+With `--features browser`: wasm-bindgen exports `info`, `build`, `facts_ir`, `inspect_ir` as strings.
 
 ## Example (conceptual JS)
 
