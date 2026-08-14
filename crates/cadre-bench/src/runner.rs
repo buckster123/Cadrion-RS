@@ -133,7 +133,7 @@ pub fn run_suite_with(
             "09_spiral_stair",
             "10_planetary_stage",
         ],
-        SUITE_FILLET_OCCT => vec!["11_filleted_plate", "12_chamfered_brick"],
+        SUITE_FILLET_OCCT => vec!["11_filleted_plate", "12_chamfered_brick", "13_filleted_l"],
         SUITE_PARTS_1_10 | "parity10" | "m2" => vec![
             "01_calibration_block",
             "02_bolt_circle_flange",
@@ -737,6 +737,6 @@ mod tests {
             report.passed,
             report.passed + report.failed
         );
-        assert_eq!(report.parts.len(), 2);
+        assert_eq!(report.parts.len(), 3);
     }
 }

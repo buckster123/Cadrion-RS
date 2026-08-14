@@ -14,10 +14,10 @@
 - Binary: `cadre` (`~/.local/bin/cadre` for Hermes MCP)
 
 ## Next board
-**Active:** [`docs/HORIZON3.md`](HORIZON3.md). Default next: **H3-7** (H3-2 blocked backends).  
+**Active:** [`docs/HORIZON3.md`](HORIZON3.md). Default next: **H3-8** (H3-2 blocked backends).  
 **Archive:** H2 + H1 boards.
 
-H3-1…H3-6 · truck-brep spike (G1 partial) · next OCCT depth …  
+H3-1…H3-7 · fillet-occt +13 filleted L · next DFM governance …  
 
 ## Crate map (as-built)
 | Crate | Role |

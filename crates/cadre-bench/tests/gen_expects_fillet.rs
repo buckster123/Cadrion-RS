@@ -12,7 +12,7 @@ use cadre_occt::OcctKernel;
 #[ignore]
 fn write_expects_fillet_occt() {
     let root = default_parity_root().join("parts");
-    for name in ["11_filleted_plate", "12_chamfered_brick"] {
+    for name in ["11_filleted_plate", "12_chamfered_brick", "13_filleted_l"] {
         let dir = root.join(name);
         let src = fs::read_to_string(dir.join("part.cad.star")).expect("star");
         let r = evaluate(&src, &EvalOptions::new("part.cad.star"));
