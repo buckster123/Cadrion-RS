@@ -86,8 +86,20 @@ pub fn migrate_build123d_skeleton(source: &str) -> MigrateReport {
         }
     }
 
+    // H3-9: Circle + extrude(amount) → cylinder(r, h)
+    for (r, h, label) in extract_extrude_cylinders(source, &params) {
+        let name = unique_name("excyl", solids.len());
+        body_lines.push(format!(
+            "    {name} = cylinder({r}, {h}, at=CENTER)  # {label}"
+        ));
+        solids.push(name);
+        notes.push("Circle+extrude → cylinder (axis assumed +Z)".into());
+    }
+
     // H2-7: Rectangle + extrude(amount) → box(w, d, amount)
-    for (w, d, h, label) in extract_extrude_boxes(source, &params) {
+    // Skip default-footprint extrude if we already consumed extrude as Circle.
+    let skip_bare_extrude = source.contains("Circle(");
+    for (w, d, h, label) in extract_extrude_boxes(source, &params, skip_bare_extrude) {
         let name = unique_name("ext", solids.len());
         body_lines.push(format!(
             "    {name} = box({w}, {d}, {h}, at=CENTER)  # {label}"
@@ -285,6 +297,13 @@ fn unsafe_reason(source: &str) -> Option<&'static str> {
         "http.client",
         "shutil.rmtree",
         "rmtree",
+        "getattr(",
+        "setattr(",
+        "globals(",
+        "locals(",
+        "builtins",
+        "breakpoint(",
+        "input(",
     ];
     for n in needles {
         if lower.contains(n) {
@@ -458,6 +477,7 @@ fn extract_locations(source: &str, params: &BTreeMap<String, f64>) -> Vec<(f64, 
 fn extract_extrude_boxes(
     source: &str,
     params: &BTreeMap<String, f64>,
+    skip_bare_extrude: bool,
 ) -> Vec<(String, String, String, String)> {
     let mut out = Vec::new();
     // collect rectangles
@@ -494,6 +514,9 @@ fn extract_extrude_boxes(
         return out;
     }
     if rects.is_empty() {
+        if skip_bare_extrude {
+            return out;
+        }
         // extrude without rectangle — default 20x20 footprint once per amount
         for h in amounts {
             out.push((
@@ -515,6 +538,51 @@ fn extract_extrude_boxes(
             fmt_num(h),
             "Rectangle+extrude".into(),
         ));
+    }
+    out
+}
+
+/// Circle(r) + extrude(amount) → cylinders.
+fn extract_extrude_cylinders(
+    source: &str,
+    params: &BTreeMap<String, f64>,
+) -> Vec<(String, String, String)> {
+    let mut circles: Vec<f64> = Vec::new();
+    for cap in circle_re().captures_iter(source) {
+        if let Some(a) = cap.name("a") {
+            if let Some(r) = resolve_num(a.as_str(), params) {
+                circles.push(r.abs().max(1e-9));
+            }
+        } else if let Some(body) = cap.name("body") {
+            if let Some(r) = kw_num(body.as_str(), &["radius", "r"], params) {
+                circles.push(r.abs().max(1e-9));
+            }
+        }
+    }
+    if circles.is_empty() {
+        return Vec::new();
+    }
+    let mut amounts: Vec<f64> = Vec::new();
+    for cap in extrude_re().captures_iter(source) {
+        if let Some(a) = cap.name("a") {
+            if let Some(v) = resolve_num(a.as_str(), params) {
+                amounts.push(v.abs().max(1e-9));
+            }
+        } else if let Some(body) = cap.name("body") {
+            if let Some(v) = kw_num(body.as_str(), &["amount", "height", "h", "depth"], params) {
+                amounts.push(v.abs().max(1e-9));
+            }
+        }
+    }
+    if amounts.is_empty() {
+        return Vec::new();
+    }
+    let n = amounts.len().max(circles.len());
+    let mut out = Vec::new();
+    for i in 0..n {
+        let r = circles[i.min(circles.len() - 1)];
+        let h = amounts[i.min(amounts.len() - 1)];
+        out.push((fmt_num(r), fmt_num(h), "Circle+extrude".into()));
     }
     out
 }
@@ -599,6 +667,23 @@ fn cone_re() -> &'static Regex {
                 \s*(?P<a>[A-Za-z_][\w.]*|-?\d+(?:\.\d+)?)\s*,
                 \s*(?P<b>[A-Za-z_][\w.]*|-?\d+(?:\.\d+)?)
                 (?:\s*,\s*(?P<c>[A-Za-z_][\w.]*|-?\d+(?:\.\d+)?))?
+              |
+                (?P<body>[^)]*)
+              )
+            \)",
+        )
+        .unwrap()
+    })
+}
+
+fn circle_re() -> &'static Regex {
+    static RE: OnceLock<Regex> = OnceLock::new();
+    RE.get_or_init(|| {
+        Regex::new(
+            r"(?x)
+            \bCircle\s*\(
+              (?:
+                \s*(?P<a>[A-Za-z_][\w.]*|-?\d+(?:\.\d+)?)
               |
                 (?P<body>[^)]*)
               )
@@ -753,6 +838,29 @@ with BuildPart() as p:
     }
 
     #[test]
+    fn circle_extrude_to_cylinder() {
+        let src = r#"
+from build123d import *
+r = 8.0
+h = 24.0
+with BuildSketch() as s:
+    Circle(r)
+with BuildPart() as p:
+    extrude(amount=h)
+"#;
+        let r = migrate_build123d_skeleton(src);
+        assert!(r.ok, "{r:?}");
+        assert!(r.skeleton.contains("cylinder("), "{}", r.skeleton);
+        assert!(r.notes.iter().any(|n| n.contains("Circle")));
+    }
+
+    #[test]
+    fn refuses_getattr() {
+        let r = migrate_build123d_skeleton("getattr(__builtins__, 'eval')('1')\nBox(1,2,3)\n");
+        assert!(r.refused);
+    }
+
+    #[test]
     fn fillet_notes_not_applied() {
         let src = r#"
 from build123d import *
@@ -776,6 +884,7 @@ with BuildPart() as p:
             "03_kwargs_sphere.py",
             "04_locations_offset.py",
             "05_fillet_extrude.py",
+            "06_circle_extrude.py",
         ] {
             let p = root.join(name);
             let src = std::fs::read_to_string(&p).unwrap_or_else(|e| panic!("{p:?}: {e}"));

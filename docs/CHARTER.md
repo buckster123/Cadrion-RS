@@ -201,3 +201,5 @@ Dated entries. A decision changes here first, then in the code.
   cone remains Unsupported (no stand-in). `docs/OCCT_PARITY.md`. Default CI still OCCT-free.
 - **2026-08-14** — **H3-8 DFM / OQ-6 seed:** versioned `cadre.dfm_profile` + community override
   (`base_version` pin, fail-closed drift). `docs/DFM_GOVERNANCE.md`.
+- **2026-08-14** — **H3-9 migrator/WASM polish:** Circle+extrude → cylinder; extra refuse needles;
+  WASM `inspect_ir` (IR-analytic refs). Still mock-only.

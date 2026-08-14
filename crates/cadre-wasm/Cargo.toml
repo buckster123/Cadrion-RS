@@ -12,6 +12,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 cadre-kernel = { workspace = true }
 cadre-lang = { workspace = true }
+cadre-inspect = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 # Pull wasm_js for the whole graph (starlark → getrandom 0.4).
