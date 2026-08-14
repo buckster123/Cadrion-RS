@@ -11,8 +11,10 @@ mod printer;
 mod slicer;
 
 pub use dfm::{
-    bundled_profiles, check_dfm, load_profile_json, pcb_outline_v1, resolve_bundled_profile,
-    sendcutsend_laser_v1, waterjet_v1, DfmFinding, DfmProfile, DfmReport, DfmSeverity, FlatPart,
+    apply_override, bundled_profiles, check_dfm, load_override_json, load_profile_json,
+    pcb_outline_v1, resolve_bundled_profile, sendcutsend_laser_v1, validate_profile, waterjet_v1,
+    DfmFinding, DfmOverride, DfmProfile, DfmReport, DfmRulesPatch, DfmSeverity, FlatPart,
+    DFM_OVERRIDE_SCHEMA, DFM_PROFILE_SCHEMA, DFM_SCHEMA_VERSION,
 };
 pub use dxf::{plate_with_holes_dxf, write_dxf_r12, DxfEntity, DxfLayer};
 pub use face_dxf::{face_to_dxf, FaceDxfReport, FacePick};

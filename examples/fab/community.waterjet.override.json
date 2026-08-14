@@ -1,0 +1,10 @@
+{
+  "schema": "cadre.dfm_override",
+  "schema_version": 1,
+  "base": "waterjet.generic",
+  "base_version": "1.0.0",
+  "note": "example shop: tighter web than bundled generic",
+  "rules": {
+    "min_web_mm": 2.5
+  }
+}

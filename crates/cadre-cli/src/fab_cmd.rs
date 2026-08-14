@@ -5,11 +5,12 @@ use std::fs;
 use std::path::PathBuf;
 
 use cadre_fab::{
-    bundled_profiles, check_dfm, check_gcode, discover_slicers, face_to_dxf, hex_sha256,
-    load_profile_json, plate_with_holes_dxf, resolve_bundled_profile, run_slice, BambuAdapter,
-    ExternalLiveTransport, ExternalMoonrakerTransport, ExternalOctoPrintTransport, FacePick,
-    FlatPart, KlipperAdapter, OctoPrintAdapter, Printer, PrinterVolume, SliceRequest, SlicerInfo,
-    SlicerKind, StartRequest, CONFIRM_SLICE, CONFIRM_START,
+    apply_override, bundled_profiles, check_dfm, check_gcode, discover_slicers, face_to_dxf,
+    hex_sha256, load_override_json, load_profile_json, plate_with_holes_dxf,
+    resolve_bundled_profile, run_slice, BambuAdapter, ExternalLiveTransport,
+    ExternalMoonrakerTransport, ExternalOctoPrintTransport, FacePick, FlatPart, KlipperAdapter,
+    OctoPrintAdapter, Printer, PrinterVolume, SliceRequest, SlicerInfo, SlicerKind, StartRequest,
+    CONFIRM_SLICE, CONFIRM_START,
 };
 use cadre_inspect::inspect_refs;
 use serde_json::json;
@@ -316,6 +317,44 @@ fn fab_check(cli: &Cli, a: &FabCheckArgs) -> ExitCode {
                 return ExitCode::Usage;
             }
         }
+    };
+
+    let profile = if let Some(ovp) = &a.override_file {
+        let text = match fs::read_to_string(ovp) {
+            Ok(t) => t,
+            Err(e) => {
+                emit(
+                    cli.json,
+                    &json!({"ok": false, "diagnostics":[{"code":"CADRE-E-IO","message": e.to_string()}]}),
+                    false,
+                );
+                return ExitCode::Io;
+            }
+        };
+        let ov = match load_override_json(&text) {
+            Ok(o) => o,
+            Err(e) => {
+                emit(
+                    cli.json,
+                    &json!({"ok": false, "diagnostics":[{"code":"CADRE-E-DFM-OVERRIDE","message": e}]}),
+                    false,
+                );
+                return ExitCode::Validation;
+            }
+        };
+        match apply_override(&profile, &ov) {
+            Ok(p) => p,
+            Err(e) => {
+                emit(
+                    cli.json,
+                    &json!({"ok": false, "diagnostics":[{"code":"CADRE-E-DFM-DRIFT","message": e}]}),
+                    false,
+                );
+                return ExitCode::Validation;
+            }
+        }
+    } else {
+        profile
     };
 
     let part = if let Some(path) = &a.part_json {
