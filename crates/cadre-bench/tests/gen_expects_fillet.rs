@@ -43,7 +43,7 @@ fn write_expects_fillet_occt() {
         let expect = serde_json::json!({
             "id": name,
             "label": ir.label,
-            "description": format!("OCCT golden (H4 fillet/chamfer) for {name}"),
+            "description": format!("OCCT golden (H4/H3-7 fillet) for {name}"),
             "volume_mm3": f.volume_mm3,
             "volume_tol_frac": 0.12,
             "bbox_mm": {
