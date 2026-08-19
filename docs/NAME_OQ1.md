@@ -49,6 +49,7 @@ An earlier same-day KEEP draft is superseded by this rename.
 
 - `cargo install cadre` is still Modal’s archived config server.
 - Install us with `cargo build -p cadrion-cli --release` or later `cargo install cadrion-cli`.
+- Public GitHub is [`buckster123/Cadrion-RS`](https://github.com/buckster123/Cadrion-RS).
 - Local garden folder may still be `~/Projects/Cadre-RS` until the directory is moved.
 - No trademark filing this slice.
 
