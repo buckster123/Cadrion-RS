@@ -1,0 +1,25 @@
+[package]
+name = "cadrion-api"
+version = "0.1.0"
+edition = "2021"
+license.workspace = true
+repository.workspace = true
+description = "Axum HTTP API for Cadrion-RS (/v1 build inspect snapshot jobs SSE OpenAPI)"
+
+[dependencies]
+anyhow = { workspace = true }
+axum = { version = "0.8", features = ["macros"] }
+cadrion-mcp = { workspace = true }
+cadrion-parts = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tower-http = { version = "0.6", features = ["cors", "trace"] }
+tracing = { workspace = true }
+uuid = { version = "1", features = ["v4", "serde"] }
+futures = "0.3"
+tokio-stream = { version = "0.1", features = ["sync"] }
+
+[dev-dependencies]
+axum-test = "17"
+tempfile = "3"

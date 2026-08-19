@@ -1,9 +1,9 @@
-# Cadre-RS — live status
+# Cadrion-RS — live status
 
 > AI-oriented status block. Prefer this + `docs/METRICS.md` + `BACKLOG.md` + Horizon boards.
 
-**As of:** 2026-08-19 · **tip:** H3-10 OQ-1 KEEP Cadre-RS · **version:** 0.1.0  
-**agent_id:** `CADRE` · **repo:** https://github.com/buckster123/Cadre-RS  
+**As of:** 2026-08-19 · **tip:** H3-10 OQ-1 Cadrion-RS · **version:** 0.1.0  
+**agent_id:** `CADRION` · **repo:** https://github.com/buckster123/Cadrion-RS  
 **kernels:** mock (default CI) · occt (`--features occt`) · truck (experimental NON-PARITY)
 
 ## Ship state
@@ -11,9 +11,9 @@
 - **Horizon-1 (H1–H10): COMPLETE** (PRs #24–#34)
 - **Horizon-2 (H2-1…H2-10): COMPLETE** (PRs #35–#46)
 - **Horizon-3:** H3-1…H3-10 done except **H3-2** (frontier harness; backends down)
-- **Name (OQ-1):** KEEP Cadre / Cadre-RS — [`NAME_OQ1.md`](NAME_OQ1.md)
+- **Name (OQ-1):** Cadrion / Cadrion-RS — [`NAME_OQ1.md`](NAME_OQ1.md)
 - CI: ubuntu + windows + wasm job; OCCT-free default workspace
-- Binary: `cadre` (`~/.local/bin/cadre` for Hermes MCP). **Not** `cargo install cadre`.
+- Binary: `cadrion` (`~/.local/bin/cadrion` for Hermes MCP). **Not** `cargo install cadre`.
 
 ## Next board
 **Active:** [`docs/HORIZON3.md`](HORIZON3.md). Default next: **H3-2** when a live backend exists.  
@@ -22,24 +22,24 @@
 ## Crate map (as-built)
 | Crate | Role |
 |-------|------|
-| cadre | facade (`publish = false`; crates.io `cadre` is Modal) |
-| cadre-kernel | GeomKernel + MockKernel |
-| cadre-occt | OCCT backend (LGPL, non-default CI) |
-| cadre-lang | hermetic Starlark → IR + execute_ir (+ migrate H8) |
-| cadre-model | selectors + BuildCache |
-| cadre-inspect | refs / measure / align / frame / diff |
-| cadre-render | software z-buffer PNG + orbit GIF |
-| cadre-bench | parity parts1-10 mock + OCCT lanes |
-| cadre-mcp | stdio (NDJSON/CL) + streamable HTTP MCP |
-| cadre-api | Axum `/v1/*` + jobs/SSE/OpenAPI |
-| cadre-parts | parts.lock + LocalFsProvider + AssemblySpec |
-| cadre-robot | URDF/SRDF/SDF + urdf-rs + jog |
-| cadre-fab | DXF, DFM (laser/pcb/waterjet), slicer, Bambu/Klipper/OctoPrint |
-| cadre-harness | agent10 scripted + live `--cmd` / `@oracle` |
-| cadre-truck | experimental kernel: seed CSG + optional H3-6 truck-brep |
-| cadre-sdf | experimental secondary SDF sample (never modeling) |
-| cadre-wasm | WASM mock IR escape hatch (H2-1) |
-| cadre-cli | clap binary (first crates.io install crate, when published) |
+| cadrion | facade |
+| cadrion-kernel | GeomKernel + MockKernel |
+| cadrion-occt | OCCT backend (LGPL, non-default CI) |
+| cadrion-lang | hermetic Starlark → IR + execute_ir (+ migrate H8) |
+| cadrion-model | selectors + BuildCache |
+| cadrion-inspect | refs / measure / align / frame / diff |
+| cadrion-render | software z-buffer PNG + orbit GIF |
+| cadrion-bench | parity parts1-10 mock + OCCT lanes |
+| cadrion-mcp | stdio (NDJSON/CL) + streamable HTTP MCP |
+| cadrion-api | Axum `/v1/*` + jobs/SSE/OpenAPI |
+| cadrion-parts | parts.lock + LocalFsProvider + AssemblySpec |
+| cadrion-robot | URDF/SRDF/SDF + urdf-rs + jog |
+| cadrion-fab | DXF, DFM (laser/pcb/waterjet), slicer, Bambu/Klipper/OctoPrint |
+| cadrion-harness | agent10 scripted + live `--cmd` / `@oracle` |
+| cadrion-truck | experimental kernel: seed CSG + optional H3-6 truck-brep |
+| cadrion-sdf | experimental secondary SDF sample (never modeling) |
+| cadrion-wasm | WASM mock IR escape hatch (H2-1) |
+| cadrion-cli | clap binary (first crates.io install crate, when published) |
 
 ## CLI surface (high signal)
 ```
@@ -53,7 +53,7 @@ version --json
 ```
 
 ## Hermes MCP
-- Config: `~/.hermes/config.yaml` → `mcp_servers.cadre` · binary `~/.local/bin/cadre mcp`
+- Config: `~/.hermes/config.yaml` → `mcp_servers.cadrion` · binary `~/.local/bin/cadrion mcp`
 - Tools: build · write_source · read_source · inspect_refs · measure · snapshot
 - Docs: [`HERMES_MCP.md`](HERMES_MCP.md) · framing auto-detect NDJSON (Hermes) / Content-Length
 

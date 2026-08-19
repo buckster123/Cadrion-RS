@@ -1,6 +1,7 @@
 /target
 *.swp
 .env
+.cadrion/
 .cadre/
 .DS_Store
 **/*.snap/

@@ -5,7 +5,7 @@ viz, and ML — never the default modeling or fab path.
 
 ## Crate
 
-`cadre-sdf` — analytic signed-distance for:
+`cadrion-sdf` — analytic signed-distance for:
 
 | Prim | Params |
 |------|--------|
@@ -15,8 +15,8 @@ viz, and ML — never the default modeling or fab path.
 ## CLI
 
 ```sh
-cargo run -p cadre-cli -- sdf sample --prim box --a 40 --b 20 --c 10 --res 32 -o /tmp/sdf_box --json
-cargo run -p cadre-cli -- sdf sample --prim cylinder --a 8 --b 24 --res 24 -o /tmp/sdf_cyl --json
+cargo run -p cadrion-cli -- sdf sample --prim box --a 40 --b 20 --c 10 --res 32 -o /tmp/sdf_box --json
+cargo run -p cadrion-cli -- sdf sample --prim cylinder --a 8 --b 24 --res 24 -o /tmp/sdf_cyl --json
 ```
 
 Writes:
@@ -24,7 +24,7 @@ Writes:
 | File | Content |
 |------|---------|
 | `*.sdf.f32` | little-endian f32 voxels, X-fastest |
-| `*.sdf.json` | grid + prim meta (`cadre.sdf_volume` v1) |
+| `*.sdf.json` | grid + prim meta (`cadrion.sdf_volume` v1) |
 | `*.nrrd` + `*.raw` | minimal NRRD0004 detached data |
 
 ## Honesty fence
@@ -38,5 +38,5 @@ Writes:
 ## Tests
 
 ```sh
-cargo test -p cadre-sdf
+cargo test -p cadrion-sdf
 ```

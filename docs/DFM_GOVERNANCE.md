@@ -1,14 +1,14 @@
 # DFM profile governance (H3-8 / OQ-6 seed)
 
-**Not a live vendor quote API.** Bundled profiles are Cadre-authored data.
+**Not a live vendor quote API.** Bundled profiles are Cadrion-authored data.
 Community shops may overlay rules — **never silently** against a bumped base.
 
 ## Schemas
 
 | Kind | `schema` | `schema_version` |
 |------|----------|------------------|
-| Full profile | `cadre.dfm_profile` | **1** |
-| Override | `cadre.dfm_override` | **1** |
+| Full profile | `cadrion.dfm_profile` | **1** |
+| Override | `cadrion.dfm_override` | **1** |
 
 Unknown schema / version → **fail closed**.
 
@@ -26,13 +26,13 @@ Legacy JSON without `schema` fields still loads (defaults applied) then validate
 | `waterjet.generic` | 1.0.0 |
 
 Bump the **string version** when changing a bundled rule. Old overrides that pin
-`base_version` will then refuse (`CADRE-E-DFM-DRIFT`) until explicitly updated.
+`base_version` will then refuse (`CADRION-E-DFM-DRIFT`) until explicitly updated.
 
 ## Community override
 
 ```json
 {
-  "schema": "cadre.dfm_override",
+  "schema": "cadrion.dfm_override",
   "schema_version": 1,
   "base": "waterjet.generic",
   "base_version": "1.0.0",
@@ -42,7 +42,7 @@ Bump the **string version** when changing a bundled rule. Old overrides that pin
 ```
 
 ```sh
-cargo run -p cadre-cli -- fab check --profile waterjet \
+cargo run -p cadrion-cli -- fab check --profile waterjet \
   --override-file examples/fab/community.waterjet.override.json \
   --part-json examples/fab/waterjet.flat.json --json
 ```

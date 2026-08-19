@@ -1,0 +1,18 @@
+[package]
+name = "cadrion-truck"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Experimental pure-Rust GeomKernel lane (non-parity; never default)"
+
+[features]
+default = []
+# H3-6: optional upstream truck B-rep (box + boolean + tessellate). Never parity.
+brep = ["dep:truck-modeling", "dep:truck-meshalgo", "dep:truck-shapeops"]
+
+[dependencies]
+cadrion-kernel = { workspace = true }
+truck-modeling = { version = "0.6", optional = true }
+truck-meshalgo = { version = "0.4", optional = true, default-features = false, features = ["tessellation"] }
+truck-shapeops = { version = "0.4", optional = true, default-features = false }

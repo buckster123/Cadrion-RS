@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "schema": "cadre.assembly_kinematics",
+  "schema": "cadrion.assembly_kinematics",
   "version": 1,
   "name": "lid_hinge_assy",
   "notes": [

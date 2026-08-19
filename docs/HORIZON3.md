@@ -1,4 +1,4 @@
-# Horizon-3 — Cadre depth, honesty, and optional pure-Rust BREP
+# Horizon-3 — Cadrion depth, honesty, and optional pure-Rust BREP
 
 **Status:** **active** board (chartered 2026-08-06 after Horizon-2 complete)  
 **Predecessor:** [`docs/HORIZON2.md`](HORIZON2.md) — **archive complete** (H2-1…H2-10)  
@@ -12,7 +12,7 @@ behind explicit gates — STEP-first, consent-gated fab, hand-rolled MCP stay.
 
 ## 1. Theme
 
-> After two full horizons, Cadre is a real agent workstation. Horizon-3 makes the
+> After two full horizons, Cadrion is a real agent workstation. Horizon-3 makes the
 > **facts truer**, the **loop thicker**, and the **pure-Rust path real enough to re-bid** —
 > without surrendering mock-default CI or print safety.
 
@@ -65,7 +65,7 @@ Three pillars:
 **Exit:** example + validate path; CHARTER OQ-4 status note (still open or partial).
 
 ### H3-5 — PMI packet → viewer overlay alpha
-**Goal:** Load `*.drawing.json` in `cadre view` as dimension labels (canvas text), not a drafting package.  
+**Goal:** Load `*.drawing.json` in `cadrion view` as dimension labels (canvas text), not a drafting package.  
 **Why:** H2-8 facts are invisible unless JSON-read; agents + humans both benefit.  
 **Depends on:** H2-6 + H2-8.  
 **Exit:** view deep-link shows dim values; docs PMI honesty line.
@@ -99,7 +99,7 @@ Three pillars:
 **Why:** Public garden maturity; rename gets harder every crate.  
 **Depends on:** none hard.  
 **Exit:** `docs/NAME_OQ1.md` with GO/DEFER; if GO, follow-up slice owns rename.  
-**Done 2026-08-19:** **KEEP** Cadre / Cadre-RS. Facade `publish = false`. First public crate = `cadre-cli`. No rename.
+**Done 2026-08-19:** **Cadrion / Cadrion-RS.** In-tree rename. First public crate = `cadrion-cli`. Legacy `CADRE_*` / `cadre://` accepted.
 
 ---
 
@@ -161,13 +161,13 @@ Otherwise Horizon-3 cook list is complete (H3-10 closed 2026-08-19).
 - [x] **H3-7** OCCT parity depth  
 - [x] **H3-8** DFM / OQ-6 governance seed  
 - [x] **H3-9** Migrator / WASM polish  
-- [x] **H3-10** OQ-1 name decision packet — KEEP Cadre-RS (`docs/NAME_OQ1.md`)  
+- [x] **H3-10** OQ-1 name decision packet — Cadrion-RS (`docs/NAME_OQ1.md`)  
 
 ---
 
 ## 8. One-line pitch
 
-> **Horizon-3** makes Cadre’s answers truer and its agent surfaces thicker, while running a
+> **Horizon-3** makes Cadrion’s answers truer and its agent surfaces thicker, while running a
 > disciplined pure-Rust BREP spike that can only earn parity the hard way.
 
 ---

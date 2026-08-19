@@ -1,0 +1,13 @@
+[package]
+name = "cadrion"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Cadrion-RS facade — re-exports core crates"
+
+[dependencies]
+cadrion-kernel = { workspace = true }
+cadrion-lang = { workspace = true }
+cadrion-model = { workspace = true }
+cadrion-inspect = { workspace = true }

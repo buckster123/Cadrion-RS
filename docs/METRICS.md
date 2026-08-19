@@ -1,13 +1,13 @@
-# Cadre-RS v1 exit metrics (PRD §12 / M6)
+# Cadrion-RS v1 exit metrics (PRD §12 / M6)
 
 Living scorecard. A row is **green** only with evidence (command + date), not intent.
 
 | # | Metric | Target | Status | Evidence |
 |---|--------|--------|--------|----------|
-| 1 | Hermetic Starlark → IR | refuse `load()`, stable IR | **green** | `cargo test -p cadre-lang` |
+| 1 | Hermetic Starlark → IR | refuse `load()`, stable IR | **green** | `cargo test -p cadrion-lang` |
 | 2 | Mock kernel CI | default workspace tests OCCT-free | **green** | `.github/workflows/ci.yml` |
 | 3 | Selectors + inspect | stable `#o…` + measure | **green** | S4/S5 CLI tests |
-| 4 | Parity parts 1–4 | deterministic suite | **green** | `cargo test -p cadre-bench` |
+| 4 | Parity parts 1–4 | deterministic suite | **green** | `cargo test -p cadrion-bench` |
 | 4b | Parity parts 1–10 | full mock suite | **green** | `bench run --suite parts1-10` |
 | 24 | OCCT translate/rotate | GeomKernel | **green** | transform_smoke + parts5-10-occt |
 | 25 | Live harness | `--cmd` / `@oracle` | **green** | agent10 live 10/10 |
@@ -15,21 +15,21 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 | 27 | OCCT transform H3 | no STEP thrash | **green** | transform_smoke + parts5-10-occt |
 | 28 | Fillet/chamfer H4 | OCCT diagnostics + suite | **green** | fillet_smoke + fillet-occt |
 | 29 | Viewer H5 | gcode scrub + robot jog | **green** | cli_snapshot view_once_* |
-| 30 | Slicer/DFM H6 | gated SLICE + pcb.outline | **green** | cadre-fab slicer/dfm tests |
-| 31 | MCP H7 | resources + write_source policy | **green** | cadre-mcp resources_* tests |
+| 30 | Slicer/DFM H6 | gated SLICE + pcb.outline | **green** | cadrion-fab slicer/dfm tests |
+| 31 | MCP H7 | resources + write_source policy | **green** | cadrion-mcp resources_* tests |
 | 32 | Migrate H8 | build123d skeleton | **green** | migrate fixtures + unit tests |
 | 33 | Klipper H9 | Moonraker gated adapter | **green** | printer_klipper tests |
-| 34 | Truck H10 | experimental non-parity kernel | **green** | cadre-truck tests |
-| 35 | WASM H2-1 | mock IR in wasm32 | **green** | cadre-wasm + CI wasm job |
+| 34 | Truck H10 | experimental non-parity kernel | **green** | cadrion-truck tests |
+| 35 | WASM H2-1 | mock IR in wasm32 | **green** | cadrion-wasm + CI wasm job |
 | 36 | MCP H2-2 | OQ-7 stay hand-rolled | **green** | compliance matrix tests |
 | 37 | Fab H2-3 | waterjet DFM + OctoPrint | **green** | octoprint + dfm tests |
 | 38 | Harness H2-4 | published live score | **green** | oracle 10.0/10 2026-08-06 · no frontier (backends down) |
-| 39 | MCP NDJSON | Hermes framing | **green** | hermes mcp test cadre |
+| 39 | MCP NDJSON | Hermes framing | **green** | hermes mcp test cadrion |
 | 40 | Joints H2-5 | assembly + robot limits | **green** | validate_assembly + assembly validate CLI |
 | 41 | Viewer H2-6 | mesh 3D + gcode/robot orbit | **green** | view --once mesh.json + cli_snapshot |
 | 42 | Migrator H2-7 | Locations/extrude/fillet notes | **green** | migrate fixtures 04–05 + unit tests |
 | 43 | PMI H2-8 | drawing packet + inspect dims | **green** | auto 20/60/100 on pmi block |
-| 44 | SDF H2-9 | cadre-sdf analytic + NRRD | **green** | sdf sample box/cyl |
+| 44 | SDF H2-9 | cadrion-sdf analytic + NRRD | **green** | sdf sample box/cyl |
 | 45 | Truck bid H2-10 | parity evidence pack NO-GO | **green** | docs/TRUCK_PARITY_BID.md |
 | 46 | Honesty H3-1 | cone refuse + suite fences | **green** | OCCT cone Unsupported; docs/KERNEL_HONESTY.md |
 | 47 | MCP H3-3 | dims + assembly + sdf tools | **green** | 9 tools tools/list |
@@ -39,15 +39,15 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 | 51 | OCCT H3-7 | fillet-occt +13 L + cone refuse | **green** | vol 8794; cone Unsupported |
 | 52 | DFM H3-8 | override + schema validate | **green** | drift refuse; override pin |
 | 53 | Migrate/WASM H3-9 | Circle+extrude + inspect_ir | **green** | fixture 06; wasm inspect |
-| 54 | Name H3-10 | OQ-1 KEEP Cadre-RS | **green** | docs/NAME_OQ1.md; facade publish=false |
+| 54 | Name H3-10 | OQ-1 Cadrion-RS | **green** | docs/NAME_OQ1.md; crates/bin renamed |
 | A1 | OCCT cone | no silent cylinder | **green** | H3-1 fail-closed |
 | A2 | truck-seed label | version JSON tag | **green** | truck_implementation field |
 | A3 | H3-2 frontier | live LLM score | **blocked** | ApexRouter backends all down 2026-08-06 |
 | 5 | Snapshot packet | multi-view PNG + orbit GIF | **green** | `cli_snapshot` tests |
-| 6 | MCP stdio | Content-Length tools | **green** | `cargo test -p cadre-mcp` |
+| 6 | MCP stdio | Content-Length tools | **green** | `cargo test -p cadrion-mcp` |
 | 7 | HTTP API | `/v1/*` + OpenAPI + jobs | **green** | `http_api` 5 tests |
-| 8 | parts.lock fail-closed | checksum verify | **green** | `cadre-parts` tests |
-| 9 | URDF validate | urdf-rs parse | **green** | `cadre-robot` + `robot validate` |
+| 8 | parts.lock fail-closed | checksum verify | **green** | `cadrion-parts` tests |
+| 9 | URDF validate | urdf-rs parse | **green** | `cadrion-robot` + `robot validate` |
 | 10 | DFM preflight | profile findings cite rules | **green** | `fab check` plate.flat.json |
 | 11 | G-code check | bbox/temp/flavor | **green** | `fab gcode-check` sample.gcode |
 | 12 | Printer start gates | allowlist+hash+confirm; no silent start | **green** | `printer` unit tests + dry-run |
@@ -65,6 +65,6 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 
 **v1 ship bar (this table):** rows 1–16 green; 17–20 may remain amber/red with honesty notes.
 
-Last updated: 2026-08-19 (H3-10 OQ-1 KEEP Cadre-RS).  
+Last updated: 2026-08-19 (H3-10 OQ-1 Cadrion-RS).  
 Harness live log: [`HARNESS_LIVE.md`](HARNESS_LIVE.md).  
 As-built companion: [`STATUS.md`](STATUS.md).

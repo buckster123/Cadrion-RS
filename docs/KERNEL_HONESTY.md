@@ -21,9 +21,9 @@ Binding fences so agents do not treat amber geometry as gold.
 | truck | — | **not** a parity suite; unit tests only |
 
 ```sh
-cargo run -p cadre-cli -- bench run --suite parts1-10 --json
+cargo run -p cadrion-cli -- bench run --suite parts1-10 --json
 # OCCT local only:
-cargo run -p cadre-cli --features occt -- bench run --suite parts1-4-occt --json
+cargo run -p cadrion-cli --features occt -- bench run --suite parts1-4-occt --json
 ```
 
 ## Cone (H3-1)
@@ -31,7 +31,7 @@ cargo run -p cadre-cli --features occt -- bench run --suite parts1-4-occt --json
 | Path | Behavior |
 |------|----------|
 | mock / IR facts | true cone volume |
-| OCCT execute | **CADRE-E-UNSUPPORTED** — refuse silent cylinder |
+| OCCT execute | **CADRION-E-UNSUPPORTED** — refuse silent cylinder |
 | truck | unsupported |
 
 Agents needing cone solids on OCCT: wait for real MakeCone binding (Horizon-3+ OCCT depth) or stay on mock for analytic facts.

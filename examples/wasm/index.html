@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Cadre WASM sketch (H2-1)</title>
+  <title>Cadrion WASM sketch (H2-1)</title>
   <style>
     body { font-family: system-ui, sans-serif; max-width: 52rem; margin: 2rem auto; padding: 0 1rem; }
     textarea { width: 100%; min-height: 12rem; font-family: ui-monospace, monospace; }
@@ -11,10 +11,10 @@
   </style>
 </head>
 <body>
-  <h1>Cadre WASM <span class="note">mock-only · non-parity</span></h1>
+  <h1>Cadrion WASM <span class="note">mock-only · non-parity</span></h1>
   <p class="note">
     Build pack first:
-    <code>wasm-pack build crates/cadre-wasm --target web --features browser</code>
+    <code>wasm-pack build crates/cadrion-wasm --target web --features browser</code>
     then point the import below at the generated module. This page is a sketch, not a bundler.
   </p>
   <textarea id="src">
@@ -28,12 +28,12 @@ def gen_step():
   <pre id="out">// click build after wiring import</pre>
   <script type="module">
     // Uncomment after wasm-pack:
-    // import init, { build, info } from "../../pkg/cadre_wasm.js";
+    // import init, { build, info } from "../../pkg/cadrion_wasm.js";
     // await init();
     // document.getElementById("out").textContent = info();
     document.getElementById("run").onclick = () => {
       document.getElementById("out").textContent =
-        "Wire wasm-pack output (see docs/WASM.md). Native proof: cargo test -p cadre-wasm";
+        "Wire wasm-pack output (see docs/WASM.md). Native proof: cargo test -p cadrion-wasm";
     };
   </script>
 </body>

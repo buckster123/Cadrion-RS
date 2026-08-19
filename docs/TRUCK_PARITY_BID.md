@@ -9,7 +9,7 @@ crate.
 
 ---
 
-## 1. What exists today (`cadre-truck` H10 seed)
+## 1. What exists today (`cadrion-truck` H10 seed)
 
 | Item | Reality |
 |------|---------|
@@ -35,7 +35,7 @@ CLI default != truck
 no Parity-10 claim under --kernel truck
 ```
 
-`cargo run -p cadre-cli -- version --json` reports `truck_parity_eligible: false`.
+`cargo run -p cadrion-cli -- version --json` reports `truck_parity_eligible: false`.
 
 ---
 
@@ -43,7 +43,7 @@ no Parity-10 claim under --kernel truck
 
 Legend: **Y** = real enough for agent fab loops · **~** = approximate / honesty-limited · **N** = missing
 
-| Capability | mock | OCCT | cadre-truck today | Parity-10 need |
+| Capability | mock | OCCT | cadrion-truck today | Parity-10 need |
 |------------|------|------|-------------------|----------------|
 | box / cyl | Y | Y | Y | Y |
 | sphere / cone | Y (IR) | Y | N | Y (parts 05+) |

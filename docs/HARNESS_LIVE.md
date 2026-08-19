@@ -18,7 +18,7 @@ Living log of **dated** `agent10` runs. A number is only green with evidence —
 | **Artifact** | [`harness/scores/h2-4-oracle-2026-08-06.json`](../harness/scores/h2-4-oracle-2026-08-06.json) |
 
 ```sh
-cargo run -p cadre-cli -- harness run --suite agent10 --cmd '@oracle' --json
+cargo run -p cadrion-cli -- harness run --suite agent10 --cmd '@oracle' --json
 ```
 
 ### Honesty
@@ -40,9 +40,9 @@ cargo run -p cadre-cli -- harness run --suite agent10 --cmd '@oracle' --json
 ### How to publish a real agent score
 
 ```sh
-# Fair: agent must NOT read CADRE_HARNESS_TASK_FILE for answers
-export CADRE_BIN="$(pwd)/target/release/cadre"
-cargo run -p cadre-cli -- harness run --suite agent10 \
+# Fair: agent must NOT read CADRION_HARNESS_TASK_FILE for answers
+export CADRION_BIN="$(pwd)/target/release/cadrion"
+cargo run -p cadrion-cli -- harness run --suite agent10 \
   --cmd 'my-agent-runner' --timeout 600 --json \
   | tee harness/scores/YYYY-MM-DD-<model>.json
 ```

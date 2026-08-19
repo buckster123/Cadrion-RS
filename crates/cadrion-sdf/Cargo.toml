@@ -1,0 +1,13 @@
+[package]
+name = "cadrion-sdf"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Experimental secondary SDF sampling (never primary modeling path)"
+
+[dependencies]
+cadrion-kernel = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }

@@ -31,7 +31,7 @@ Count capped at **64**.
 ## Example
 
 ```sh
-cargo run -p cadre-cli -- build examples/stdlib/pattern_hub.cad.star
+cargo run -p cadrion-cli -- build examples/stdlib/pattern_hub.cad.star
 # hub + polar fins + sphere boss + mirrored pads
 ```
 

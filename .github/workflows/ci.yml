@@ -26,7 +26,7 @@ jobs:
       - name: build (default members, no OCCT)
         run: cargo build
       - name: skills export both agents
-        run: cargo run -q -p cadre-cli -- skills export --all -o /tmp/cadre-skills --json
+        run: cargo run -q -p cadrion-cli -- skills export --all -o /tmp/cadrion-skills --json
 
   wasm:
     runs-on: ubuntu-latest
@@ -36,10 +36,10 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
-      - name: wasm32 build cadre-wasm (browser)
-        run: cargo build -p cadre-wasm --target wasm32-unknown-unknown --features browser
+      - name: wasm32 build cadrion-wasm (browser)
+        run: cargo build -p cadrion-wasm --target wasm32-unknown-unknown --features browser
       - name: wasm unit tests (host)
-        run: cargo test -p cadre-wasm
+        run: cargo test -p cadrion-wasm
 
   windows:
     runs-on: windows-latest
@@ -62,4 +62,4 @@ jobs:
   #   steps:
   #     - uses: actions/checkout@v4
   #     - uses: dtolnay/rust-toolchain@stable
-  #     - run: cargo test -p cadre-occt
+  #     - run: cargo test -p cadrion-occt

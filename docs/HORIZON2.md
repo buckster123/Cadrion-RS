@@ -1,11 +1,11 @@
-# Cadre-RS Horizon-2 — mediums & distribution
+# Cadrion-RS Horizon-2 — mediums & distribution
 
 > **Status:** **COMPLETE** 2026-08-06 (H2-1…H2-10). **Archive.**  
 > **Successor (active):** [`docs/HORIZON3.md`](HORIZON3.md)  
 > **When written:** 2026-08-06 (after H1–H10 / PR #24–#34).  
 > **Authority:** does **not** override `docs/CHARTER.md` D1–Dn. Ordering only.  
 > **Prior board:** [`docs/HORIZON.md`](HORIZON.md) (Horizon-1 archive + principles).  
-> **Agent id:** `CADRE`
+> **Agent id:** `CADRION`
 
 ## 0. Where we are
 
@@ -42,7 +42,7 @@
 Numbered **H2-1..H2-10**. Cook order = recommended order. Inside a slice, (a)(b)(c) still applies.
 
 ### H2-1 — WASM IR component (escape hatch)
-**Goal:** `cadre-wasm` (or `cadre-lang`/`kernel` feature) builds a **wasm32** package that can `evaluate` Starlark → IR and run **mock** facts (no OCCT). Optional thin JS glue + example page.  
+**Goal:** `cadrion-wasm` (or `cadrion-lang`/`kernel` feature) builds a **wasm32** package that can `evaluate` Starlark → IR and run **mock** facts (no OCCT). Optional thin JS glue + example page.  
 **Why:** Horizon-2 distribution; agents/browsers without native binary; proves IR is the portable contract.  
 **Depends on:** none (H1 done).  
 **Exit:** `wasm-pack` or `cargo build --target wasm32-unknown-unknown` green in CI job or documented optional lane; `docs/WASM.md`; version/meta says mock-only + non-OCCT.  
@@ -79,7 +79,7 @@ Numbered **H2-1..H2-10**. Cook order = recommended order. Inside a slice, (a)(b)
 **Exit:** docs + `--once` CI; honesty: not Blender.
 
 ### H2-7 — Migrator depth
-**Goal:** `cadre migrate` covers more public-API shapes (Workplane/Locations offsets → translate, simple fillet call → note stub, extrude-ish → box).  
+**Goal:** `cadrion migrate` covers more public-API shapes (Workplane/Locations offsets → translate, simple fillet call → note stub, extrude-ish → box).  
 **Why:** H8 skeleton is thin; onboarding payoff.  
 **Depends on:** H8.  
 **Exit:** +2 fixtures; still refuse unsafe Python.
@@ -88,10 +88,10 @@ Numbered **H2-1..H2-10**. Cook order = recommended order. Inside a slice, (a)(b)
 **Goal:** smallest honest PMI surface: attach linear dimension facts to selectors → JSON “drawing packet” (not full sheets).  
 **Why:** Horizon-2 mediums; huge if unbounded — keep alpha.  
 **Depends on:** inspect refs.  
-**Exit:** `cadre inspect dims` or MCP tool; example; “not a drafting package” note.
+**Exit:** `cadrion inspect dims` or MCP tool; example; “not a drafting package” note.
 
 ### H2-9 — SDF secondary medium (experimental)
-**Goal:** optional `cadre-sdf` or feature: SDF sample grid from mock/OCCT mesh **or** simple analytic SDF for box/cyl; export NRRD/raw; never default modeling path.  
+**Goal:** optional `cadrion-sdf` or feature: SDF sample grid from mock/OCCT mesh **or** simple analytic SDF for box/cyl; export NRRD/raw; never default modeling path.  
 **Why:** FR-9xx parking; must stay **secondary** to STEP.  
 **Depends on:** none hard.  
 **Exit:** docs fence + tests; CHARTER reminder STEP-first.
@@ -166,4 +166,4 @@ Same as Horizon-1:
 
 ## 7. One-line pitch
 
-> **Horizon-2** ships Cadre beyond the native agent workstation — portable IR (WASM), sturdier MCP story, deeper fab/robots/viewer, and fenced experimental mediums — without surrendering STEP-first honesty or consent-gated fab.
+> **Horizon-2** ships Cadrion beyond the native agent workstation — portable IR (WASM), sturdier MCP story, deeper fab/robots/viewer, and fenced experimental mediums — without surrendering STEP-first honesty or consent-gated fab.

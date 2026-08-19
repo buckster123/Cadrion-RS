@@ -4,8 +4,8 @@
 
 | Transport | `write_source` | Override |
 |-----------|----------------|----------|
-| stdio | **OFF** | `CADRE_MCP_WRITE_SOURCE=1` |
-| HTTP | **ON** | `CADRE_MCP_WRITE_SOURCE=0` |
+| stdio | **OFF** | `CADRION_MCP_WRITE_SOURCE=1` |
+| HTTP | **ON** | `CADRION_MCP_WRITE_SOURCE=0` |
 
 `read_source` stays available on both.
 
@@ -13,19 +13,19 @@
 
 ```
 resources/list
-resources/read  { "uri": "cadre://doc/status" }
+resources/read  { "uri": "cadrion://doc/status" }
 ```
 
 | URI prefix | Role |
 |------------|------|
-| `cadre://doc/*` | doctrine markdown (STATUS, STDLIB, VIEWER, SLICER_DFM, FILLET, policy) |
-| `cadre://artifact/index` | scan under `CADRE_PROJECT` / cwd |
-| `cadre://artifact/file/<rel>` | read artifact (path-escape refused) |
+| `cadrion://doc/*` | doctrine markdown (STATUS, STDLIB, VIEWER, SLICER_DFM, FILLET, policy) |
+| `cadrion://artifact/index` | scan under `CADRION_PROJECT` / cwd |
+| `cadrion://artifact/file/<rel>` | read artifact (path-escape refused) |
 
 ## Tests
 
 ```sh
-cargo test -p cadre-mcp
+cargo test -p cadrion-mcp
 ```
 
 ## Honesty

@@ -1,6 +1,6 @@
 # Viewer — snaps · mesh 3D · G-code · robot jog (H5 + H2-6)
 
-Loopback `cadre view` stays a tiny HTTP server (no new crate).
+Loopback `cadrion view` stays a tiny HTTP server (no new crate).
 
 ## Targets
 
@@ -15,12 +15,12 @@ Loopback `cadre view` stays a tiny HTTP server (no new crate).
 
 ```sh
 # CI-friendly prepare
-cargo run -p cadre-cli -- view examples/studio/stellar_crown.cad.star --once --json
-cargo run -p cadre-cli -- view examples/fab/sample.gcode --once --json
-cargo run -p cadre-cli -- view examples/robots/simple_arm.robot.json --once --json
+cargo run -p cadrion-cli -- view examples/studio/stellar_crown.cad.star --once --json
+cargo run -p cadrion-cli -- view examples/fab/sample.gcode --once --json
+cargo run -p cadrion-cli -- view examples/robots/simple_arm.robot.json --once --json
 
 # Serve (browser)
-cargo run -p cadre-cli -- view \
+cargo run -p cadrion-cli -- view \
   examples/studio/stellar_crown.cad.star \
   examples/fab/sample.gcode \
   examples/robots/simple_arm.robot.json
@@ -53,9 +53,9 @@ The mesh canvas shows **dim value chips** (HUD) + a list under the canvas.
 **Not** leader lines / sheets / GD&T — not a drafting package.
 
 ```sh
-cargo run -p cadre-cli -- inspect dims examples/pmi/block.cad.star --json
-cargo run -p cadre-cli -- view examples/pmi/block.cad.star --once --json
+cargo run -p cadrion-cli -- inspect dims examples/pmi/block.cad.star --json
+cargo run -p cadrion-cli -- view examples/pmi/block.cad.star --once --json
 # → examples/pmi/block.snap/drawing.json + mesh
-cargo run -p cadre-cli -- view examples/pmi/block.cad.star
+cargo run -p cadrion-cli -- view examples/pmi/block.cad.star
 # open http://127.0.0.1:7411/ → dim chips on orbit canvas
 ```

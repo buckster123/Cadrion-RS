@@ -1,6 +1,6 @@
 # Windows notes (S12)
 
-Cadre default workspace is intended to build on Windows without OCCT.
+Cadrion default workspace is intended to build on Windows without OCCT.
 
 ## CI
 
@@ -13,8 +13,8 @@ GitHub Actions job `windows` runs on `windows-latest`:
 ```powershell
 rustup default stable
 cargo test
-cargo run -p cadre-cli -- version --json
-cargo run -p cadre-cli -- fab check --part-json examples/fab/plate.flat.json --json
+cargo run -p cadrion-cli -- version --json
+cargo run -p cadrion-cli -- fab check --part-json examples/fab/plate.flat.json --json
 ```
 
 ## Paths

@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "schema": "cadre.drawing_packet",
+  "schema": "cadrion.drawing_packet",
   "version": 1,
   "source": "block.cad.star",
   "dims": [

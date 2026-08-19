@@ -452,24 +452,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7354288c522e7e980fafd2075d63d1285794c3a6a16cdd492f189ea406e5f18b"
 
 [[package]]
-name = "cadre"
+name = "cadrion"
 version = "0.1.0"
 dependencies = [
- "cadre-inspect",
- "cadre-kernel",
- "cadre-lang",
- "cadre-model",
+ "cadrion-inspect",
+ "cadrion-kernel",
+ "cadrion-lang",
+ "cadrion-model",
 ]
 
 [[package]]
-name = "cadre-api"
+name = "cadrion-api"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
  "axum-test",
- "cadre-mcp",
- "cadre-parts",
+ "cadrion-mcp",
+ "cadrion-parts",
  "futures",
  "serde",
  "serde_json",
@@ -482,39 +482,39 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-bench"
+name = "cadrion-bench"
 version = "0.1.0"
 dependencies = [
- "cadre-inspect",
- "cadre-kernel",
- "cadre-lang",
- "cadre-occt",
+ "cadrion-inspect",
+ "cadrion-kernel",
+ "cadrion-lang",
+ "cadrion-occt",
  "serde",
  "serde_json",
  "thiserror 2.0.19",
 ]
 
 [[package]]
-name = "cadre-cli"
+name = "cadrion-cli"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "assert_cmd",
- "cadre-api",
- "cadre-bench",
- "cadre-fab",
- "cadre-harness",
- "cadre-inspect",
- "cadre-kernel",
- "cadre-lang",
- "cadre-mcp",
- "cadre-model",
- "cadre-occt",
- "cadre-parts",
- "cadre-render",
- "cadre-robot",
- "cadre-sdf",
- "cadre-truck",
+ "cadrion-api",
+ "cadrion-bench",
+ "cadrion-fab",
+ "cadrion-harness",
+ "cadrion-inspect",
+ "cadrion-kernel",
+ "cadrion-lang",
+ "cadrion-mcp",
+ "cadrion-model",
+ "cadrion-occt",
+ "cadrion-parts",
+ "cadrion-render",
+ "cadrion-robot",
+ "cadrion-sdf",
+ "cadrion-truck",
  "clap",
  "predicates",
  "serde",
@@ -528,11 +528,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-fab"
+name = "cadrion-fab"
 version = "0.1.0"
 dependencies = [
- "cadre-inspect",
- "cadre-kernel",
+ "cadrion-inspect",
+ "cadrion-kernel",
  "serde",
  "serde_json",
  "sha2",
@@ -541,31 +541,31 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-harness"
+name = "cadrion-harness"
 version = "0.1.0"
 dependencies = [
- "cadre-inspect",
- "cadre-kernel",
- "cadre-lang",
- "cadre-render",
+ "cadrion-inspect",
+ "cadrion-kernel",
+ "cadrion-lang",
+ "cadrion-render",
  "serde",
  "serde_json",
  "thiserror 2.0.19",
 ]
 
 [[package]]
-name = "cadre-inspect"
+name = "cadrion-inspect"
 version = "0.1.0"
 dependencies = [
- "cadre-kernel",
- "cadre-model",
+ "cadrion-kernel",
+ "cadrion-model",
  "serde",
  "serde_json",
  "thiserror 2.0.19",
 ]
 
 [[package]]
-name = "cadre-kernel"
+name = "cadrion-kernel"
 version = "0.1.0"
 dependencies = [
  "serde",
@@ -574,11 +574,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-lang"
+name = "cadrion-lang"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "cadre-kernel",
+ "cadrion-kernel",
  "regex",
  "serde",
  "serde_json",
@@ -587,17 +587,17 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-mcp"
+name = "cadrion-mcp"
 version = "0.1.0"
 dependencies = [
  "axum",
  "base64 0.22.1",
- "cadre-inspect",
- "cadre-kernel",
- "cadre-lang",
- "cadre-parts",
- "cadre-render",
- "cadre-sdf",
+ "cadrion-inspect",
+ "cadrion-kernel",
+ "cadrion-lang",
+ "cadrion-parts",
+ "cadrion-render",
+ "cadrion-sdf",
  "serde",
  "serde_json",
  "thiserror 2.0.19",
@@ -607,10 +607,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-model"
+name = "cadrion-model"
 version = "0.1.0"
 dependencies = [
- "cadre-kernel",
+ "cadrion-kernel",
  "hex",
  "serde",
  "serde_json",
@@ -619,12 +619,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-occt"
+name = "cadrion-occt"
 version = "0.1.0"
 dependencies = [
- "cadre-inspect",
- "cadre-kernel",
- "cadre-lang",
+ "cadrion-inspect",
+ "cadrion-kernel",
+ "cadrion-lang",
  "glam",
  "opencascade",
  "opencascade-sys",
@@ -634,11 +634,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-parts"
+name = "cadrion-parts"
 version = "0.1.0"
 dependencies = [
- "cadre-kernel",
- "cadre-model",
+ "cadrion-kernel",
+ "cadrion-model",
  "hex",
  "serde",
  "serde_json",
@@ -647,11 +647,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-render"
+name = "cadrion-render"
 version = "0.1.0"
 dependencies = [
- "cadre-kernel",
- "cadre-lang",
+ "cadrion-kernel",
+ "cadrion-lang",
  "gif",
  "png",
  "serde",
@@ -660,10 +660,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-robot"
+name = "cadrion-robot"
 version = "0.1.0"
 dependencies = [
- "cadre-kernel",
+ "cadrion-kernel",
  "serde",
  "serde_json",
  "thiserror 2.0.19",
@@ -671,32 +671,32 @@ dependencies = [
 ]
 
 [[package]]
-name = "cadre-sdf"
+name = "cadrion-sdf"
 version = "0.1.0"
 dependencies = [
- "cadre-kernel",
+ "cadrion-kernel",
  "serde",
  "serde_json",
  "thiserror 2.0.19",
 ]
 
 [[package]]
-name = "cadre-truck"
+name = "cadrion-truck"
 version = "0.1.0"
 dependencies = [
- "cadre-kernel",
+ "cadrion-kernel",
  "truck-meshalgo",
  "truck-modeling",
  "truck-shapeops",
 ]
 
 [[package]]
-name = "cadre-wasm"
+name = "cadrion-wasm"
 version = "0.1.0"
 dependencies = [
- "cadre-inspect",
- "cadre-kernel",
- "cadre-lang",
+ "cadrion-inspect",
+ "cadrion-kernel",
+ "cadrion-lang",
  "getrandom 0.4.3",
  "serde",
  "serde_json",

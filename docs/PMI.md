@@ -7,25 +7,25 @@ No sheets, title blocks, GD&T symbols, or STEP AP242 PMI.
 
 ```sh
 # Auto: opposite-face linear dims
-cargo run -p cadre-cli -- inspect dims examples/pmi/block.cad.star --json
+cargo run -p cadrion-cli -- inspect dims examples/pmi/block.cad.star --json
 
 # Explicit
-cargo run -p cadre-cli -- inspect dims examples/pmi/block.cad.star \
+cargo run -p cadrion-cli -- inspect dims examples/pmi/block.cad.star \
   --dim '#o1.1.f1,#o1.1.f2,thickness,height' --json
 
 # Specs file
-cargo run -p cadre-cli -- inspect dims examples/pmi/block.cad.star \
+cargo run -p cadrion-cli -- inspect dims examples/pmi/block.cad.star \
   --specs examples/pmi/block.dims.json -o /tmp/block.drawing.json --json
 ```
 
 Default output: `<stem>.drawing.json` next to the source.
 
-## Packet schema (`cadre.drawing_packet` v1)
+## Packet schema (`cadrion.drawing_packet` v1)
 
 ```json
 {
   "ok": true,
-  "schema": "cadre.drawing_packet",
+  "schema": "cadrion.drawing_packet",
   "version": 1,
   "source": "block.cad.star",
   "topology": "ir-analytic",
@@ -56,5 +56,5 @@ Default output: `<stem>.drawing.json` next to the source.
 
 ## Viewer overlay (H3-5)
 
-`cadre view part.cad.star` embeds dim chips on the orbit canvas from `drawing.json`
+`cadrion view part.cad.star` embeds dim chips on the orbit canvas from `drawing.json`
 (auto or sidecar). See `docs/VIEWER.md`. Still not a drafting package.

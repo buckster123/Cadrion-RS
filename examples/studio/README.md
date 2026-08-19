@@ -8,8 +8,8 @@ Hand-authored / agent-MCP examples — not parity goldens.
 | `lunar_bug.cad.star` | Chassis, polar legs, dome, antennae |
 
 ```sh
-cargo run -p cadre-cli -- build examples/studio/stellar_crown.cad.star --json
-cargo run -p cadre-cli -- snapshot examples/studio/stellar_crown.cad.star
+cargo run -p cadrion-cli -- build examples/studio/stellar_crown.cad.star --json
+cargo run -p cadrion-cli -- snapshot examples/studio/stellar_crown.cad.star
 # or via Hermes MCP: write_source / build / snapshot
 ```
 
