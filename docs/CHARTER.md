@@ -1,4 +1,4 @@
-# Cadre-RS — charter
+# Cadrion-RS — charter
 
 > **The decisions log below is BINDING.** Amend it with a dated entry; never silently.
 > Where this document and the code disagree, one of them is a bug — say which.
@@ -6,7 +6,7 @@
 
 ## What this is
 
-Cadre is a Rust-native CAD runtime for AI agents: hermetic Starlark source → B-rep kernel →
+Cadrion is a Rust-native CAD runtime for AI agents: hermetic Starlark source → B-rep kernel →
 numeric inspect → visual snapshot → export / parts / robots / fab handoff. One workspace,
 three co-equal surfaces (CLI, MCP, local HTTP), plus a generated skill pack that teaches the
 workflow. Clean-room functional-conceptual equivalent of `earthtojake/text-to-cad` — parity of
@@ -18,7 +18,7 @@ jobs and doctrine, never of source or API.
 - Not a build123d / OpenCascade Python runtime — no CPython, no running reference sources.
 - Not CAM, FEA, BIM, mesh sculpting, or organic modeling as the authoring medium.
 - Not a multi-tenant hosted SaaS — HTTP is local/embedded; public hardening is future work.
-- Not a slicer reimplementation — Cadre orchestrates real slicer CLIs and validates G-code.
+- Not a slicer reimplementation — Cadrion orchestrates real slicer CLIs and validates G-code.
 - Not a pure-Rust-only stack in v1 — default kernel is OCCT (LGPL + exception), fetched as a
   separate engine component; pure-Rust `truck` is experimental and non-parity.
 - Not telemetry-bearing and not auto-printing — hardware and third-party effects are
@@ -30,7 +30,7 @@ Numbered, binding, dated. One decision per entry, with the reason — a decision
 rationale is lost gets re-litigated within a month.
 
 - **D1 — Clean-room of the reference, not a port of its source.** Implement from this
-  repo's PRD (`docs/cadre-prd.md`) and public reference *behavior* only. No translating
+  repo's PRD (`docs/cadrion-prd.md`) and public reference *behavior* only. No translating
   Python/JS from `earthtojake/text-to-cad`. Rules out source compatibility and dual-maintenance
   of a Python surface.
 - **D2 — Starlark is the authoring language.** Hermetic, deterministic, LLM-fluent
@@ -41,10 +41,10 @@ rationale is lost gets re-litigated within a month.
   hand-edit generated geometry — edit source and rebuild.
 - **D4 — Default kernel is OCCT behind `GeomKernel`; truck is experimental.** Only realistic
   path to reference-grade fillets/booleans/STEP. Sanctioned C/FFI exception to the house
-  "pure Rust" preference. OCCT ships as a separately fetched engine (`cadre engine install`),
+  "pure Rust" preference. OCCT ships as a separately fetched engine (`cadrion engine install`),
   not statically linked into the core binary. Truck never carries parity claims.
-- **D5 — Three co-equal faces + skill pack.** CLI (`cadre`), MCP (`cadre mcp`), local HTTP
-  (`cadre serve api`) share one schema source (`cadre schema`). L2 requires installable skill
+- **D5 — Three co-equal faces + skill pack.** CLI (`cadrion`), MCP (`cadrion mcp`), local HTTP
+  (`cadrion serve api`) share one schema source (`cadrion schema`). L2 requires installable skill
   packs for Claude Code and Codex. Standalone-first: no ApexOS ownership assumed.
 - **D6 — Dual license MIT OR Apache-2.0 for core.** Rust convention; skill-pack prose and
   vendor profiles are original works. OCCT remains LGPL-2.1 + OCCT exception via dynamic /
@@ -56,7 +56,7 @@ rationale is lost gets re-litigated within a month.
   measure / align / diff are the repair loop; snapshots complement and skill doctrine makes
   review non-optional after visible geometry changes (sanctioned skips only).
 - **D9 — Hermetic model evaluation.** Model code: no clock, env, network, or filesystem;
-  fueled/time/memory caps; builds cache by content hash. Same source + Cadre version ⇒
+  fueled/time/memory caps; builds cache by content hash. Same source + Cadrion version ⇒
   identical IR and equal-within-tolerance geometry.
 - **D10 — Consent for consequences.** Printer start, vendor upload, and any hardware /
   third-party effect: dry-run default, allow-list, explicit non-defaultable confirm at every
@@ -64,22 +64,24 @@ rationale is lost gets re-litigated within a month.
 - **D11 — Explicit targets only.** Commands name files/refs; refuse directory-wide builds or
   ambient mutation outside the stated target.
 - **D12 — MCP tool surface budget ≤ 4,000 tokens.** Deep guidance lives in skill-pack
-  progressive references and `cadre://doc/**` resources, not tool descriptions.
+  progressive references and `cadrion://doc/**` resources, not tool descriptions.
 - **D13 — Single schema source.** CLI JSON shapes, MCP tool schemas, and OpenAPI are
   generated from one Rust type layer; drift is a CI failure.
 - **D14 — No telemetry.** None. Opt-in local bench reports may be printed; nothing phones home.
-- **D15 — Cerebro agent id `CADRE`.** Session memory for this repo is isolated under
-  `agent_id="CADRE"`.
+- **D15 — Cerebro agent id `CADRION`.** Session memory for this repo is isolated under
+  `agent_id="CADRION"`.
 - **D16 — Crate map is a requirement; internal design is free.** Workspace members follow
-  PRD §6 (`cadre-kernel`, `cadre-lang`, `cadre-model`, faces, …). Bootstrap keeps a thin
-  `cadre` facade crate so the workspace resolves from commit 0; slices split logic into the
+  PRD §6 (`cadrion-kernel`, `cadrion-lang`, `cadrion-model`, faces, …). Bootstrap keeps a thin
+  `cadrion` facade crate so the workspace resolves from commit 0; slices split logic into the
   named crates rather than growing an unstructured monolith.
 - **D17 — House MCP is hand-rolled (OQ-7 closed 2026-08-06).** Stdio + streamable HTTP stay
-  in `cadre-mcp` without the official SDK until a dated amendment re-opens OQ-7. See
+  in `cadrion-mcp` without the official SDK until a dated amendment re-opens OQ-7. See
   `docs/MCP_SDK.md` for the compliance matrix and reopen criteria. D12 tool budget still binds.
-- **D18 — Working name `cadre` pending trademark/crates.io sweep.** Binary and crate
-  namespace stay `cadre` until OQ-1 closes; rename is a deliberate charter amendment.
-- **D19 — OCCT bind path GO (S1).** Default parity backend will be `cadre-occt` implementing
+- **D18 — Product name Cadrion / Cadrion-RS (OQ-1 closed 2026-08-19).** Binary `cadrion`,
+  workspace crates `cadrion` / `cadrion-*`, Cerebro `CADRION`. First public install crate,
+  when published, is `cadrion-cli`. Cadre was rejected (cadre3d.com same-class). Rename
+  again is a deliberate charter amendment. See `docs/NAME_OQ1.md`.
+- **D19 — OCCT bind path GO (S1).** Default parity backend will be `cadrion-occt` implementing
   `GeomKernel`, layered on bschwind `opencascade`/`opencascade-sys` with **dynamic or
   separately installed engine** preferred over static `occt-sys` in the default binary.
   Fallback ladder: thin cxx to prebuilt OCCT → `occt-wasm` engine process. Do **not** adopt
@@ -126,15 +128,18 @@ Honesty on partial done-whens: see `docs/METRICS.md` rows 17–20 and `docs/STAT
 
 From PRD §16 — still unresolved; do not silently assume answers in code:
 
-1. **OQ-1** Final product/binary name and crate namespace (trademark + crates.io).
+1. ~~**OQ-1** Final product/binary name and crate namespace (trademark + crates.io).~~
+   **Resolved 2026-08-19 (H3-10):** **Cadrion / Cadrion-RS.** Packet `docs/NAME_OQ1.md`.
+   First install crate = `cadrion-cli`. Legacy `CADRE_*` / `cadre://` / `cadre.*` schemas
+   still accepted. No trademark filing this slice.
 2. **OQ-2** Starlark dialect details: float formatting, module system for shared libraries, stdlib naming via LLM A/B.
 3. **OQ-3** Migration assistant scope/timing (M6 vs defer).
 4. **OQ-4** Depth of assembly joint model in STEP for 1.0 (kinematic AP242 vs labels+placements).
-   **Partial (H3-4):** labels+placements+joint envelope → `cadre.assembly_kinematics` sidecar and
+   **Partial (H3-4):** labels+placements+joint envelope → `cadrion.assembly_kinematics` sidecar and
    `assembly emit-robot` → URDF path. **AP242 STEP joint entities still open.**
-5. ~~**OQ-5** Whether MCP `write_source`/`read_source` default on for local stdio or HTTP-only.~~ **Resolved 2026-08-05 (H7):** stdio `write_source` **OFF** by default; HTTP **ON** by default; override via `CADRE_MCP_WRITE_SOURCE`. `read_source` on both. See amendments + `cadre://doc/write-source-policy`.
+5. ~~**OQ-5** Whether MCP `write_source`/`read_source` default on for local stdio or HTTP-only.~~ **Resolved 2026-08-05 (H7):** stdio `write_source` **OFF** by default; HTTP **ON** by default; override via `CADRION_MCP_WRITE_SOURCE`. `read_source` on both. See amendments + `cadrion://doc/write-source-policy`.
 6. **OQ-6** Vendor-profile governance for community DFM rulepack updates.
-   **Partial (H3-8):** `cadre.dfm_profile` / `cadre.dfm_override` v1 + fail-closed `base_version`
+   **Partial (H3-8):** `cadrion.dfm_profile` / `cadrion.dfm_override` v1 + fail-closed `base_version`
    pin. Not a registry. See `docs/DFM_GOVERNANCE.md`.
 7. ~~**OQ-7** MCP transport: official SDK vs house hand-rolled (see D17).~~ **Resolved 2026-08-06 (H2-2):** **stay hand-rolled**. No dual stack. Compliance matrix + reopen criteria in `docs/MCP_SDK.md`. `initialize.serverInfo.implementation = "hand-rolled"`.
 
@@ -144,31 +149,31 @@ From PRD §16 — still unresolved; do not silently assume answers in code:
 
 Dated entries. A decision changes here first, then in the code.
 
-- **2026-08-05** — charter adopted from `docs/cadre-prd.md` (Draft v0.1, 2026-07-28) at Launchpad-RS bootstrap.
+- **2026-08-05** — charter adopted from `docs/cadrion-prd.md` (Draft v0.1, 2026-07-28) at Launchpad-RS bootstrap.
 - **2026-08-05** — D19: S1 kernel spike GO on OCCT via `GeomKernel` + opencascade-rs family
-  (dynamic/separate engine); see `docs/occt-binding.md`. `cadre-kernel` + `MockKernel` landed.
-- **2026-08-05** — S2: `cadre-lang` Starlark host + feature IR v0 (box/cylinder/boolean/label);
+  (dynamic/separate engine); see `docs/occt-binding.md`. `cadrion-kernel` + `MockKernel` landed.
+- **2026-08-05** — S2: `cadrion-lang` Starlark host + feature IR v0 (box/cylinder/boolean/label);
   hermetic `load()` refuse; diagnostic JSON shape pinned in `docs/design.md`.
-- **2026-08-05** — S3: `cadre-occt` + `execute_ir`; fillet/chamfer IR ops; calibration block
+- **2026-08-05** — S3: `cadrion-occt` + `execute_ir`; fillet/chamfer IR ops; calibration block
   STEP e2e green locally (`CMAKE_POLICY_VERSION_MINIMUM=3.5`). CI excludes OCCT package.
-- **2026-08-05** — S4: `cadre-model` selectors + build cache; `cadre-inspect` refs/measure;
+- **2026-08-05** — S4: `cadrion-model` selectors + build cache; `cadrion-inspect` refs/measure;
   stable sort keys (centroid/area); cache keyed by source+params+versions (FR-105).
-- **2026-08-05** — S5: `cadre-cli` (`cadre` bin) build/inspect/export + `--json`; mock default;
+- **2026-08-05** — S5: `cadrion-cli` (`cadrion` bin) build/inspect/export + `--json`; mock default;
   optional `occt` feature; dir-wide builds refused; IR companion always written.
-- **2026-08-05** — S6: Parity parts 1–4 fixtures + `cadre-bench` + `cadre bench run`; mock
+- **2026-08-05** — S6: Parity parts 1–4 fixtures + `cadrion-bench` + `cadrion bench run`; mock
   volume goldens; selectors/measure checks in CI.
-- **2026-08-05** — S7: `cadre-render` software z-buffer snapshots (PNG multi-view + orbit GIF);
-  `cadre snapshot` / `cadre view` (loopback HTML + deep links). Preview mesh notes for cuts.
-- **2026-08-05** — S8: hand-rolled MCP stdio (`cadre mcp`) with 6 tools; skill-pack alpha at
-  `skills/cadre` + `cadre skills export`. Snapshot tool can return image content blocks.
-- **2026-08-05** — S9: `cadre-parts` (parts.lock fail-closed, LocalFsProvider, AssemblySpec +
-  align_check); `cadre-api` Axum `/v1/*` + jobs/SSE + OpenAPI; `cadre serve api`; example
+- **2026-08-05** — S7: `cadrion-render` software z-buffer snapshots (PNG multi-view + orbit GIF);
+  `cadrion snapshot` / `cadrion view` (loopback HTML + deep links). Preview mesh notes for cuts.
+- **2026-08-05** — S8: hand-rolled MCP stdio (`cadrion mcp`) with 6 tools; skill-pack alpha at
+  `skills/cadrion` + `cadrion skills export`. Snapshot tool can return image content blocks.
+- **2026-08-05** — S9: `cadrion-parts` (parts.lock fail-closed, LocalFsProvider, AssemblySpec +
+  align_check); `cadrion-api` Axum `/v1/*` + jobs/SSE + OpenAPI; `cadrion serve api`; example
   plate+bolt assembly under `examples/assembly/`.
-- **2026-08-05** — S10: `cadre-robot` URDF writer + structural/inertial validation + urdf-rs
-  parse; SRDF/SDF emit; `cadre robot gen|validate`; `examples/robots/simple_arm`.
-- **2026-08-05** — S11: `cadre-fab` DXF R12, DFM engine + bundled SendCutSend-style profile,
+- **2026-08-05** — S10: `cadrion-robot` URDF writer + structural/inertial validation + urdf-rs
+  parse; SRDF/SDF emit; `cadrion robot gen|validate`; `examples/robots/simple_arm`.
+- **2026-08-05** — S11: `cadrion-fab` DXF R12, DFM engine + bundled SendCutSend-style profile,
   slicer discovery/command preview, gcode-check, Bambu adapter dry-run + hard start gates
-  (live MQTT start still refused); `cadre fab` / `cadre printer`.
+  (live MQTT start still refused); `cadrion fab` / `cadrion printer`.
 - **2026-08-05** — S12: v1 hardening — `docs/METRICS.md`, `docs/LICENSING.md`, Windows CI,
   `skills export --all` (claude-code/codex/hermes), property tests on lang/gcode/selectors,
   release checklist.
@@ -176,16 +181,16 @@ Dated entries. A decision changes here first, then in the code.
   crate tables aligned to reality (no phantom crates); milestone table marked done with
   honesty notes on amber/red metrics.
 - **2026-08-05** — **H7 / OQ-5 resolved:** MCP `write_source` default **OFF on stdio**, **ON on HTTP**;
-  override `CADRE_MCP_WRITE_SOURCE=0|1`. `resources/list` + `resources/read` for
-  `cadre://doc/**` and `cadre://artifact/**`. `read_source` remains on both transports.
+  override `CADRION_MCP_WRITE_SOURCE=0|1`. `resources/list` + `resources/read` for
+  `cadrion://doc/**` and `cadrion://artifact/**`. `read_source` remains on both transports.
 - **2026-08-06** — **H2-2 / OQ-7 resolved:** stay **hand-rolled** MCP (no official SDK dual stack).
-  Compliance constants + tests in `cadre-mcp`; decision log `docs/MCP_SDK.md`. D17 amended.
+  Compliance constants + tests in `cadrion-mcp`; decision log `docs/MCP_SDK.md`. D17 amended.
 - **2026-08-06** — **H2-5 joint depth:** assembly `JointSpec` gains axis/origin/limits;
   `validate_assembly` fail-closed; robot revolute/prismatic missing or inverted limits are **errors**.
-  CLI `cadre assembly validate`. Not AP242 STEP kinematics (OQ-4 still open for STEP depth).
+  CLI `cadrion assembly validate`. Not AP242 STEP kinematics (OQ-4 still open for STEP depth).
   See `docs/JOINTS.md`.
-- **2026-08-06** — **H2-9 SDF secondary:** `cadre-sdf` analytic box/cyl sample + raw/NRRD;
-  CLI `cadre sdf sample`. **Not a modeling path** — STEP/B-rep remains primary (`docs/SDF.md`).
+- **2026-08-06** — **H2-9 SDF secondary:** `cadrion-sdf` analytic box/cyl sample + raw/NRRD;
+  CLI `cadrion sdf sample`. **Not a modeling path** — STEP/B-rep remains primary (`docs/SDF.md`).
 - **2026-08-06** — **H2-10 truck parity bid prep:** evidence pack `docs/TRUCK_PARITY_BID.md`.
   Decision **NO-GO** for default/`parity_eligible`. No code default flip. Horizon-2 board complete.
 - **2026-08-06** — **Horizon-3 chartered:** `docs/HORIZON3.md` Top-N H3-1…H3-10 (honesty, agent loop,
@@ -199,7 +204,10 @@ Dated entries. A decision changes here first, then in the code.
   false; default unchanged. G1 partial (no STEP). Apache-2.0 pins in `docs/LICENSING.md`.
 - **2026-08-14** — **H3-7 OCCT parity depth:** `fillet-occt` + `13_filleted_l` (union+fillet golden);
   cone remains Unsupported (no stand-in). `docs/OCCT_PARITY.md`. Default CI still OCCT-free.
-- **2026-08-14** — **H3-8 DFM / OQ-6 seed:** versioned `cadre.dfm_profile` + community override
+- **2026-08-14** — **H3-8 DFM / OQ-6 seed:** versioned `cadrion.dfm_profile` + community override
   (`base_version` pin, fail-closed drift). `docs/DFM_GOVERNANCE.md`.
 - **2026-08-14** — **H3-9 migrator/WASM polish:** Circle+extrude → cylinder; extra refuse needles;
   WASM `inspect_ir` (IR-analytic refs). Still mock-only.
+- **2026-08-19** — **H3-10 / OQ-1 resolved:** **Cadrion / Cadrion-RS** (Cadre dropped —
+  cadre3d.com same-class). D15 agent `CADRION`. D18 amended. Crates/bin/skills renamed
+  in-tree. `CADRE_*` + `cadre://` + `cadre.*` schemas still accepted. See `docs/NAME_OQ1.md`.

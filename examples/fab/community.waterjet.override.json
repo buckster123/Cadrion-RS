@@ -1,5 +1,5 @@
 {
-  "schema": "cadre.dfm_override",
+  "schema": "cadrion.dfm_override",
   "schema_version": 1,
   "base": "waterjet.generic",
   "base_version": "1.0.0",

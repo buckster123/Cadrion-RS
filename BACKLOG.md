@@ -1,4 +1,4 @@
-# Cadre-RS backlog — slice ledger
+# Cadrion-RS backlog — slice ledger
 
 A row gets its ✅ when the slice is **merged, deployed, and verified live** — not when tests
 pass (house doctrine #5). Notes carry the date and the evidence.
@@ -9,29 +9,29 @@ Milestones M0–M6 / slices S0–S12 shipped on `main` (2026-08-05). Scorecard: 
 As-built map: `docs/STATUS.md`.
 
 - [x] **S0 — bootstrap**: Launchpad stamp, CLAUDE.md, CHARTER, design contract, PRD in-tree,
-      workspace + `crates/cadre` facade, CI, dual license (2026-08-05)
-- [x] **S1 — M0 kernel spike (trait + binding eval)**: `cadre-kernel` `GeomKernel` v0 +
+      workspace + `crates/cadrion` facade, CI, dual license (2026-08-05)
+- [x] **S1 — M0 kernel spike (trait + binding eval)**: `cadrion-kernel` `GeomKernel` v0 +
       `MockKernel` tests; `docs/occt-binding.md`; charter D19 GO (2026-08-05). Live OCCT → S3
-- [x] **S2 — M0 Starlark host PoC**: `cadre-lang` hermetic eval; `params`/`box`/`cylinder`/
+- [x] **S2 — M0 Starlark host PoC**: `cadrion-lang` hermetic eval; `params`/`box`/`cylinder`/
       booleans/`solid` → feature IR v0; structured diagnostics JSON; overrides (2026-08-05)
-- [x] **S3 — M0 e2e part 1**: `cadre-occt` GeomKernel; IR execute; fillet/chamfer in lang;
+- [x] **S3 — M0 e2e part 1**: `cadrion-occt` GeomKernel; IR execute; fillet/chamfer in lang;
       calibration block → STEP + facts (OCCT local; CI excludes package) (2026-08-05)
-- [x] **S4 — M1 build cache + selectors**: `cadre-model` (selectors + content-hash cache);
-      `cadre-inspect` (refs/measure); stable `#o…` tokens (2026-08-05)
-- [x] **S5 — M1 CLI face**: `cadre-cli` binary `cadre` — `build` / `inspect refs|measure` /
+- [x] **S4 — M1 build cache + selectors**: `cadrion-model` (selectors + content-hash cache);
+      `cadrion-inspect` (refs/measure); stable `#o…` tokens (2026-08-05)
+- [x] **S5 — M1 CLI face**: `cadrion-cli` binary `cadrion` — `build` / `inspect refs|measure` /
       `export step|stl|glb` with `--json`; mock default, optional `--features occt` (2026-08-05)
-- [x] **S6 — M1 parity parts 1–4**: `parity/parts/01–04` + `cadre-bench` runner +
-      `cadre bench run --suite parts1-4`; mock CI green (2026-08-05)
-- [x] **S7 — M2 snapshot + viewer alpha**: `cadre-render` software PNG/GIF packets;
-      `cadre snapshot` / `cadre view` deep links (2026-08-05)
-- [x] **S8 — M2 MCP stdio + skill-pack alpha**: `cadre-mcp` 6 tools; `cadre mcp`;
-      `cadre skills export`; bundled `skills/cadre` doctrine (2026-08-05)
-- [x] **S9 — M3 assemblies + parts.lock + HTTP API**: `cadre-parts` lock/provider/assembly;
-      `cadre-api` Axum `/v1` + jobs/SSE/OpenAPI; plate+bolt example; `cadre serve api` (2026-08-05)
-- [x] **S10 — M4 robots**: `cadre-robot` URDF/SRDF/SDF gen+validate+inertials; urdf-rs parse;
-      `cadre robot gen|validate`; simple_arm example (2026-08-05)
-- [x] **S11 — M5 fab path**: `cadre-fab` DXF + DFM (SendCutSend-style) + slicer discover +
-      gcode-check + Bambu dry-run/gated start (no live print); `cadre fab` / `cadre printer`
+- [x] **S6 — M1 parity parts 1–4**: `parity/parts/01–04` + `cadrion-bench` runner +
+      `cadrion bench run --suite parts1-4`; mock CI green (2026-08-05)
+- [x] **S7 — M2 snapshot + viewer alpha**: `cadrion-render` software PNG/GIF packets;
+      `cadrion snapshot` / `cadrion view` deep links (2026-08-05)
+- [x] **S8 — M2 MCP stdio + skill-pack alpha**: `cadrion-mcp` 6 tools; `cadrion mcp`;
+      `cadrion skills export`; bundled `skills/cadrion` doctrine (2026-08-05)
+- [x] **S9 — M3 assemblies + parts.lock + HTTP API**: `cadrion-parts` lock/provider/assembly;
+      `cadrion-api` Axum `/v1` + jobs/SSE/OpenAPI; plate+bolt example; `cadrion serve api` (2026-08-05)
+- [x] **S10 — M4 robots**: `cadrion-robot` URDF/SRDF/SDF gen+validate+inertials; urdf-rs parse;
+      `cadrion robot gen|validate`; simple_arm example (2026-08-05)
+- [x] **S11 — M5 fab path**: `cadrion-fab` DXF + DFM (SendCutSend-style) + slicer discover +
+      gcode-check + Bambu dry-run/gated start (no live print); `cadrion fab` / `cadrion printer`
       (2026-08-05)
 - [x] **S12 — M6 1.0 hardening**: metrics table, licensing review, Windows CI job, dual-agent
       skills export (`--all`), property/fuzz-style parser tests, release checklist (2026-08-05)
@@ -99,9 +99,9 @@ Priority suggestions when resuming:
 | H3-7 | OCCT parity depth | ✅ PR #52 |
 | H3-8 | DFM / OQ-6 governance seed | ✅ PR #54 |
 | H3-9 | Migrator / WASM polish | ✅ this slice |
-| H3-10 | OQ-1 name decision packet | next |
+| H3-10 | OQ-1 name decision packet | ✅ this slice — Cadrion-RS |
 
-Default when resuming with no pref: **H3-10**.
+Default when resuming with no pref: **H3-2** (blocked until a live backend exists).
 
 ## Post-v1 parking (still deferred)
 

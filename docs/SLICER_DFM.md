@@ -11,12 +11,12 @@
 Default is **preview** (prints command, no spawn). Execute never runs if gates fail.
 
 ```sh
-cargo run -p cadre-cli -- fab slice mesh.stl --json
-cargo run -p cadre-cli -- fab slice mesh.stl --execute --confirm SLICE \
+cargo run -p cadrion-cli -- fab slice mesh.stl --json
+cargo run -p cadrion-cli -- fab slice mesh.stl --execute --confirm SLICE \
   --allowlist prusa-slicer -o out.gcode --json
 
 # tests / stubs
-cargo run -p cadre-cli -- fab slice mesh.stl --slicer-bin ./fake-slicer.sh \
+cargo run -p cadrion-cli -- fab slice mesh.stl --slicer-bin ./fake-slicer.sh \
   --execute --confirm SLICE --allowlist fake-slicer.sh -o out.gcode --json
 ```
 
@@ -28,13 +28,13 @@ cargo run -p cadre-cli -- fab slice mesh.stl --slicer-bin ./fake-slicer.sh \
 | `pcb.outline` | FR4 / Aluminum PCB outline |
 
 ```sh
-cargo run -p cadre-cli -- fab profiles --json
-cargo run -p cadre-cli -- fab check --profile pcb.outline \
+cargo run -p cadrion-cli -- fab profiles --json
+cargo run -p cadrion-cli -- fab check --profile pcb.outline \
   --part-json examples/fab/pcb.flat.json --json
 ```
 
 ## Honesty
 
-- Cadre does not reimplement a slicer — it shells to host CLIs.
+- Cadrion does not reimplement a slicer — it shells to host CLIs.
 - Bundled DFM profiles are **versioned data**, not live vendor APIs.
 - Printer live path remains separate (`--live` + `START`).

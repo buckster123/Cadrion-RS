@@ -12,20 +12,20 @@
 > explicit don't. Cross-project version drift lives in
 > `~/Projects/Launchpad-RS/docs/sharp-edges.md` instead.
 
-- **Clean-room only.** Cadre is a functional-conceptual peer of `earthtojake/text-to-cad`, not
+- **Clean-room only.** Cadrion is a functional-conceptual peer of `earthtojake/text-to-cad`, not
   a source port. Don't vendor, translate, or "check how they did it" in their Python/JS tree.
   Behavior comes from our PRD + their *public* docs/README/skill text. Don't add a submodule
   or copy of the reference repo.
 
 - **OCCT behind `GeomKernel`, engine separate.** Default kernel is LGPL-adjacent. Don't
   statically link OCCT into MIT/Apache core binaries or bypass the trait "just for a spike"
-  in a way that smears license boundary into published crates. Use `cadre engine install`
+  in a way that smears license boundary into published crates. Use `cadrion engine install`
   distribution story; legal review before 1.0.
 
 - **Truck is not parity.** Experimental backend seeds the trait. Don't mark Parity-10 green
   on truck or advertise truck as default without a charter amendment.
 
-- **No directory-wide builds.** Agents will try `cadre build .`. Refuse. Explicit targets only.
+- **No directory-wide builds.** Agents will try `cadrion build .`. Refuse. Explicit targets only.
 
 - **Don't git-diff STEP/STL/3MF.** Binary noise. Use `inspect diff` and content hashes. Skill
   doctrine must keep saying this.
@@ -43,22 +43,22 @@
   structured error. Don't return empty artifacts with `ok: true`.
 
 - **`MockKernel` is not OCCT.** Volumes after boolean are analytic approximations; fillet /
-  chamfer / STEP / tessellate return `CADRE-E-UNSUPPORTED`. Don't mark Parity-10 or field
+  chamfer / STEP / tessellate return `CADRION-E-UNSUPPORTED`. Don't mark Parity-10 or field
   evidence against mock. Don't silently “implement” fillet in mock as a no-op success.
 
-- **OCCT stays out of default `cargo test`.** `cadre-kernel` must stay pure Rust. Don't add
-  `opencascade`/`occt-sys` to the default workspace build graph — gate behind `cadre-occt`
+- **OCCT stays out of default `cargo test`.** `cadrion-kernel` must stay pure Rust. Don't add
+  `opencascade`/`occt-sys` to the default workspace build graph — gate behind `cadrion-occt`
   features / optional member so fresh clones stay green (see `docs/occt-binding.md`).
 
-- **`load()` is hermetic-forbidden.** `cadre-lang` refuses AST loads before eval
-  (`CADRE-E-HERMETIC-LOAD`). Don't add a silent file loader "for convenience" without a
+- **`load()` is hermetic-forbidden.** `cadrion-lang` refuses AST loads before eval
+  (`CADRION-E-HERMETIC-LOAD`). Don't add a silent file loader "for convenience" without a
   charter amendment and sandbox story.
 
 - **Starlark `box` is `r#box` in Rust.** The stdlib exports the name `box` to Starlark; don't
   rename it to `make_box` in the language surface (PRD / agent fluency).
 
 - **OCCT build needs CMake policy on CMake ≥ 4.** `export CMAKE_POLICY_VERSION_MINIMUM=3.5`
-  before `cargo test -p cadre-occt`. Don't "fix" by forking occt-sys in-tree without a
+  before `cargo test -p cadrion-occt`. Don't "fix" by forking occt-sys in-tree without a
   charter note.
 
 - **`OcctKernel` is Send via unsafe.** Unique ownership only — never share one kernel across
@@ -79,9 +79,9 @@
 - **Snapshot preview ≠ B-rep.** Cut/intersect preview meshes keep A only; fillet/chamfer are
   not shown. Agents must still trust numeric inspect, not pixels alone.
 
-- **`cadre view` blocks.** Use `--once` in CI (prepare only). Default serves until Ctrl-C.
+- **`cadrion view` blocks.** Use `--once` in CI (prepare only). Default serves until Ctrl-C.
 
-- **MCP stdout is protocol-only.** Never print human banners on stdout in `cadre mcp`.
+- **MCP stdout is protocol-only.** Never print human banners on stdout in `cadrion mcp`.
 - **`part.cad.star` is not a repo file.** Fixtures live under `parity/parts/*/part.cad.star`.
 - **parts.lock is fail-closed.** Missing lock entry or checksum mismatch must error — never
   silently fetch/substitute.

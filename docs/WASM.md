@@ -1,6 +1,6 @@
 # H2-1 — WASM IR component
 
-Portable **mock-only** Cadre surface for browsers / wasm hosts.
+Portable **mock-only** Cadrion surface for browsers / wasm hosts.
 
 ## Honesty
 
@@ -9,17 +9,17 @@ Portable **mock-only** Cadre surface for browsers / wasm hosts.
 | Kernel | **mock** only |
 | OCCT / STEP | **unavailable** |
 | Parity-10 | **no** (`parity_eligible: false`) |
-| Default product path | still native `cadre` CLI / MCP |
+| Default product path | still native `cadrion` CLI / MCP |
 
 ## Build
 
 ```sh
 # native unit tests (default CI)
-cargo test -p cadre-wasm
+cargo test -p cadrion-wasm
 
 # browser/wasm artifact
 rustup target add wasm32-unknown-unknown
-cargo build -p cadre-wasm --target wasm32-unknown-unknown --features browser
+cargo build -p cadrion-wasm --target wasm32-unknown-unknown --features browser
 ```
 
 `.cargo/config.toml` sets `getrandom` wasm_js backend for `wasm32-unknown-unknown`.
@@ -28,7 +28,7 @@ Optional (local):
 
 ```sh
 # if wasm-pack installed
-wasm-pack build crates/cadre-wasm --target web --features browser -- --no-default-features
+wasm-pack build crates/cadrion-wasm --target web --features browser -- --no-default-features
 ```
 
 ## API (JSON in / JSON out)
@@ -40,14 +40,14 @@ wasm-pack build crates/cadre-wasm --target web --features browser -- --no-defaul
 | `facts_ir` | `{ir}` | mock facts from IR JSON |
 | `inspect_ir` | `{ir}` | IR-analytic `inspect_refs` (H3-9; not OCCT) |
 
-Native Rust: `cadre_wasm::build_json` / `facts_ir_json` / `inspect_ir_json` / `info_json`.
+Native Rust: `cadrion_wasm::build_json` / `facts_ir_json` / `inspect_ir_json` / `info_json`.
 
 With `--features browser`: wasm-bindgen exports `info`, `build`, `facts_ir`, `inspect_ir` as strings.
 
 ## Example (conceptual JS)
 
 ```js
-import init, { info, build } from "./cadre_wasm.js";
+import init, { info, build } from "./cadrion_wasm.js";
 await init();
 console.log(info());
 const out = JSON.parse(build(JSON.stringify({
@@ -64,5 +64,5 @@ See `examples/wasm/index.html` for a static sketch (load your own pack output).
 
 ## CI
 
-Ubuntu job `wasm` builds `cadre-wasm` for `wasm32-unknown-unknown` with `--features browser`.
+Ubuntu job `wasm` builds `cadrion-wasm` for `wasm32-unknown-unknown` with `--features browser`.
 Windows default job stays native-only (no wasm target required).

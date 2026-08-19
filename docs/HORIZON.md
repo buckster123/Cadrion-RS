@@ -1,10 +1,10 @@
-# Cadre-RS Horizon-1 — post foundation board (COMPLETE)
+# Cadrion-RS Horizon-1 — post foundation board (COMPLETE)
 
 > **Status:** **COMPLETE** (H1–H10 merged ~PR #24–#34).  
 > **When written:** 2026-08-05 · **closed:** 2026-08-06.  
 > **Next board:** [`docs/HORIZON2.md`](HORIZON2.md)  
 > **Authority:** does **not** override `docs/CHARTER.md` D1–Dn.  
-> **Agent id:** `CADRE`
+> **Agent id:** `CADRION`
 
 ## 0. Where we are (ground truth)
 
@@ -59,7 +59,7 @@ Rank candidates by **all five**, not one:
 **Natural next step (recommended):**  
 **(a) Horizon-1 agent depth** — live LLM harness + richer stdlib (fillet/patterns used for real) + OCCT transform quality — *not* truck, WASM, or SaaS.
 
-Why: foundation is agent CAD. The biggest remaining gap is **“a real model can drive Cadre end-to-end and we can score it”** plus **geometry vocabulary depth** so parts 7–10 stop being mock-shaped approximations. Parking-lot truck/WASM/SaaS do not improve that loop yet.
+Why: foundation is agent CAD. The biggest remaining gap is **“a real model can drive Cadrion end-to-end and we can score it”** plus **geometry vocabulary depth** so parts 7–10 stop being mock-shaped approximations. Parking-lot truck/WASM/SaaS do not improve that loop yet.
 
 ---
 
@@ -68,7 +68,7 @@ Why: foundation is agent CAD. The biggest remaining gap is **“a real model can
 Numbered **H1..H10**. Alphabetical option lists still apply inside a slice; this list is **recommended cook order**.
 
 ### H1 — Live agent harness driver (highest leverage)
-**Goal:** `cadre harness run --suite agent10 --cmd '…'` (or MCP client) drives **natural-language prompts only**, scores first-try / loops-to-success / wall / tokens.  
+**Goal:** `cadrion harness run --suite agent10 --cmd '…'` (or MCP client) drives **natural-language prompts only**, scores first-try / loops-to-success / wall / tokens.  
 **Why now:** scripted 10/10 proves surfaces; does not prove LLM fluency. PRD §12 agent number is still the open “is it good for AI?” metric.  
 **Depends on:** nothing new.  
 **Exit:** one documented run with a frontier or strong local model ≥6/10 ≤3 loops median (or honest score + failure corpus).  
@@ -94,7 +94,7 @@ Numbered **H1..H10**. Alphabetical option lists still apply inside a slice; this
 **Exit:** OCCT-only expect lane for filleted variants; skill doctrine “if mock, skip fillet”.
 
 ### H5 — Viewer depth (G-code scrub + URDF jog alpha)
-**Goal:** extend `cadre view` beyond STEP/STL/GLB: G-code layer scrub (fab) + URDF joint sliders (robot).  
+**Goal:** extend `cadrion view` beyond STEP/STL/GLB: G-code layer scrub (fab) + URDF joint sliders (robot).  
 **Why:** human-in-loop for fab/robot already shipped as data; P2 user still blind.  
 **Depends on:** none.  
 **Exit:** deep links + `--json` meta; no new crate if possible (keep loopback HTML honest).
@@ -106,13 +106,13 @@ Numbered **H1..H10**. Alphabetical option lists still apply inside a slice; this
 **Exit:** dry-run default; `--confirm SLICE` or reuse START pattern; profile version in report.
 
 ### H7 — MCP surface completion (resources + write_source policy)
-**Goal:** `cadre://doc/**` + `cadre://artifact/**` resources; decide default for `write_source` (local stdio off / HTTP on).  
+**Goal:** `cadrion://doc/**` + `cadrion://artifact/**` resources; decide default for `write_source` (local stdio off / HTTP on).  
 **Why:** OQ-5/OQ-7 residue; agents on HTTP need project I/O.  
 **Depends on:** none.  
 **Exit:** dated CHARTER note on write_source default; resource list in skills.
 
 ### H8 — build123d → skeleton migrator (clean-room)
-**Goal:** `cadre migrate path.py` → best-effort `.cad.star` skeleton (structure + params, not full semantics).  
+**Goal:** `cadrion migrate path.py` → best-effort `.cad.star` skeleton (structure + params, not full semantics).  
 **Why:** onboarding; charter OQ-3. **Only** from public build123d docs / user-supplied files — never reference repo source.  
 **Depends on:** H2 (richer target stdlib = better skeletons).  
 **Exit:** 3 golden .py fixtures (hand-written, public-API shaped); refuse if parse unsafe.
@@ -124,7 +124,7 @@ Numbered **H1..H10**. Alphabetical option lists still apply inside a slice; this
 **Exit:** dry-run + allowlist + hash + confirm; no silent start.
 
 ### H10 — truck experimental lane (explicit non-parity)
-**Goal:** `cadre-truck` crate implements subset of `GeomKernel` (box/cyl/boolean/facts); never default; never parity-10 claims.  
+**Goal:** `cadrion-truck` crate implements subset of `GeomKernel` (box/cyl/boolean/facts); never default; never parity-10 claims.  
 **Why:** D4 honesty valve; pure-Rust future seed. **Not** “promotion toward default” until H1–H4 prove OCCT still wins.  
 **Depends on:** none, but **schedule after H1–H4** so it doesn’t steal agent-loop oxygen.  
 **Exit:** feature-gated tests; meta warns non-parity.
@@ -141,7 +141,7 @@ Numbered **H1..H10**. Alphabetical option lists still apply inside a slice; this
 | build123d migrator | **H8** | After stdlib depth |
 | Klipper/Moonraker/DFM | **H6 then H9** | Fab spine first |
 | STEP PMI / drawings | **Defer** | Horizon-2 (huge; not agent hot path) |
-| Multi-tenant HTTP | **Defer / NG3** | Not Cadre’s product shape unless you re-charter |
+| Multi-tenant HTTP | **Defer / NG3** | Not Cadrion’s product shape unless you re-charter |
 
 ---
 
@@ -195,6 +195,6 @@ Same rhythm that worked for #14–#22:
 
 ## 8. One-line pitch
 
-> **Horizon-1 makes Cadre unmistakably good for agents** (live harness + deeper stdlib + faster OCCT transforms).  
+> **Horizon-1 makes Cadrion unmistakably good for agents** (live harness + deeper stdlib + faster OCCT transforms).  
 > **Horizon-2 expands mediums and distribution** (WASM, PMI, SDF side-path, truck parity bid).  
 > **Parking stays parking** until Horizon-1 checklist is mostly green.

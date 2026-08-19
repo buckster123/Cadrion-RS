@@ -1,16 +1,16 @@
-# Cadre-RS — the contract
+# Cadrion-RS — the contract
 
 > **Contract first** (house doctrine #1). This document is pinned **before** the code it
 > describes. Code follows this doc; a PR that changes behaviour updates this doc in the same
 > commit. When the two disagree, that is a bug in one of them — find out which, don't guess.
 >
-> Full product requirements live in [`cadre-prd.md`](cadre-prd.md). This file is the
+> Full product requirements live in [`cadrion-prd.md`](cadrion-prd.md). This file is the
 > **implementer contract**: surfaces, types, lifecycle, env, invariants. Charter decisions
 > D1–Dn bind when this doc and the PRD disagree on scope.
 
 ## Scope
 
-Covers the agent/hardware-design loop Cadre exposes:
+Covers the agent/hardware-design loop Cadrion exposes:
 
 - hermetic evaluation of `*.cad.star` / `*.dxf.star` / `*.urdf.star` / `*.srdf.star` / `*.sdf.star`
 - kernel execution to primary STEP (and secondary exports)
@@ -30,39 +30,39 @@ Crate boundaries are requirements (charter D16). Internal module layout is free.
 
 | Crate | Responsibility | v1 status |
 |-------|----------------|-----------|
-| `cadre` | Thin facade / re-exports | shipped |
-| `cadre-kernel` | `GeomKernel` trait + `MockKernel` | shipped |
-| `cadre-occt` | OCCT backend (FFI); separate LGPL engine | shipped (local/opt-in) |
-| `cadre-lang` | Starlark host, CAD stdlib, IR emission, `execute_ir` | shipped |
-| `cadre-model` | Selectors, content hashing, build cache | shipped |
-| `cadre-inspect` | refs / measure (+ topology snapshot helpers) | shipped |
-| `cadre-render` | **Software** z-buffer: multi-view PNG, orbit GIF | shipped (wgpu parked) |
-| `cadre-bench` | Parity suite runner (parts 1–4) | shipped |
-| `cadre-parts` | `PartProvider`, `parts.lock`, assembly specs | shipped |
-| `cadre-robot` | URDF/SRDF/SDF gen + validators; analytic inertials | shipped |
-| `cadre-fab` | DFM rulepacks; slicer discovery; G-code checks; `Printer` | shipped |
-| `cadre-mcp` | MCP server (stdio + streamable HTTP) | shipped |
-| `cadre-api` | Axum HTTP API, jobs, SSE, OpenAPI | shipped |
-| `cadre-cli` | Clap front end — the `cadre` binary | shipped |
+| `cadrion` | Thin facade / re-exports | shipped |
+| `cadrion-kernel` | `GeomKernel` trait + `MockKernel` | shipped |
+| `cadrion-occt` | OCCT backend (FFI); separate LGPL engine | shipped (local/opt-in) |
+| `cadrion-lang` | Starlark host, CAD stdlib, IR emission, `execute_ir` | shipped |
+| `cadrion-model` | Selectors, content hashing, build cache | shipped |
+| `cadrion-inspect` | refs / measure (+ topology snapshot helpers) | shipped |
+| `cadrion-render` | **Software** z-buffer: multi-view PNG, orbit GIF | shipped (wgpu parked) |
+| `cadrion-bench` | Parity suite runner (parts 1–4) | shipped |
+| `cadrion-parts` | `PartProvider`, `parts.lock`, assembly specs | shipped |
+| `cadrion-robot` | URDF/SRDF/SDF gen + validators; analytic inertials | shipped |
+| `cadrion-fab` | DFM rulepacks; slicer discovery; G-code checks; `Printer` | shipped |
+| `cadrion-mcp` | MCP server (stdio + streamable HTTP) | shipped |
+| `cadrion-api` | Axum HTTP API, jobs, SSE, OpenAPI | shipped |
+| `cadrion-cli` | Clap front end — the `cadrion` binary | shipped |
 
-**Parked / not crates yet:** `cadre-truck` (experimental pure-Rust kernel), standalone
-`cadre-export` / `cadre-viewer` / `cadre-skills` packages (export/view/skills live in
+**Parked / not crates yet:** `cadrion-truck` (experimental pure-Rust kernel), standalone
+`cadrion-export` / `cadrion-viewer` / `cadrion-skills` packages (export/view/skills live in
 cli/render/mcp as of S12). See `docs/STATUS.md`.
 
-Bootstrap shipped `crates/cadre`. **S1** added `crates/cadre-kernel` (`GeomKernel` +
-`MockKernel`). **S2** added `crates/cadre-lang` (hermetic Starlark → feature IR v0).
-**S3** added `crates/cadre-occt` (LGPL OCCT backend) + `execute_ir`. **S4** added
-`crates/cadre-model` (selectors + content-hash cache) and `crates/cadre-inspect`
-(refs/measure). **S5** added `crates/cadre-cli` (`cadre` binary). Default workspace
+Bootstrap shipped `crates/cadrion`. **S1** added `crates/cadrion-kernel` (`GeomKernel` +
+`MockKernel`). **S2** added `crates/cadrion-lang` (hermetic Starlark → feature IR v0).
+**S3** added `crates/cadrion-occt` (LGPL OCCT backend) + `execute_ir`. **S4** added
+`crates/cadrion-model` (selectors + content-hash cache) and `crates/cadrion-inspect`
+(refs/measure). **S5** added `crates/cadrion-cli` (`cadrion` binary). Default workspace
 members exclude OCCT so CI stays fast; see [`occt-binding.md`](occt-binding.md).
 
 ### CLI face (v0)
 
 ```sh
-cargo run -p cadre-cli -- build part.cad.star --json
-cargo run -p cadre-cli -- inspect refs part.cad.star --facts --json
-cargo run -p cadre-cli -- inspect measure part.cad.star '#o1.1.f1' '#o1.1.f2' --kind thickness --json
-cargo run -p cadre-cli --features occt -- --kernel occt build part.cad.star --json
+cargo run -p cadrion-cli -- build part.cad.star --json
+cargo run -p cadrion-cli -- inspect refs part.cad.star --facts --json
+cargo run -p cadrion-cli -- inspect measure part.cad.star '#o1.1.f1' '#o1.1.f2' --kind thickness --json
+cargo run -p cadrion-cli --features occt -- --kernel occt build part.cad.star --json
 ```
 
 Global: `--json`, `--quiet`, `--project`, `--kernel mock|occt`, `-v`.
@@ -73,7 +73,7 @@ S5 `export --format glb` writes JSON glTF (embedded buffers) when tessellation i
 ### Parity suite (parts 1–4)
 
 Fixtures live under `parity/parts/NN_name/{part.cad.star,expect.json}`.
-Runner: `cadre-bench` / `cadre bench run --suite parts1-4 --json`.
+Runner: `cadrion-bench` / `cadrion bench run --suite parts1-4 --json`.
 
 Checks per part: eval · label · params · IR ops · mock execute · volume · bbox ·
 faces/edges min · selector stability · optional measures.
@@ -84,13 +84,13 @@ are a later `parity-geom` lane.
 ### Snapshots & viewer (v0 / S7)
 
 ```sh
-cargo run -p cadre-cli -- snapshot part.cad.star --json
+cargo run -p cadrion-cli -- snapshot part.cad.star --json
 # → part.snap/{iso,front,top,right}.png + orbit.gif + manifest.json
 
-cargo run -p cadre-cli -- view part.snap --json
+cargo run -p cadrion-cli -- view part.snap --json
 # → http://127.0.0.1:7411/v/0/  (Ctrl-C to stop)
 
-cargo run -p cadre-cli -- view part.cad.star --once --json
+cargo run -p cadrion-cli -- view part.cad.star --once --json
 # CI-friendly: builds snap packet, no server
 ```
 
@@ -101,26 +101,26 @@ preview mesh and record that in `manifest.notes` / `preview_mesh: true`.
 ### MCP + skills (v0 / S8)
 
 ```sh
-cargo run -p cadre-cli -- mcp                 # stdio, Content-Length framing
-cargo run -p cadre-cli -- serve mcp --port 7420 --token dev   # streamable HTTP
+cargo run -p cadrion-cli -- mcp                 # stdio, Content-Length framing
+cargo run -p cadrion-cli -- serve mcp --port 7420 --token dev   # streamable HTTP
 # POST http://127.0.0.1:7420/mcp  Authorization: Bearer dev
 # body: {"jsonrpc":"2.0","id":1,"method":"tools/list"}
 # GET  http://127.0.0.1:7420/mcp  — SSE heartbeats
 # GET  http://127.0.0.1:7420/health
 
-cargo run -p cadre-cli -- skills export -o dist/skills/cadre --json
+cargo run -p cadrion-cli -- skills export -o dist/skills/cadrion --json
 ```
 
 Tools (short schemas): `build`, `write_source`, `read_source`, `inspect_refs`, `measure`,
 `snapshot` (optional base64 PNG content for iso/front).
 
-Doctrine pack: `skills/cadre/SKILL.md` + `references/workflow.md`.
+Doctrine pack: `skills/cadrion/SKILL.md` + `references/workflow.md`.
 Hand-rolled JSON-RPC (OQ-7 SDK deferred). Logs on **stderr** only.
 
 ### HTTP API + parts/assembly (v0 / S9)
 
 ```sh
-cargo run -p cadre-cli -- serve api --port 7410 --token secret
+cargo run -p cadrion-cli -- serve api --port 7410 --token secret
 # GET  /v1/health
 # GET  /v1/openapi.json
 # POST /v1/build|inspect/refs|snapshot  (Bearer token)
@@ -136,8 +136,8 @@ Example: `examples/assembly/plate_bolt.assy.json`.
 ### Robots (v0 / S10)
 
 ```sh
-cargo run -p cadre-cli -- robot gen examples/robots/simple_arm.robot.json -o /tmp/arm --json
-cargo run -p cadre-cli -- robot validate /tmp/arm/simple_arm.urdf --json
+cargo run -p cadrion-cli -- robot gen examples/robots/simple_arm.robot.json -o /tmp/arm --json
+cargo run -p cadrion-cli -- robot validate /tmp/arm/simple_arm.urdf --json
 ```
 
 `RobotSpec` JSON → URDF (SI units) with analytic box/cylinder inertials; validated for
@@ -148,11 +148,11 @@ non-fixed joints; minimal SDF model emit.
 
 ```sh
 # Largest +Z face outline from a part (mock topology)
-cargo run -p cadre-cli -- fab dxf-face parity/parts/01_calibration_block/part.cad.star \
+cargo run -p cadrion-cli -- fab dxf-face parity/parts/01_calibration_block/part.cad.star \
   --normal 0,0,1 -o /tmp/face.dxf --json
 
 # Or pick a selector from `inspect refs`
-cargo run -p cadre-cli -- fab dxf-face part.cad.star --face '#o1.1.f6' -o face.dxf --json
+cargo run -p cadrion-cli -- fab dxf-face part.cad.star --face '#o1.1.f6' -o face.dxf --json
 ```
 
 Projects coplanar edges with endpoints onto the face plane (R12 DXF, mm).
@@ -161,11 +161,11 @@ Plate helper `fab dxf --width …` remains for quick sketches without a model.
 ### Fabrication (v0 / S11)
 
 ```sh
-cargo run -p cadre-cli -- fab dxf --width 100 --height 50 --hole 25,25,6 -o plate.dxf --json
-cargo run -p cadre-cli -- fab check --part-json examples/fab/plate.flat.json --json
-cargo run -p cadre-cli -- fab slicers --json
-cargo run -p cadre-cli -- fab gcode-check examples/fab/sample.gcode --json
-cargo run -p cadre-cli -- printer dry-run examples/fab/sample.gcode --json
+cargo run -p cadrion-cli -- fab dxf --width 100 --height 50 --hole 25,25,6 -o plate.dxf --json
+cargo run -p cadrion-cli -- fab check --part-json examples/fab/plate.flat.json --json
+cargo run -p cadrion-cli -- fab slicers --json
+cargo run -p cadrion-cli -- fab gcode-check examples/fab/sample.gcode --json
+cargo run -p cadrion-cli -- printer dry-run examples/fab/sample.gcode --json
 ```
 
 - DXF: R12 text, mm (`$INSUNITS=4`), outline + circles
@@ -189,11 +189,11 @@ diameter / thickness against that inventory (from a `TopologySnapshot`).
 
 ### Build cache (v0)
 
-Key = SHA-256 of `{source_sha, params_sha, cadre_version, kernel_id, kernel_version, ir_version}`.
-Store under `<project>/.cadre/cache/<key_digest>/` with `entry.json` + artifact; get verifies
+Key = SHA-256 of `{source_sha, params_sha, cadrion_version, kernel_id, kernel_version, ir_version}`.
+Store under `<project>/.cadrion/cache/<key_digest>/` with `entry.json` + artifact; get verifies
 artifact hash (corruption → miss). Warm hit is filesystem metadata + hash check only.
 
-### Feature IR (v0, from `cadre-lang`)
+### Feature IR (v0, from `cadrion-lang`)
 
 Evaluation returns `EvalResult` JSON:
 
@@ -219,17 +219,17 @@ Hermetic: `load()` refused; no fs/net/clock in stdlib; host overrides via `EvalO
 
 ```
 myproject/
-  cadre.toml            # kernel, viewer port, printer allow-list, providers
+  cadrion.toml            # kernel, viewer port, printer allow-list, providers
   parts.lock            # pinned catalog parts + checksums
   cad/bracket.cad.star  # source …
   cad/bracket.step      # … artifact, same basename, same directory
   cad/bracket.snap/     # snapshot packets
   robots/arm.urdf.star  → robots/arm.urdf
-  .cadre/               # build cache, tess cache, logs (gitignored)
+  .cadrion/               # build cache, tess cache, logs (gitignored)
 ```
 
 Paths resolve from invoking CWD, never from install/skill directories.
-Config precedence: **flags > env (`CADRE_*`) > project `cadre.toml` > user config**.
+Config precedence: **flags > env (`CADRION_*`) > project `cadrion.toml` > user config**.
 
 ## Authoring surface
 
@@ -263,30 +263,30 @@ Global CLI flags: `--json`, `--quiet`, `--project <dir>`, `--kernel <backend>`, 
 
 | Surface | Purpose | Shape notes |
 |---------|---------|-------------|
-| `cadre build <target>` | Hermetic eval + kernel → primary artifact | JSON: artifacts[], facts, diagnostics[], hashes, validity, wall_ms. Refuses directory-wide builds |
-| `cadre inspect refs\|measure\|align\|frame\|diff` | Numeric interrogation | JSON numeric results + construction text; align is pass/fail vs tol |
-| `cadre snapshot <target>` | PNG packet (+ GIF) | Files on disk; MCP/API also return image content blocks |
-| `cadre export …` | Secondary formats | Provenance: source hash + tolerances |
-| `cadre view [paths…]` | Embed viewer, reuse instance | Prints deep links (`http://127.0.0.1:<port>/…`) |
-| `cadre parts search\|show\|fetch\|lock` | Catalog + lockfile | Checksum-verified cache; fail closed on lock mismatch |
-| `cadre robot validate` | URDF/SRDF/SDF | Cross-check flags where paired |
-| `cadre fab check\|slicers\|slice\|gcode-check` | DFM + slice path | Evidence-backed findings; real slicer CLIs |
-| `cadre printer status\|upload\|dry-run\|start\|watch` | Printer handoff | `start` gated (below) |
-| `cadre serve api` | Local Axum | Loopback + bearer token default; `/v1/*` + jobs/SSE + OpenAPI |
-| `cadre mcp` | Agent tools | stdio default; progress notifications; image blocks for snapshot |
-| `cadre skills export\|install` | L2 skill packs | Original prose; tool invocations → `cadre` |
-| `cadre bench run\|agent` | Parity-10 + agent harness | Local only; no phone-home |
-| `cadre engine install\|info` | Kernel backend component | Checksummed fetch |
-| `cadre schema [cli\|mcp\|api\|errors]` | Single schema dump | CI drift gate (D13) |
+| `cadrion build <target>` | Hermetic eval + kernel → primary artifact | JSON: artifacts[], facts, diagnostics[], hashes, validity, wall_ms. Refuses directory-wide builds |
+| `cadrion inspect refs\|measure\|align\|frame\|diff` | Numeric interrogation | JSON numeric results + construction text; align is pass/fail vs tol |
+| `cadrion snapshot <target>` | PNG packet (+ GIF) | Files on disk; MCP/API also return image content blocks |
+| `cadrion export …` | Secondary formats | Provenance: source hash + tolerances |
+| `cadrion view [paths…]` | Embed viewer, reuse instance | Prints deep links (`http://127.0.0.1:<port>/…`) |
+| `cadrion parts search\|show\|fetch\|lock` | Catalog + lockfile | Checksum-verified cache; fail closed on lock mismatch |
+| `cadrion robot validate` | URDF/SRDF/SDF | Cross-check flags where paired |
+| `cadrion fab check\|slicers\|slice\|gcode-check` | DFM + slice path | Evidence-backed findings; real slicer CLIs |
+| `cadrion printer status\|upload\|dry-run\|start\|watch` | Printer handoff | `start` gated (below) |
+| `cadrion serve api` | Local Axum | Loopback + bearer token default; `/v1/*` + jobs/SSE + OpenAPI |
+| `cadrion mcp` | Agent tools | stdio default; progress notifications; image blocks for snapshot |
+| `cadrion skills export\|install` | L2 skill packs | Original prose; tool invocations → `cadrion` |
+| `cadrion bench run\|agent` | Parity-10 + agent harness | Local only; no phone-home |
+| `cadrion engine install\|info` | Kernel backend component | Checksummed fetch |
+| `cadrion schema [cli\|mcp\|api\|errors]` | Single schema dump | CI drift gate (D13) |
 
-### MCP tools (names final; schemas via `cadre schema mcp`)
+### MCP tools (names final; schemas via `cadrion schema mcp`)
 
 `build`, `write_source`, `read_source`, `inspect_refs`, `measure`, `align_check`, `frame`,
 `diff`, `snapshot`, `export`, `viewer_open`, `parts_search`, `parts_fetch`, `robot_validate`,
 `fab_check`, `fab_slice`, `gcode_check`, `printer_status`, `printer_upload`, `printer_dry_run`,
 `printer_start`, `project_artifacts`, `engine_info`.
 
-Resources: `cadre://project/**`, `cadre://artifact/**`, `cadre://doc/**`.
+Resources: `cadrion://project/**`, `cadrion://artifact/**`, `cadrion://doc/**`.
 
 Tool descriptions + schemas total **≤ 4,000 tokens** (D12).
 
@@ -295,7 +295,7 @@ Tool descriptions + schemas total **≤ 4,000 tokens** (D12).
 - Bearer token (printed at start); loopback bind default.
 - Sync for fast ops; async jobs: `POST /v1/jobs`, `GET /v1/jobs/{id}`, `GET /v1/jobs/{id}/events` (SSE).
 - Artifacts: `GET /v1/artifacts/{hash}`.
-- Families mirror MCP 1:1 under `/v1/...`. OpenAPI at `/v1/openapi.json` from the same types as `cadre schema`.
+- Families mirror MCP 1:1 under `/v1/...`. OpenAPI at `/v1/openapi.json` from the same types as `cadrion schema`.
 - Versioned `/v1`; additive-only within a major.
 
 ### Printer start gate (all surfaces)
@@ -330,7 +330,7 @@ Load-bearing serialized shapes (evolve only with schema + fixtures):
 
 ```json
 {
-  "code": "CADRE-E-FILLET-RADIUS",
+  "code": "CADRION-E-FILLET-RADIUS",
   "severity": "error",
   "message": "…",
   "target": "cad/flange.cad.star",
@@ -341,7 +341,7 @@ Load-bearing serialized shapes (evolve only with schema + fixtures):
 }
 ```
 
-Codes are stable and enumerable (`cadre schema errors`). Kernel failures are translated to
+Codes are stable and enumerable (`cadrion schema errors`). Kernel failures are translated to
 feature-level terms (which op, which selector, plausible causes) — never raw FFI dumps as the
 only message.
 
@@ -365,7 +365,7 @@ only message.
   "meta": {
     "source_sha256": "…",
     "params": {},
-    "cadre_version": "0.1.0",
+    "cadrion_version": "0.1.0",
     "kernel": "occt",
     "kernel_version": "…",
     "wall_ms": 420
@@ -417,23 +417,23 @@ Any skipped gate is a hard error (code 8), not a warning.
 
 | Var | Default | Purpose |
 |-----|---------|---------|
-| `CADRE_PROJECT` | cwd walk | Project root override (else `--project` / find `cadre.toml`) |
-| `CADRE_KERNEL` | `occt` | Backend id (`occt` \| `truck`) |
-| `CADRE_ENGINE_DIR` | platform cache | OCCT/engine install location |
-| `CADRE_VIEWER_PORT` | `7411` | Default viewer bind port |
-| `CADRE_API_PORT` | `7410` | Default API bind port |
-| `CADRE_API_TOKEN` | auto at start | Bearer token; never log full value |
-| `CADRE_LOG` | `info` | `tracing` filter (stderr only) |
-| `CADRE_CACHE` | `<project>/.cadre` | Build/tess cache root |
-| `CADRE_PARTS_CACHE` | user cache | Catalog STEP cache |
-| `CADRE_NO_COLOR` | unset | Disable ANSI |
+| `CADRION_PROJECT` | cwd walk | Project root override (else `--project` / find `cadrion.toml`) |
+| `CADRION_KERNEL` | `occt` | Backend id (`occt` \| `truck`) |
+| `CADRION_ENGINE_DIR` | platform cache | OCCT/engine install location |
+| `CADRION_VIEWER_PORT` | `7411` | Default viewer bind port |
+| `CADRION_API_PORT` | `7410` | Default API bind port |
+| `CADRION_API_TOKEN` | auto at start | Bearer token; never log full value |
+| `CADRION_LOG` | `info` | `tracing` filter (stderr only) |
+| `CADRION_CACHE` | `<project>/.cadrion` | Build/tess cache root |
+| `CADRION_PARTS_CACHE` | user cache | Catalog STEP cache |
+| `CADRION_NO_COLOR` | unset | Disable ANSI |
 
-Flags win over env; env wins over `cadre.toml`. Tokens and printer credentials: **0600 files /
+Flags win over env; env wins over `cadrion.toml`. Tokens and printer credentials: **0600 files /
 env only**, never committed, never full-printed (lengths/heads only).
 
 ## Invariants
 
-1. **Source + lock + Cadre/kernel versions determine artifacts.** No hidden ambient inputs in model code.
+1. **Source + lock + Cadrion/kernel versions determine artifacts.** No hidden ambient inputs in model code.
 2. **Primary artifact basename matches source** (`block.cad.star` → `block.step` beside it).
 3. **No directory-wide build or scan mutation.** Explicit targets only.
 4. **Stdout on MCP is JSON-RPC only.** All logs on stderr.
@@ -448,7 +448,7 @@ env only**, never committed, never full-printed (lengths/heads only).
 
 | Condition | Behavior |
 |-----------|----------|
-| OCCT engine not installed | `cadre build` fails with `CADRE-E-ENGINE-MISSING` + hint to `cadre engine install`; never pretends truck parity |
+| OCCT engine not installed | `cadrion build` fails with `CADRION-E-ENGINE-MISSING` + hint to `cadrion engine install`; never pretends truck parity |
 | `truck` selected for parity path | Explicit non-parity warning in meta; parity-10 may skip or xfail loudly |
 | Parts catalog unreachable | `parts search/fetch` → code 7; builds using lock miss fail closed |
 | Slicer CLI not found | `fab slice` → structured miss listing discovery paths; no fake gcode |
@@ -460,7 +460,7 @@ env only**, never committed, never full-printed (lengths/heads only).
 
 - Parity-10 deterministic suite (PRD §12) is the geometry acceptance gate.
 - Agent harness scores loops-to-success; not a substitute for deterministic asserts.
-- Library face: 30-line "bracket → STEP" example compiles in CI once `cadre-lang` + kernel land.
+- Library face: 30-line "bracket → STEP" example compiles in CI once `cadrion-lang` + kernel land.
 
 ## Open questions
 
@@ -468,4 +468,5 @@ See charter OQ-1…OQ-7. Design-level watches:
 
 - Exact stdlib symbol names and selector query grammar — freeze with golden-IR tests in M1.
 - Default viewer/API ports (7411/7410 above) — change only with schema + docs together.
-- Whether `cadre` facade remains public on crates.io or becomes a virtual workspace binary package only (OQ-1).
+- ~~Whether the facade remains public on crates.io~~ **Resolved (OQ-1 / H3-10):**
+  product is **Cadrion**. First public install crate is `cadrion-cli`. See `docs/NAME_OQ1.md`.

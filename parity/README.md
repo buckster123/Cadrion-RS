@@ -1,6 +1,6 @@
 # Parity suite
 
-Deterministic geometry fixtures for Cadre-RS (PRD §12 Parity-10).
+Deterministic geometry fixtures for Cadrion-RS (PRD §12 Parity-10).
 
 ## Parts 1–4 (M1)
 
@@ -32,18 +32,18 @@ expect.json     # volume/bbox/ops/params (mock goldens)
 ## Run
 
 ```sh
-cargo test -p cadre-bench
-cargo run -p cadre-cli -- bench run --suite parts1-4 --json
-cargo run -p cadre-cli -- bench run --suite parts5-10 --json
-cargo run -p cadre-cli -- bench run --suite parts1-10 --json   # full Parity-10
+cargo test -p cadrion-bench
+cargo run -p cadrion-cli -- bench run --suite parts1-4 --json
+cargo run -p cadrion-cli -- bench run --suite parts5-10 --json
+cargo run -p cadrion-cli -- bench run --suite parts1-10 --json   # full Parity-10
 ```
 
 Volumes are calibrated against **MockKernel** analytic booleans so default CI stays OCCT-free.
 
 ### OCCT lane
 ```sh
-CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadre-occt --test transform_smoke
-CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo run -p cadre-cli --features occt -- \
+CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadrion-occt --test transform_smoke
+CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo run -p cadrion-cli --features occt -- \
   bench run --suite parts5-10-occt
 ```
 

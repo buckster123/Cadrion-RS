@@ -9,8 +9,8 @@
 | `waterjet.generic` | `waterjet`, `wj` | waterjet / abrasive cut |
 
 ```sh
-cargo run -p cadre-cli -- fab profiles --json
-cargo run -p cadre-cli -- fab check --profile waterjet \
+cargo run -p cadrion-cli -- fab profiles --json
+cargo run -p cadrion-cli -- fab check --profile waterjet \
   --part-json examples/fab/waterjet.flat.json --json
 ```
 
@@ -19,16 +19,16 @@ cargo run -p cadre-cli -- fab check --profile waterjet \
 Same gates as Bambu/Klipper: allowlist · sha256 · `confirm=START` · gcode-check · `--live`.
 
 ```sh
-cargo run -p cadre-cli -- printer dry-run examples/fab/sample.gcode \
+cargo run -p cadrion-cli -- printer dry-run examples/fab/sample.gcode \
   --id octoprint:pi --host 192.168.1.70 --json
 
-cargo run -p cadre-cli -- printer start examples/fab/sample.gcode \
+cargo run -p cadrion-cli -- printer start examples/fab/sample.gcode \
   --backend octoprint --id octoprint:pi --host 192.168.1.70 \
   --sha256 <from-dry-run> --confirm START --allowlist octoprint:pi --json
 
 # LIVE
-export CADRE_OCTOPRINT_API_KEY=xxxxxxxx
-cargo run -p cadre-cli -- printer start examples/fab/sample.gcode \
+export CADRION_OCTOPRINT_API_KEY=xxxxxxxx
+cargo run -p cadrion-cli -- printer start examples/fab/sample.gcode \
   --backend octoprint --id octoprint:pi --host 192.168.1.70 \
   --sha256 <from-dry-run> --confirm START --allowlist octoprint:pi --live --json
 ```
@@ -41,9 +41,9 @@ Id prefixes `octoprint:` / `octo:` auto-select backend.
 
 | Env | Role |
 |-----|------|
-| `CADRE_OCTOPRINT_API_KEY` | API key (required for live) |
-| `CADRE_OCTOPRINT_URL` | base URL override |
-| `CADRE_CURL` | curl binary |
+| `CADRION_OCTOPRINT_API_KEY` | API key (required for live) |
+| `CADRION_OCTOPRINT_URL` | base URL override |
+| `CADRION_CURL` | curl binary |
 
 `--moonraker-url` is reused as a generic base-URL override for klipper/octoprint when set.
 

@@ -1,13 +1,13 @@
-# Patched `opencascade` 0.2.0 (Cadre-RS H3)
+# Patched `opencascade` 0.2.0 (Cadrion-RS H3)
 
 Local path patch of [opencascade-rs](https://github.com/bschwind/opencascade-rs) 0.2.0.
 
 ## Why
 
 Upstream `Shape.inner` is `pub(crate)`, so consumers cannot call `BRepBuilderAPI_Transform`
-without STEP write/read thrash. Cadre-RS needs in-memory translate/rotate/mirror/sphere.
+without STEP write/read thrash. Cadrion-RS needs in-memory translate/rotate/mirror/sphere.
 
-## Cadre additions (`src/primitives/shape.rs`)
+## Cadrion additions (`src/primitives/shape.rs`)
 
 | Method | Purpose |
 |--------|---------|

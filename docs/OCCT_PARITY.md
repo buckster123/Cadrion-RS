@@ -22,16 +22,16 @@ Default CI stays **OCCT-free**. This note is for local `--features occt` runs.
 Part **13** is the H3-7 hard golden: `union` of two plates then all-edge fillet.
 
 ```sh
-CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadre-occt --test fillet_smoke
-CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadre-bench --features occt fillet_occt
-CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo run -p cadre-cli --features occt -- \
+CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadrion-occt --test fillet_smoke
+CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadrion-bench --features occt fillet_occt
+CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo run -p cadrion-cli --features occt -- \
   bench run --suite fillet-occt --json
 ```
 
 Regenerate fillet goldens:
 
 ```sh
-CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadre-bench --features occt \
+CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadrion-bench --features occt \
   --test gen_expects_fillet -- --ignored --nocapture
 ```
 

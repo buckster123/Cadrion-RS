@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Oracle live-harness driver — CI plumbing, not an LLM.
 
-Reads CADRE_HARNESS_TASK_FILE and writes the *last loop's* write content to
-CADRE_HARNESS_PART. Proves the live --cmd protocol end-to-end without a model.
+Reads CADRION_HARNESS_TASK_FILE and writes the *last loop's* write content to
+CADRION_HARNESS_PART. Proves the live --cmd protocol end-to-end without a model.
 
-Real agents: ignore TASK_FILE solutions; only use CADRE_HARNESS_PROMPT + WORKDIR.
+Real agents: ignore TASK_FILE solutions; only use CADRION_HARNESS_PROMPT + WORKDIR.
 """
 from __future__ import annotations
 
@@ -15,15 +15,15 @@ from pathlib import Path
 
 
 def main() -> int:
-    task_file = os.environ.get("CADRE_HARNESS_TASK_FILE")
-    workdir = os.environ.get("CADRE_HARNESS_WORKDIR")
-    part = os.environ.get("CADRE_HARNESS_PART")
-    prompt = os.environ.get("CADRE_HARNESS_PROMPT", "")
-    task_id = os.environ.get("CADRE_HARNESS_TASK_ID", "?")
-    loop_n = os.environ.get("CADRE_HARNESS_LOOP", "1")
+    task_file = os.environ.get("CADRION_HARNESS_TASK_FILE")
+    workdir = os.environ.get("CADRION_HARNESS_WORKDIR")
+    part = os.environ.get("CADRION_HARNESS_PART")
+    prompt = os.environ.get("CADRION_HARNESS_PROMPT", "")
+    task_id = os.environ.get("CADRION_HARNESS_TASK_ID", "?")
+    loop_n = os.environ.get("CADRION_HARNESS_LOOP", "1")
 
     if not task_file or not part:
-        print("oracle: missing CADRE_HARNESS_TASK_FILE or CADRE_HARNESS_PART", file=sys.stderr)
+        print("oracle: missing CADRION_HARNESS_TASK_FILE or CADRION_HARNESS_PART", file=sys.stderr)
         return 2
 
     task = json.loads(Path(task_file).read_text())

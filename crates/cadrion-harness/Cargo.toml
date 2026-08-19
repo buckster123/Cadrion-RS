@@ -1,0 +1,16 @@
+[package]
+name = "cadrion-harness"
+version = "0.1.0"
+edition = "2021"
+license.workspace = true
+repository.workspace = true
+description = "Agent-loop harness: scripted CAD cycles scored for loops-to-success"
+
+[dependencies]
+cadrion-inspect = { workspace = true }
+cadrion-kernel = { workspace = true }
+cadrion-lang = { workspace = true }
+cadrion-render = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }

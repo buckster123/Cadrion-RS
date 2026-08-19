@@ -1,12 +1,12 @@
 # OCCT binding strategy (S1 spike)
 
-> Status: **GO** (D19). S3 landed `crates/cadre-occt` + IR execute + calibration STEP e2e.
-> Default CI still excludes OCCT (CMake/OCCT compile cost). Local: `CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadre-occt`.
+> Status: **GO** (D19). S3 landed `crates/cadrion-occt` + IR execute + calibration STEP e2e.
+> Default CI still excludes OCCT (CMake/OCCT compile cost). Local: `CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadrion-occt`.
 
 
 ## Goal
 
-Ship reference-grade B-rep (fillets, booleans, STEP AP242) behind [`GeomKernel`](../crates/cadre-kernel)
+Ship reference-grade B-rep (fillets, booleans, STEP AP242) behind [`GeomKernel`](../crates/cadrion-kernel)
 without:
 
 1. smearing LGPL into MIT/Apache core static links (D4, D6)
@@ -18,7 +18,7 @@ without:
 | Option | Crate(s) | License (tooling) | Link model | Fit |
 |--------|----------|-------------------|------------|-----|
 | **A. bschwind opencascade-rs** | `opencascade` 0.2, `opencascade-sys` 0.2, `occt-sys` 0.6 | LGPL-2.1 | Static via `occt-sys` **or** dynamic system OCCT (`default-features = false`, `DEP_OCCT_ROOT`) | **Primary candidate** — cxx bridge exists, STEP/fillet/boolean surface, active enough for a spike |
-| **B. occt-wasm** | `occt-wasm` 3.3 | MIT/Apache tooling; **WASM binary LGPL** | In-process wasmtime or out-of-process engine | Strong **portable engine** story for `cadre engine install` without host C++ toolchain; extra latency/host layer |
+| **B. occt-wasm** | `occt-wasm` 3.3 | MIT/Apache tooling; **WASM binary LGPL** | In-process wasmtime or out-of-process engine | Strong **portable engine** story for `cadrion engine install` without host C++ toolchain; extra latency/host layer |
 | **C. cadrum** | `cadrum` 0.8 | Claims MIT; static OCCT inside | Static | **Do not adopt as modeling API** — would fork authoring away from Starlark/IR. Techniques for static/headless builds may inform packaging later |
 | **D. Hand-rolled cxx → system OCCT** | none | our MIT/Apache + system LGPL | Dynamic `.so`/`.dylib` | Maximum control; more glue code; still need prebuilt engine matrix |
 | **E. Pure Rust** | `truck-modeling` 0.6, `cadcore` 0.1 | Apache/MIT | None | **Experimental second backend only** — not parity-eligible (D4) |
@@ -30,29 +30,29 @@ Sources: crates.io metadata + upstream READMEs (`bschwind/opencascade-rs`, `andy
 ### Layering
 
 ```
-cadre-lang / cadre-model
+cadrion-lang / cadrion-model
         │  feature IR
         ▼
- cadre-kernel::GeomKernel     ← pure Rust, this repo, MIT OR Apache-2.0
+ cadrion-kernel::GeomKernel     ← pure Rust, this repo, MIT OR Apache-2.0
         │
         ├── MockKernel        ← tests / offline dry-run (ships now)
-        ├── cadre-occt        ← default parity backend (S3+)
-        └── cadre-truck       ← optional, non-parity
+        ├── cadrion-occt        ← default parity backend (S3+)
+        └── cadrion-truck       ← optional, non-parity
 ```
 
-### `cadre-occt` implementation plan
+### `cadrion-occt` implementation plan
 
 1. **Implement `GeomKernel` only** — no Starlark, no CLI inside the crate.
 2. **Prefer dynamic / separate engine** over baking `occt-sys` static into the default
-   `cadre` binary:
+   `cadrion` binary:
    - Dev/CI option: `opencascade` with `default-features = false` against distro or
      `DEP_OCCT_ROOT` prebuilts.
-   - Product option: `cadre engine install` drops versioned shared libraries + a small
-     loader (dlopen or a dedicated `cadre-engine` helper process). Matches D4.
+   - Product option: `cadrion engine install` drops versioned shared libraries + a small
+     loader (dlopen or a dedicated `cadrion-engine` helper process). Matches D4.
 3. **Spike order for S3:** box → cylinder → boolean cut → fillet → `write_step` → facts
    (volume/bbox) on calibration-block topology. If bschwind high-level API blocks a needed
    op, drop to `opencascade-sys` / cxx for that op only.
-4. **Error translation:** OCCT failures → `KernelError::Diagnostic` with `CADRE-E-*` codes
+4. **Error translation:** OCCT failures → `KernelError::Diagnostic` with `CADRION-E-*` codes
    and feature-level hints (never raw C++ as the only message).
 5. **Feature flag:** workspace builds default **without** OCCT so `cargo test` on a fresh
    clone stays green. `--features occt` or separate package enables the backend.
@@ -72,29 +72,29 @@ If opencascade-rs proves unmaintained or API-blocked during S3:
 
 1. Try **D** (thin cxx to same prebuilt OCCT).
 2. Evaluate **B** (`occt-wasm`) as the *engine process* implementation of
-   `cadre engine install` (host talks JSON/IPC; WASM stays LGPL-isolated).
+   `cadrion engine install` (host talks JSON/IPC; WASM stays LGPL-isolated).
 3. Only then reconsider deeper vendoring.
 
 Record any switch as a dated charter amendment — do not silent-pivot.
 
 ## S1 exit evidence
 
-- [x] `cadre-kernel` crate with `GeomKernel` v0 + `MockKernel` tests
+- [x] `cadrion-kernel` crate with `GeomKernel` v0 + `MockKernel` tests
 - [x] This document
 - [x] Charter D19 + amendment dated 2026-08-05
 
 ## S3 exit evidence
 
-- [x] `cadre-occt` implements `GeomKernel` (box/cylinder/boolean/fillet/chamfer/STEP)
-- [x] `cadre_lang::execute_ir` lowers IR onto any kernel
+- [x] `cadrion-occt` implements `GeomKernel` (box/cylinder/boolean/fillet/chamfer/STEP)
+- [x] `cadrion_lang::execute_ir` lowers IR onto any kernel
 - [x] Calibration block `.cad.star` → fillet → STEP (1524 ents) + volume/bbox facts
 - [x] Default CI excludes OCCT; local recipe documented (CMake 4 policy env)
-- [ ] Prebuilt `cadre engine install` artifacts (still M6 / packaging)
+- [ ] Prebuilt `cadrion engine install` artifacts (still M6 / packaging)
 
 ### Local OCCT gotchas (2026-08-05)
 
 - **CMake 4.x:** vendored OCCT CMakeLists use `cmake_minimum_required` &lt; 3.5. Set
-  `CMAKE_POLICY_VERSION_MINIMUM=3.5` when building `cadre-occt` on CMake ≥ 4.
+  `CMAKE_POLICY_VERSION_MINIMUM=3.5` when building `cadrion-occt` on CMake ≥ 4.
 - **Volume facts:** S3 uses tessellation-based volume (public API has no GProp helpers
   without `opencascade-sys` internals). Tolerances in e2e are ~5–8% relative.
 - **Shape clone:** STEP round-trip clone (no public `Clone` on `Shape`).

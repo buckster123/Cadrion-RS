@@ -1,125 +1,118 @@
 <div align="center">
 
-<img src="assets/banner.jpg" alt="Cadre-RS" width="100%">
+<img src="assets/banner.png" alt="Cadrion" width="100%">
 
-<h1>Cadre-RS</h1>
+<h1>Cadrion</h1>
 
-<p><strong>CAD runtime for AI agents — hermetic Starlark in, verified STEP out.</strong><br>
-Rust-native toolkit: build, inspect, snapshot, export, source parts, describe robots, and
-hand off to fabrication through CLI, MCP, and local HTTP. Clean-room peer to text-to-cad skills.</p>
+<p><strong>CAD for agents that have to prove the part.</strong><br>
+Write the geometry. Check the facts. Look at it.<br>
+Then export or print — only when you say so.</p>
 
 <p>
 <img alt="license" src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue">
 <img alt="rust" src="https://img.shields.io/badge/rust-2021-orange?logo=rust&logoColor=white">
-<img alt="ci" src="https://img.shields.io/github/actions/workflow/status/buckster123/Cadre-RS/ci.yml?label=ci">
-<img alt="status" src="https://img.shields.io/badge/status-v1%20surface%20·%20S0–S12-brightgreen">
+<img alt="ci" src="https://img.shields.io/github/actions/workflow/status/buckster123/Cadrion-RS/ci.yml?label=ci">
+<img alt="status" src="https://img.shields.io/badge/status-v0.1%20·%20usable-brightgreen">
 </p>
+
+<sub>CLI · MCP · local HTTP · skill pack</sub>
 
 </div>
 
 ---
 
 > [!NOTE]
-> Model code has zero ambient authority (no clock, net, or filesystem). Hardware and vendor
-> effects are dry-run-first and consent-gated on every surface — nothing prints by default.
+> **The model cannot touch the world.** A `.cad.star` file has no clock, network, or
+> filesystem. Printers stay in dry-run until allow-list, file hash, and `confirm=START`.
+> Default CI uses a mock kernel. Parts you would actually make need the optional
+> Open CASCADE build.
 
-## Status
+Cadrion is a Rust CAD runtime for coding agents — and for humans who would rather
+type than click. One binary builds the solid, measures it, draws it, and (behind
+those gates) talks to slicers and printers.
 
-**v1 surface complete (S0–S12 / M0–M6)** plus **Horizon-1 H1–H10** and **Horizon-2 H2-1…H2-10**.
-Default path is mock-kernel CI-green on Linux + Windows (+ wasm job).
-**Active board:** [`docs/HORIZON3.md`](docs/HORIZON3.md) (next **H3-1** honesty pass).  
-Archives: [`docs/HORIZON2.md`](docs/HORIZON2.md) · [`docs/HORIZON.md`](docs/HORIZON.md).  
-Truck bid NO-GO: [`docs/TRUCK_PARITY_BID.md`](docs/TRUCK_PARITY_BID.md). Compact status:
-[`docs/STATUS.md`](docs/STATUS.md) · scorecard: [`docs/METRICS.md`](docs/METRICS.md).
-Hermes MCP: [`docs/HERMES_MCP.md`](docs/HERMES_MCP.md).
+```
+.cad.star  →  B-rep  →  facts + snapshot  →  STEP / robot / fab
+```
 
-## What it is
+## Why
 
-Cadre is a single workspace that turns agent-written parametric CAD (Starlark) into B-rep
-geometry via an optional OCCT-backed kernel, then gives the agent numeric facts, stable
-selectors, mandatory visual review packets, and paths to parts catalogs, robot descriptions,
-and fab tools. Prompt-ware (exported skill packs) is half the product: doctrine for the loop,
-not just binaries.
+Hardware design for agents usually means a Python CAD stack, a GUI, and a person
+who has to decide that a fillet “looks about right.” The loop dies there.
+
+Cadrion is the other loop. The part is code. The kernel returns geometry. Selectors
+and measurements are numbers, not vibes. A snapshot is mandatory review, not
+decoration. Failures say why.
+
+## Try it
+
+```sh
+git clone https://github.com/buckster123/Cadrion-RS
+cd Cadrion-RS
+cargo build -p cadrion-cli --release
+
+./target/release/cadrion build    parity/parts/01_calibration_block/part.cad.star --json
+./target/release/cadrion inspect refs parity/parts/01_calibration_block/part.cad.star --facts --json
+./target/release/cadrion snapshot parity/parts/01_calibration_block/part.cad.star --json
+```
+
+Real STEP / STL (local; first OCCT build is long):
+
+```sh
+CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo build -p cadrion-cli --release --features occt
+./target/release/cadrion --kernel occt build parity/parts/01_calibration_block/part.cad.star --json
+```
+
+For an agent: `cadrion mcp` (stdio). For a human: `cadrion view`. Same schema
+on the local HTTP face: `cadrion serve api`.
+
+## Faces
+
+| | Who | How |
+|--|-----|-----|
+| **CLI** | you, scripts | `build` · `inspect` · `snapshot` · `view` · `export` · `fab` · `printer` |
+| **MCP** | Hermes, Claude Code, Codex | `cadrion mcp` |
+| **HTTP** | anything on loopback | `cadrion serve api` — `/v1` + jobs + OpenAPI |
+| **Skills** | the agent that has to *know* the loop | `cadrion skills export --all` |
+
+The skill pack is half the product. Tools without doctrine are not a CAD runtime.
+
+## What ships
+
+- **Author** — hermetic Starlark, parametric, no ambient authority
+- **Build** — B-rep via mock (CI) or optional OCCT
+- **Verify** — stable selectors, measure, align, frame, diff
+- **See** — multi-view PNG, orbit GIF, local viewer
+- **Assemble** — parts.lock, assemblies, joint envelope
+- **Robots** — URDF / SRDF / SDF generate + validate
+- **Make** — DXF, DFM profiles, slicer handoff, gated Bambu / Klipper / OctoPrint
 
 ## Install
 
-```sh
-git clone https://github.com/buckster123/Cadre-RS
-cd Cadre-RS
-cargo build -p cadre-cli --release
-# optional OCCT kernel (local; long first build):
-# CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo build -p cadre-cli --release --features occt
-```
-
-## Use
+The binary is `cadrion`, from crate `cadrion-cli`.
 
 ```sh
-cargo run -p cadre-cli -- build parity/parts/01_calibration_block/part.cad.star --json
-cargo run -p cadre-cli -- inspect refs parity/parts/01_calibration_block/part.cad.star --facts --json
-cargo run -p cadre-cli -- snapshot parity/parts/01_calibration_block/part.cad.star --json
-# STEP/STL with OCCT:
-# cargo run -p cadre-cli --features occt -- --kernel occt build … --json
+cargo build -p cadrion-cli --release
+cp -f target/release/cadrion ~/.local/bin/cadrion
 ```
 
-### Shipped slices (S0–S12)
-
-| Slice | Surface |
-|-------|---------|
-| S0–S5 | kernel · Starlark · OCCT · selectors · CLI build/inspect/export |
-| S6 | parity parts 1–4 (`cadre bench`) |
-| S7 | `snapshot` / `view` (PNG + orbit GIF) |
-| S8 | `mcp` + `skills export` |
-| S9 | `serve api` + parts.lock + assembly |
-| S10 | `robot gen\|validate` (URDF/SRDF/SDF) |
-| S11 | `fab` / `printer` (DXF, DFM, gcode, gated dry-run) |
-| S12 | metrics · licensing · Windows CI · `skills export --all` |
-
-### Quick tests
-
-```sh
-cargo run -p cadre-cli -- version --json
-cargo run -p cadre-cli -- snapshot parity/parts/01_calibration_block/part.cad.star --json
-cargo run -p cadre-cli -- serve api --port 7410 --project examples/assembly --token dev
-# second terminal:
-curl -s -H "Authorization: Bearer dev" -H 'content-type: application/json' \
-  -d '{"path":"plate_bolt.assy.json"}' http://127.0.0.1:7410/v1/assembly/validate
-cargo run -p cadre-cli -- robot gen examples/robots/simple_arm.robot.json -o /tmp/arm --json
-cargo run -p cadre-cli -- fab check --part-json examples/fab/plate.flat.json --json
-cargo run -p cadre-cli -- fab gcode-check examples/fab/sample.gcode --json
-cargo run -p cadre-cli -- printer dry-run examples/fab/sample.gcode --json
-cargo run -p cadre-cli -- skills export --all -o dist/skills --json
-```
-
-## How it works
-
-```
-agent/human ──CLI/MCP/HTTP──▶ cadre-lang (Starlark) → IR → GeomKernel (mock | OCCT)
-                              inspect · snapshot · export · parts · robot · fab
-```
-
-Contract: [`docs/design.md`](docs/design.md). Binding decisions: [`docs/CHARTER.md`](docs/CHARTER.md).
-Full PRD: [`docs/cadre-prd.md`](docs/cadre-prd.md). Live status: [`docs/STATUS.md`](docs/STATUS.md).
+`cargo install cadre` is a different, archived project. Ours is this repo, or later
+`cargo install cadrion-cli`. Hermes: [`docs/HERMES_MCP.md`](docs/HERMES_MCP.md).
 
 ## Docs
 
-| File | What's in it |
-|------|--------------|
-| [`docs/STATUS.md`](docs/STATUS.md) | Live as-built status (start here after pull) |
-| [`docs/design.md`](docs/design.md) | The contract — wire format, API, invariants |
-| [`docs/CHARTER.md`](docs/CHARTER.md) | Binding decisions, phases, scope fence |
-| [`docs/METRICS.md`](docs/METRICS.md) | v1 exit metrics scorecard |
-| [`docs/LICENSING.md`](docs/LICENSING.md) | Dual-license + OCCT LGPL fence |
-| [`docs/WINDOWS.md`](docs/WINDOWS.md) | Windows build notes |
+| | |
+|--|--|
+| [`docs/STATUS.md`](docs/STATUS.md) | What is actually built |
+| [`docs/design.md`](docs/design.md) | Wire contract |
+| [`docs/CHARTER.md`](docs/CHARTER.md) | Binding decisions |
+| [`docs/NAME_OQ1.md`](docs/NAME_OQ1.md) | Why the name is Cadrion |
+| [`docs/LICENSING.md`](docs/LICENSING.md) | MIT/Apache core · OCCT is LGPL, separate |
 | [`docs/gotchas.md`](docs/gotchas.md) | Operator pitfalls |
-| [`docs/occt-binding.md`](docs/occt-binding.md) | OCCT backend strategy |
-| [`docs/occt-depth.md`](docs/occt-depth.md) | Live topology + known cut abort |
-| [`docs/cadre-prd.md`](docs/cadre-prd.md) | Product requirements, parity matrix, NFRs |
-| [`BACKLOG.md`](BACKLOG.md) | Slice ledger — S0–S12 done; post-v1 parking |
 
 ## License
 
-MIT OR Apache-2.0 — see [LICENSE-MIT](LICENSE-MIT) and [LICENSE-APACHE](LICENSE-APACHE).
-The optional OCCT engine component is LGPL-2.1 with the OCCT exception and is distributed
-separately (see [`docs/LICENSING.md`](docs/LICENSING.md)).
+MIT OR Apache-2.0 — [LICENSE-MIT](LICENSE-MIT) and [LICENSE-APACHE](LICENSE-APACHE).
+The optional OCCT engine is LGPL-2.1 with the OCCT exception and ships separately.
 
-<sub>Banner generated with <a href="https://github.com/buckster123/Imaginarium-RS">Imaginarium-RS</a> (job <code>01KZ94QZ21JH73Y7J64A2ENW90</code>).</sub>
+<sub>Banner · <a href="https://github.com/buckster123/Imaginarium-RS">Imaginarium-RS</a> · job <code>01M0DV4BEAPJ5RCC7153J40A0Z</code></sub>

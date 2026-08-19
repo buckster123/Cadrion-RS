@@ -10,8 +10,8 @@ Two modes:
 ## Scripted (CI default)
 
 ```sh
-cargo test -p cadre-harness
-cargo run -p cadre-cli -- harness run --suite agent10 --json
+cargo test -p cadrion-harness
+cargo run -p cadrion-cli -- harness run --suite agent10 --json
 ```
 
 Target bar (PRD M3): **≥ 6/10**.
@@ -20,13 +20,13 @@ Target bar (PRD M3): **≥ 6/10**.
 
 ```sh
 # Plumbing check (oracle — not an LLM)
-cargo run -p cadre-cli -- harness run --suite agent10 \
+cargo run -p cadrion-cli -- harness run --suite agent10 \
   --cmd 'python3 harness/drivers/oracle_agent.py' --json
 
-# Real agent: your process must write $CADRE_HARNESS_PART from the prompt alone.
-# Do not read CADRE_HARNESS_TASK_FILE for solutions (oracle only).
-export CADRE_BIN="$(pwd)/target/debug/cadre"
-cargo run -p cadre-cli -- harness run --suite agent10 \
+# Real agent: your process must write $CADRION_HARNESS_PART from the prompt alone.
+# Do not read CADRION_HARNESS_TASK_FILE for solutions (oracle only).
+export CADRION_BIN="$(pwd)/target/debug/cadrion"
+cargo run -p cadrion-cli -- harness run --suite agent10 \
   --cmd 'my-agent-runner' --timeout 600 --json
 ```
 
@@ -34,18 +34,18 @@ cargo run -p cadre-cli -- harness run --suite agent10 \
 
 | Variable | Meaning |
 |----------|---------|
-| `CADRE_HARNESS_TASK_ID` | e.g. `01_block` |
-| `CADRE_HARNESS_PROMPT` | Natural language only |
-| `CADRE_HARNESS_WORKDIR` | Temp workspace (cwd of `--cmd`) |
-| `CADRE_HARNESS_PART` | Absolute path to write (`…/part.cad.star`) |
-| `CADRE_HARNESS_LOOP` | 1-based attempt |
-| `CADRE_HARNESS_MAX_LOOPS` | Cap (default 3) |
-| `CADRE_HARNESS_TASK_FILE` | Task JSON (oracle/debug; **not** for fair LLM runs) |
+| `CADRION_HARNESS_TASK_ID` | e.g. `01_block` |
+| `CADRION_HARNESS_PROMPT` | Natural language only |
+| `CADRION_HARNESS_WORKDIR` | Temp workspace (cwd of `--cmd`) |
+| `CADRION_HARNESS_PART` | Absolute path to write (`…/part.cad.star`) |
+| `CADRION_HARNESS_LOOP` | 1-based attempt |
+| `CADRION_HARNESS_MAX_LOOPS` | Cap (default 3) |
+| `CADRION_HARNESS_TASK_FILE` | Task JSON (oracle/debug; **not** for fair LLM runs) |
 
 ### Contract
 
 1. Exit **0** when you produced a candidate part.  
-2. Leave valid Starlark at `CADRE_HARNESS_PART` with `def gen_step(): …`.  
+2. Leave valid Starlark at `CADRION_HARNESS_PART` with `def gen_step(): …`.  
 3. Harness **builds + asserts** (volume/label/faces/snapshot). Fail → next loop.  
 4. Scorecard `mode: "live"`; same ≥6/10 target.
 
@@ -53,9 +53,9 @@ cargo run -p cadre-cli -- harness run --suite agent10 \
 
 ```sh
 # pseudocode
-# read $CADRE_HARNESS_PROMPT
-# write Starlark to $CADRE_HARNESS_PART
-# optional: $CADRE_BIN build "$CADRE_HARNESS_PART" --json for self-check
+# read $CADRION_HARNESS_PROMPT
+# write Starlark to $CADRION_HARNESS_PART
+# optional: $CADRION_BIN build "$CADRION_HARNESS_PART" --json for self-check
 ```
 
 ## Honesty
@@ -67,4 +67,4 @@ cargo run -p cadre-cli -- harness run --suite agent10 \
 - **Published scores:** [`docs/HARNESS_LIVE.md`](../docs/HARNESS_LIVE.md) · `harness/scores/`.
 
 # In-process oracle (CI)
-cargo run -p cadre-cli -- harness run --suite agent10 --cmd '@oracle' --json
+cargo run -p cadrion-cli -- harness run --suite agent10 --cmd '@oracle' --json

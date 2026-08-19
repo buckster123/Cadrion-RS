@@ -5,7 +5,7 @@
 | Id | Feature | What |
 |----|---------|------|
 | `--kernel truck` | always | Analytic CSG **seed** (volume math + bbox mesh) |
-| `--kernel truck-brep` | `cadre-cli` feature `truck-brep` | **H3-6 spike:** upstream `truck-modeling` 0.6 + `truck-shapeops` 0.4 |
+| `--kernel truck-brep` | `cadrion-cli` feature `truck-brep` | **H3-6 spike:** upstream `truck-modeling` 0.6 + `truck-shapeops` 0.4 |
 
 ## Honesty (binding)
 
@@ -21,20 +21,20 @@
 ## CLI
 
 ```sh
-cargo test -p cadre-truck
-cargo test -p cadre-truck --features brep
-cargo run -p cadre-cli --features truck-brep -- \
+cargo test -p cadrion-truck
+cargo test -p cadrion-truck --features brep
+cargo run -p cadrion-cli --features truck-brep -- \
   build examples/pmi/block.cad.star --kernel truck-brep --json
-cargo run -p cadre-cli -- version --json
+cargo run -p cadrion-cli -- version --json
 # truck_parity_eligible: false
 # truck_brep_spike: true|false
 ```
 
-Without `--features truck-brep`, `--kernel truck-brep` returns `CADRE-E-KERNEL-UNAVAILABLE`.
+Without `--features truck-brep`, `--kernel truck-brep` returns `CADRION-E-KERNEL-UNAVAILABLE`.
 
 ## Spike notes (H3-6)
 
-- Box centered at placement (Cadre convention) via `tsweep`.
+- Box centered at placement (Cadrion convention) via `tsweep`.
 - Cylinder: `rsweep` + `try_attach_plane` + `tsweep`.
 - Cut = invert tool + `truck_shapeops::and` (tol 0.05 mm). Fail-closed if `None`.
 - Tessellate = `MeshableShape::triangulation` (not bbox).

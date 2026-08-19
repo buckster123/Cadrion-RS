@@ -1,49 +1,49 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/cadre",
-    "crates/cadre-kernel",
-    "crates/cadre-lang",
-    "crates/cadre-model",
-    "crates/cadre-inspect",
-    "crates/cadre-cli",
-    "crates/cadre-bench",
-    "crates/cadre-render",
-    "crates/cadre-mcp",
-    "crates/cadre-parts",
-    "crates/cadre-api",
-    "crates/cadre-robot",
-    "crates/cadre-fab",
-    "crates/cadre-harness",
-    "crates/cadre-occt",
-    "crates/cadre-truck",
-    "crates/cadre-wasm",
-    "crates/cadre-sdf",
+    "crates/cadrion",
+    "crates/cadrion-kernel",
+    "crates/cadrion-lang",
+    "crates/cadrion-model",
+    "crates/cadrion-inspect",
+    "crates/cadrion-cli",
+    "crates/cadrion-bench",
+    "crates/cadrion-render",
+    "crates/cadrion-mcp",
+    "crates/cadrion-parts",
+    "crates/cadrion-api",
+    "crates/cadrion-robot",
+    "crates/cadrion-fab",
+    "crates/cadrion-harness",
+    "crates/cadrion-occt",
+    "crates/cadrion-truck",
+    "crates/cadrion-wasm",
+    "crates/cadrion-sdf",
 ]
 default-members = [
-    "crates/cadre",
-    "crates/cadre-kernel",
-    "crates/cadre-lang",
-    "crates/cadre-model",
-    "crates/cadre-inspect",
-    "crates/cadre-cli",
-    "crates/cadre-bench",
-    "crates/cadre-render",
-    "crates/cadre-mcp",
-    "crates/cadre-parts",
-    "crates/cadre-api",
-    "crates/cadre-robot",
-    "crates/cadre-fab",
-    "crates/cadre-harness",
-    "crates/cadre-truck",
-    "crates/cadre-wasm",
-    "crates/cadre-sdf",
+    "crates/cadrion",
+    "crates/cadrion-kernel",
+    "crates/cadrion-lang",
+    "crates/cadrion-model",
+    "crates/cadrion-inspect",
+    "crates/cadrion-cli",
+    "crates/cadrion-bench",
+    "crates/cadrion-render",
+    "crates/cadrion-mcp",
+    "crates/cadrion-parts",
+    "crates/cadrion-api",
+    "crates/cadrion-robot",
+    "crates/cadrion-fab",
+    "crates/cadrion-harness",
+    "crates/cadrion-truck",
+    "crates/cadrion-wasm",
+    "crates/cadrion-sdf",
 ]
 
 [workspace.package]
 edition = "2021"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/buckster123/Cadre-RS"
+repository = "https://github.com/buckster123/Cadrion-RS"
 
 [workspace.dependencies]
 anyhow = "1"
@@ -55,24 +55,24 @@ tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
-cadre-kernel = { path = "crates/cadre-kernel" }
-cadre-lang = { path = "crates/cadre-lang" }
-cadre-model = { path = "crates/cadre-model" }
-cadre-inspect = { path = "crates/cadre-inspect" }
-cadre-cli = { path = "crates/cadre-cli" }
-cadre-bench = { path = "crates/cadre-bench" }
-cadre-render = { path = "crates/cadre-render" }
-cadre-mcp = { path = "crates/cadre-mcp" }
-cadre-parts = { path = "crates/cadre-parts" }
-cadre-api = { path = "crates/cadre-api" }
-cadre-robot = { path = "crates/cadre-robot" }
-cadre-fab = { path = "crates/cadre-fab" }
-cadre-harness = { path = "crates/cadre-harness" }
-cadre-occt = { path = "crates/cadre-occt" }
-cadre-truck = { path = "crates/cadre-truck" }
-cadre-wasm = { path = "crates/cadre-wasm" }
-cadre-sdf = { path = "crates/cadre-sdf" }
+cadrion-kernel = { path = "crates/cadrion-kernel" }
+cadrion-lang = { path = "crates/cadrion-lang" }
+cadrion-model = { path = "crates/cadrion-model" }
+cadrion-inspect = { path = "crates/cadrion-inspect" }
+cadrion-cli = { path = "crates/cadrion-cli" }
+cadrion-bench = { path = "crates/cadrion-bench" }
+cadrion-render = { path = "crates/cadrion-render" }
+cadrion-mcp = { path = "crates/cadrion-mcp" }
+cadrion-parts = { path = "crates/cadrion-parts" }
+cadrion-api = { path = "crates/cadrion-api" }
+cadrion-robot = { path = "crates/cadrion-robot" }
+cadrion-fab = { path = "crates/cadrion-fab" }
+cadrion-harness = { path = "crates/cadrion-harness" }
+cadrion-occt = { path = "crates/cadrion-occt" }
+cadrion-truck = { path = "crates/cadrion-truck" }
+cadrion-wasm = { path = "crates/cadrion-wasm" }
+cadrion-sdf = { path = "crates/cadrion-sdf" }
 
-# H3: patched opencascade so cadre-occt can BRep-transform without STEP I/O.
+# H3: patched opencascade so cadrion-occt can BRep-transform without STEP I/O.
 [patch.crates-io]
 opencascade = { path = "third_party/opencascade" }

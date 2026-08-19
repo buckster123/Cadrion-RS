@@ -1,0 +1,26 @@
+[package]
+name = "cadrion-mcp"
+version = "0.1.0"
+edition = "2021"
+license.workspace = true
+repository.workspace = true
+description = "MCP server for Cadrion-RS (stdio + streamable HTTP)"
+
+[dependencies]
+cadrion-inspect = { workspace = true }
+cadrion-kernel = { workspace = true }
+cadrion-lang = { workspace = true }
+cadrion-render = { workspace = true }
+cadrion-parts = { workspace = true }
+cadrion-sdf = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+base64 = "0.22"
+axum = { version = "0.8", features = ["macros"] }
+tokio = { workspace = true }
+tokio-stream = { version = "0.1", features = ["time"] }
+tower = "0.5"
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }

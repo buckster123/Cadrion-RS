@@ -1,4 +1,4 @@
-# Migrator — build123d → Cadre skeleton (H8 + H2-7 + H3-9)
+# Migrator — build123d → Cadrion skeleton (H8 + H2-7 + H3-9)
 
 ## Scope
 
@@ -11,13 +11,13 @@ Shaped from **public** build123d-style APIs only — never third-party private s
 ## CLI
 
 ```sh
-cargo run -p cadre-cli -- migrate fixtures/migrate/01_simple_box.py --json
-cargo run -p cadre-cli -- migrate fixtures/migrate/06_circle_extrude.py --json
+cargo run -p cadrion-cli -- migrate fixtures/migrate/01_simple_box.py --json
+cargo run -p cadrion-cli -- migrate fixtures/migrate/06_circle_extrude.py --json
 ```
 
 ## Coverage
 
-| Pattern | Cadre output |
+| Pattern | Cadrion output |
 |---------|----------------|
 | `Box` / kwargs | `box(...)` |
 | `Cylinder` / `Sphere` / `Cone` | matching stdlib |

@@ -13,26 +13,26 @@
 ## Validate (fail-closed)
 
 ```sh
-cargo run -p cadre-cli -- assembly validate examples/assembly/lid_hinge.assy.json --json
-cargo run -p cadre-cli -- assembly validate examples/assembly/bad_limits.assy.json --json
+cargo run -p cadrion-cli -- assembly validate examples/assembly/lid_hinge.assy.json --json
+cargo run -p cadrion-cli -- assembly validate examples/assembly/bad_limits.assy.json --json
 ```
 
 ## H3-4 — kinematics emit (OQ-4 partial)
 
 ```sh
-# Sidecar: cadre.assembly_kinematics v1 (m / rad)
-cargo run -p cadre-cli -- assembly emit-kinematics examples/assembly/lid_hinge.assy.json --json
+# Sidecar: cadrion.assembly_kinematics v1 (m / rad)
+cargo run -p cadrion-cli -- assembly emit-kinematics examples/assembly/lid_hinge.assy.json --json
 # → examples/assembly/lid_hinge.kinematics.json
 
 # Minimal robot JSON (placeholder 50mm cubes) → URDF path
-cargo run -p cadre-cli -- assembly emit-robot examples/assembly/lid_hinge.assy.json -o /tmp/lid.robot.json --json
-cargo run -p cadre-cli -- robot gen /tmp/lid.robot.json -o /tmp/lid_urdf --json
+cargo run -p cadrion-cli -- assembly emit-robot examples/assembly/lid_hinge.assy.json -o /tmp/lid.robot.json --json
+cargo run -p cadrion-cli -- robot gen /tmp/lid.robot.json -o /tmp/lid_urdf --json
 ```
 
 | Artifact | Contents |
 |----------|----------|
 | `*.kinematics.json` | links, joints, placements_mm, unit notes |
-| `*.robot.json` | RobotSpec-shaped JSON + `_cadre` honesty tag |
+| `*.robot.json` | RobotSpec-shaped JSON + `_cadrion` honesty tag |
 | URDF/SRDF/SDF | via existing `robot gen` |
 
 **Not AP242.** No kinematic STEP entities. Placeholder visuals/inertials — not CAD meshes.

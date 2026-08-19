@@ -1,4 +1,4 @@
-# Cadre skeleton migrated from build123d-style Python (H8/H2-7 clean-room).
+# Cadrion skeleton migrated from build123d-style Python (H8/H2-7 clean-room).
 # Best-effort structure + params — NOT full semantic parity.
 # Review numbers, placements, and booleans before fab.
 

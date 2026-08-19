@@ -3,7 +3,7 @@
 ## Problem
 
 Upstream `opencascade` 0.2 keeps `Shape.inner` (`TopoDS_Shape`) crate-private.
-Cadre previously cloned/transformed via **STEP write → read → BRep → STEP write → read**,
+Cadrion previously cloned/transformed via **STEP write → read → BRep → STEP write → read**,
 which was slow, serial-hostile, and littered `/tmp`.
 
 ## Fix
@@ -23,7 +23,7 @@ Minimal LGPL fork of 0.2.0 adding:
 | `Shape::apply_transform` / `transformed_with` | in-memory `gp_Trsf` |
 | `Shape::sphere(r)` | `MakeSphere` without STEP |
 
-`cadre-occt` now:
+`cadrion-occt` now:
 
 - **translate / rotate** — single BRep transform
 - **mirror** — scale −1 then 180° about complementary axis (sys lacks `SetMirror(gp_Ax2)`)
@@ -33,10 +33,10 @@ Minimal LGPL fork of 0.2.0 adding:
 ## Evidence
 
 ```sh
-CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadre-occt --test transform_smoke
-# includes assert: no new cadre-occt-*.step in /tmp during transforms
+CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadrion-occt --test transform_smoke
+# includes assert: no new cadrion-occt-*.step in /tmp during transforms
 
-CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadre-bench --features occt \
+CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo test -p cadrion-bench --features occt \
   parts_5_10_occt -- --nocapture
 ```
 
