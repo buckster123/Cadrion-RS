@@ -39,6 +39,7 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 | 51 | OCCT H3-7 | fillet-occt +13 L + cone refuse | **green** | vol 8794; cone Unsupported |
 | 52 | DFM H3-8 | override + schema validate | **green** | drift refuse; override pin |
 | 53 | Migrate/WASM H3-9 | Circle+extrude + inspect_ir | **green** | fixture 06; wasm inspect |
+| 54 | Name H3-10 | OQ-1 KEEP Cadre-RS | **green** | docs/NAME_OQ1.md; facade publish=false |
 | A1 | OCCT cone | no silent cylinder | **green** | H3-1 fail-closed |
 | A2 | truck-seed label | version JSON tag | **green** | truck_implementation field |
 | A3 | H3-2 frontier | live LLM score | **blocked** | ApexRouter backends all down 2026-08-06 |
@@ -64,6 +65,6 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 
 **v1 ship bar (this table):** rows 1–16 green; 17–20 may remain amber/red with honesty notes.
 
-Last updated: 2026-08-06 (H2-4 harness live publish).  
+Last updated: 2026-08-19 (H3-10 OQ-1 KEEP Cadre-RS).  
 Harness live log: [`HARNESS_LIVE.md`](HARNESS_LIVE.md).  
 As-built companion: [`STATUS.md`](STATUS.md).

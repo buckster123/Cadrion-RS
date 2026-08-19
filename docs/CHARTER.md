@@ -77,8 +77,11 @@ rationale is lost gets re-litigated within a month.
 - **D17 — House MCP is hand-rolled (OQ-7 closed 2026-08-06).** Stdio + streamable HTTP stay
   in `cadre-mcp` without the official SDK until a dated amendment re-opens OQ-7. See
   `docs/MCP_SDK.md` for the compliance matrix and reopen criteria. D12 tool budget still binds.
-- **D18 — Working name `cadre` pending trademark/crates.io sweep.** Binary and crate
-  namespace stay `cadre` until OQ-1 closes; rename is a deliberate charter amendment.
+- **D18 — Product name Cadre / Cadre-RS (OQ-1 closed 2026-08-19).** Binary `cadre`,
+  workspace crates `cadre` / `cadre-*`, Cerebro `CADRE`. Facade crate is **not**
+  published as crates.io `cadre` (name taken). First public install crate, when
+  published, is `cadre-cli`. Rename remains a deliberate charter amendment. See
+  `docs/NAME_OQ1.md`.
 - **D19 — OCCT bind path GO (S1).** Default parity backend will be `cadre-occt` implementing
   `GeomKernel`, layered on bschwind `opencascade`/`opencascade-sys` with **dynamic or
   separately installed engine** preferred over static `occt-sys` in the default binary.
@@ -126,7 +129,10 @@ Honesty on partial done-whens: see `docs/METRICS.md` rows 17–20 and `docs/STAT
 
 From PRD §16 — still unresolved; do not silently assume answers in code:
 
-1. **OQ-1** Final product/binary name and crate namespace (trademark + crates.io).
+1. ~~**OQ-1** Final product/binary name and crate namespace (trademark + crates.io).~~
+   **Resolved 2026-08-19 (H3-10):** **KEEP Cadre / Cadre-RS.** Packet `docs/NAME_OQ1.md`.
+   Do not publish facade as crates.io `cadre`. First install crate = `cadre-cli`.
+   No trademark filing this slice. Reopen criteria in the packet.
 2. **OQ-2** Starlark dialect details: float formatting, module system for shared libraries, stdlib naming via LLM A/B.
 3. **OQ-3** Migration assistant scope/timing (M6 vs defer).
 4. **OQ-4** Depth of assembly joint model in STEP for 1.0 (kinematic AP242 vs labels+placements).
@@ -203,3 +209,7 @@ Dated entries. A decision changes here first, then in the code.
   (`base_version` pin, fail-closed drift). `docs/DFM_GOVERNANCE.md`.
 - **2026-08-14** — **H3-9 migrator/WASM polish:** Circle+extrude → cylinder; extra refuse needles;
   WASM `inspect_ir` (IR-analytic refs). Still mock-only.
+- **2026-08-19** — **H3-10 / OQ-1 resolved:** KEEP Cadre / Cadre-RS. D18 amended. Sweep:
+  crates.io `cadre` is Modal (archived); all workspace `cadre-*` names free; cadre3d.com
+  is a same-class browser CAD — public face stays Cadre-RS. Facade `publish = false`.
+  See `docs/NAME_OQ1.md`.

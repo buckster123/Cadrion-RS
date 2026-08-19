@@ -99,9 +99,9 @@ Priority suggestions when resuming:
 | H3-7 | OCCT parity depth | ✅ PR #52 |
 | H3-8 | DFM / OQ-6 governance seed | ✅ PR #54 |
 | H3-9 | Migrator / WASM polish | ✅ this slice |
-| H3-10 | OQ-1 name decision packet | next |
+| H3-10 | OQ-1 name decision packet | ✅ this slice — KEEP Cadre-RS |
 
-Default when resuming with no pref: **H3-10**.
+Default when resuming with no pref: **H3-2** (blocked until a live backend exists).
 
 ## Post-v1 parking (still deferred)
 

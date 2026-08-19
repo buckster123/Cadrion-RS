@@ -70,6 +70,7 @@ The load-bearing summary; **`docs/CHARTER.md` D1–Dn is the binding long form.*
 - **Safety**: printer/vendor effects dry-run + allow-list + explicit confirm (D10)
 - **No telemetry** (D14)
 - **Cerebro agent**: `CADRE` (D15)
+- **Name**: Cadre / Cadre-RS (OQ-1 closed); never publish facade as crates.io `cadre` (D18)
 - **Clean-room** vs text-to-cad (D1)
 
 ---

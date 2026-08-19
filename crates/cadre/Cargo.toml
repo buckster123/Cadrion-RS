@@ -5,6 +5,8 @@ edition.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "Cadre-RS facade — re-exports core crates"
+# crates.io `cadre` is Modal's archived config crate (OQ-1 / docs/NAME_OQ1.md).
+publish = false
 
 [dependencies]
 cadre-kernel = { workspace = true }

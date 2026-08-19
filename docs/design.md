@@ -468,4 +468,6 @@ See charter OQ-1…OQ-7. Design-level watches:
 
 - Exact stdlib symbol names and selector query grammar — freeze with golden-IR tests in M1.
 - Default viewer/API ports (7411/7410 above) — change only with schema + docs together.
-- Whether `cadre` facade remains public on crates.io or becomes a virtual workspace binary package only (OQ-1).
+- ~~Whether `cadre` facade remains public on crates.io~~ **Resolved (OQ-1 / H3-10):**
+  facade stays a workspace-only crate (`publish = false`). First public install crate is
+  `cadre-cli`. See `docs/NAME_OQ1.md`.

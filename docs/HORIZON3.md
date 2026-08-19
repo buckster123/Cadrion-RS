@@ -98,7 +98,8 @@ Three pillars:
 **Goal:** Decision packet for product/binary/crates.io name (OQ-1): options, trademark notes, rename cost estimate — **decide or explicitly defer with date**. No forced rename in-slice unless GO.  
 **Why:** Public garden maturity; rename gets harder every crate.  
 **Depends on:** none hard.  
-**Exit:** `docs/NAME_OQ1.md` with GO/DEFER; if GO, follow-up slice owns rename.
+**Exit:** `docs/NAME_OQ1.md` with GO/DEFER; if GO, follow-up slice owns rename.  
+**Done 2026-08-19:** **KEEP** Cadre / Cadre-RS. Facade `publish = false`. First public crate = `cadre-cli`. No rename.
 
 ---
 
@@ -144,7 +145,8 @@ Three pillars:
 5. Default next = next unchecked H3-N  
 6. Truck work must cite bid G-criteria in PR  
 
-**Default next if “cook on” with no pref:** **H3-10 OQ-1 name decision packet** (H3-2 when backends healthy).
+**Default next if “cook on” with no pref:** **H3-2** when a live router backend exists.
+Otherwise Horizon-3 cook list is complete (H3-10 closed 2026-08-19).
 
 ---
 
@@ -159,7 +161,7 @@ Three pillars:
 - [x] **H3-7** OCCT parity depth  
 - [x] **H3-8** DFM / OQ-6 governance seed  
 - [x] **H3-9** Migrator / WASM polish  
-- [ ] **H3-10** OQ-1 name decision packet  
+- [x] **H3-10** OQ-1 name decision packet — KEEP Cadre-RS (`docs/NAME_OQ1.md`)  
 
 ---
 
