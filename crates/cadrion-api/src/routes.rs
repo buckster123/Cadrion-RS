@@ -41,6 +41,8 @@ pub fn router(state: AppState) -> Router {
         .route("/v1/sdf/sample", post(sdf_sample))
         .route("/v1/snapshot", post(snapshot))
         .route("/v1/parts/search", post(parts_search))
+        .route("/v1/parts/fetch", post(parts_fetch))
+        .route("/v1/parts/lock", post(parts_lock))
         .route("/v1/assembly/validate", post(assembly_validate))
         .route("/v1/jobs", post(create_job))
         .route("/v1/jobs/{id}", get(get_job))
@@ -94,10 +96,6 @@ struct PathBody {
     size: Option<u32>,
     #[serde(default)]
     include_images: Option<bool>,
-    #[serde(default)]
-    query: Option<String>,
-    #[serde(default)]
-    parts_root: Option<String>,
 }
 
 async fn build(
@@ -454,23 +452,75 @@ async fn snapshot(
     call_tool("snapshot", &args)
 }
 
+#[derive(Debug, Deserialize)]
+struct PartsBody {
+    #[serde(default)]
+    query: Option<String>,
+    #[serde(default)]
+    id: Option<String>,
+    #[serde(default)]
+    parts_root: Option<String>,
+    #[serde(default)]
+    lock: Option<String>,
+    #[serde(default)]
+    key: Option<String>,
+    #[serde(default)]
+    project: Option<String>,
+}
+
+fn parts_args(st: &AppState, body: &PartsBody, op: &str) -> Value {
+    let mut args = json!({"op": op});
+    if let Some(q) = &body.query {
+        args["query"] = json!(q);
+    }
+    if let Some(id) = &body.id {
+        args["id"] = json!(id);
+    }
+    let root = body
+        .parts_root
+        .as_deref()
+        .map(|p| resolve_out_path(st, p))
+        .unwrap_or_else(|| st.cfg.project_root.join("parts").display().to_string());
+    args["parts_root"] = json!(root);
+    if let Some(lock) = &body.lock {
+        args["lock"] = json!(resolve_out_path(st, lock));
+    }
+    if let Some(key) = &body.key {
+        args["key"] = json!(key);
+    }
+    args["project"] = json!(body
+        .project
+        .as_deref()
+        .map(|p| resolve_out_path(st, p))
+        .unwrap_or_else(|| st.cfg.project_root.display().to_string()));
+    args
+}
+
 async fn parts_search(
     State(st): State<AppState>,
     headers: HeaderMap,
-    Json(body): Json<PathBody>,
+    Json(body): Json<PartsBody>,
 ) -> Result<impl IntoResponse, ApiError> {
     auth(&st, &headers)?;
-    use cadrion_parts::{LocalFsProvider, PartProvider};
-    let root = body
-        .parts_root
-        .map(PathBuf::from)
-        .unwrap_or_else(|| st.cfg.project_root.join("parts"));
-    let prov = LocalFsProvider::new(root);
-    let q = body.query.unwrap_or_default();
-    let hits = prov.search(&q).map_err(|e| ApiError::bad(e.to_string()))?;
-    Ok(Json(
-        json!({"ok": true, "provider": prov.id(), "results": hits}),
-    ))
+    call_tool("parts", &parts_args(&st, &body, "search"))
+}
+
+async fn parts_fetch(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<PartsBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    call_tool("parts", &parts_args(&st, &body, "fetch"))
+}
+
+async fn parts_lock(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<PartsBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    call_tool("parts", &parts_args(&st, &body, "lock"))
 }
 
 #[derive(Debug, Deserialize)]

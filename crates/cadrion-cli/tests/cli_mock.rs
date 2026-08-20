@@ -149,3 +149,45 @@ fn version_json() {
         .success()
         .stdout(predicate::str::contains("cadrion"));
 }
+
+#[test]
+fn parts_search_fetch_lock_local_catalog() {
+    use std::path::PathBuf;
+    let dir = tempdir().unwrap();
+    let parts = dir.path().join("parts");
+    fs::create_dir_all(&parts).unwrap();
+    let src = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../examples/assembly/parts/m6_bolt.step");
+    fs::copy(&src, parts.join("m6_bolt.step")).unwrap();
+
+    cargo_bin_cmd!("cadrion")
+        .current_dir(dir.path())
+        .args(["--json", "parts", "search", "m6"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("m6_bolt"))
+        .stdout(predicate::str::contains("\"storefront\": false"));
+
+    cargo_bin_cmd!("cadrion")
+        .current_dir(dir.path())
+        .args(["--json", "parts", "show", "m6_bolt"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("\"downloaded\": false"));
+
+    cargo_bin_cmd!("cadrion")
+        .current_dir(dir.path())
+        .args(["--json", "parts", "lock", "m6_bolt"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("\"verified\": true"));
+    assert!(dir.path().join("parts.lock").is_file());
+
+    cargo_bin_cmd!("cadrion")
+        .current_dir(dir.path())
+        .args(["--json", "parts", "fetch", "nope"])
+        .assert()
+        .failure()
+        .code(4)
+        .stdout(predicate::str::contains("CADRION-E-PARTS-NOT-FOUND"));
+}

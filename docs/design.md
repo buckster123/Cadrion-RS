@@ -283,7 +283,7 @@ Global CLI flags: `--json`, `--quiet`, `--project <dir>`, `--kernel <backend>`, 
 ### MCP tools (names final; schemas via `cadrion schema mcp`)
 
 `build`, `write_source`, `read_source`, `inspect_refs`, `measure`, `align_check`, `frame`,
-`diff`, `snapshot`, `export`, `viewer_open`, `parts_search`, `parts_fetch`, `robot_validate`,
+`diff`, `snapshot`, `export`, `viewer_open`, `parts` (`op=search|fetch|lock`; H6-1), `robot_validate`,
 `fab_check`, `fab_slice`, `gcode_check`, `printer_status`, `printer_upload`, `printer_dry_run`,
 `printer_start`, `project_artifacts`, `engine_info`.
 

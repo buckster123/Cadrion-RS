@@ -58,6 +58,33 @@ pub fn load_parts_lock(path: &Path) -> Result<PartsLock, PartsLockError> {
     Ok(serde_json::from_str(&text)?)
 }
 
+/// Write `parts.lock` (pretty JSON). Creates parent dirs.
+pub fn write_parts_lock(path: &Path, lock: &PartsLock) -> Result<(), PartsLockError> {
+    if let Some(parent) = path.parent() {
+        if !parent.as_os_str().is_empty() {
+            fs::create_dir_all(parent)?;
+        }
+    }
+    fs::write(path, serde_json::to_string_pretty(lock)?)?;
+    Ok(())
+}
+
+/// Insert or replace one entry and persist. Caller must `verify_lock_entry` after.
+pub fn upsert_lock_entry(
+    path: &Path,
+    key: &str,
+    entry: PartsLockEntry,
+) -> Result<PartsLock, PartsLockError> {
+    let mut lock = if path.is_file() {
+        load_parts_lock(path)?
+    } else {
+        PartsLock::empty()
+    };
+    lock.parts.insert(key.to_string(), entry);
+    write_parts_lock(path, &lock)?;
+    Ok(lock)
+}
+
 /// Fail-closed verify: entry must exist, file must exist, hash must match.
 pub fn verify_lock_entry(
     lock: &PartsLock,
@@ -120,6 +147,14 @@ mod tests {
         let loaded = load_parts_lock(&lock_path).unwrap();
         verify_lock_entry(&loaded, "m6_bolt", &dir).unwrap();
         assert!(verify_lock_entry(&loaded, "nope", &dir).is_err());
+
+        let again = upsert_lock_entry(
+            &lock_path,
+            "m6_bolt",
+            loaded.parts.get("m6_bolt").unwrap().clone(),
+        )
+        .unwrap();
+        verify_lock_entry(&again, "m6_bolt", &dir).unwrap();
         let _ = fs::remove_dir_all(&dir);
     }
 }

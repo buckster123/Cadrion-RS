@@ -139,7 +139,7 @@ Horizon-5 **complete**. Successor: [`docs/HORIZON6.md`](docs/HORIZON6.md).
 
 | # | Slice | Status |
 |---|-------|--------|
-| H6-1 | CLI + MCP/HTTP parts search \| fetch \| lock | ☐ this board |
+| H6-1 | CLI + MCP/HTTP parts search \| fetch \| lock | ✅ this slice |
 | H6-2 | MCP/HTTP viewer_open | ☐ |
 | H6-3 | MCP/HTTP gcode_check | ☐ |
 | H6-4 | MCP/HTTP fab_slice | ☐ |
@@ -150,7 +150,7 @@ Horizon-5 **complete**. Successor: [`docs/HORIZON6.md`](docs/HORIZON6.md).
 | H6-9 | MCP/HTTP fab dxf \| profiles | ☐ |
 | H6-10 | project_artifacts + OpenAPI honesty | ☐ |
 
-Default next: **H6-1**.
+Default next: **H6-2**.
 
 ## Post-v1 parking (still deferred)
 

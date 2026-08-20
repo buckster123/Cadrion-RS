@@ -160,6 +160,16 @@ mod tests {
             .unwrap()
             .iter()
             .any(|n| n == "robot"));
+        assert!(v["mcp"]["tool_names"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|n| n == "parts"));
+        assert!(v["cli"]["commands"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|c| c["name"] == "parts"));
         assert_eq!(v["api"]["openapi"], "3.1.0");
         assert!(v["errors"]["count"].as_u64().unwrap() >= 20);
     }

@@ -14,7 +14,10 @@ use cadrion_inspect::{
 };
 use cadrion_kernel::{GeomKernel, MockKernel, StepWriteOpts};
 use cadrion_lang::{evaluate, execute_ir, EvalOptions};
-use cadrion_parts::{validate_assembly, AssemblySpec};
+use cadrion_parts::{
+    upsert_lock_entry, validate_assembly, verify_lock_entry, AssemblySpec, LocalFsProvider,
+    PartProvider, PartsLockEntry,
+};
 use cadrion_render::{
     mesh_from_ir, write_gltf_json, write_snapshot_packet, write_stl_ascii, SnapshotOptions,
     ViewName,
@@ -263,6 +266,23 @@ pub fn tool_defs() -> Value {
                 },
                 "required": ["op", "path"]
             }
+        },
+        {
+            "name": "parts",
+            "description": "Local STEP catalog: search/fetch/lock. Not a storefront. See cadrion://doc/status.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "op": {"type": "string", "enum": ["search", "fetch", "lock"]},
+                    "query": {"type": "string"},
+                    "id": {"type": "string"},
+                    "parts_root": {"type": "string"},
+                    "lock": {"type": "string"},
+                    "key": {"type": "string"},
+                    "project": {"type": "string"}
+                },
+                "required": ["op"]
+            }
         }
     ])
 }
@@ -286,6 +306,7 @@ pub fn call_tool(name: &str, args: &Value) -> Result<Value, ToolError> {
         "engine" => tool_engine(args),
         "schema" => tool_schema(args),
         "robot" => tool_robot(args),
+        "parts" => tool_parts(args),
         other => Err(ToolError::msg(format!("unknown tool: {other}"))),
     }
 }
@@ -841,6 +862,132 @@ fn tool_robot(args: &Value) -> Result<Value, ToolError> {
     }))
 }
 
+fn tool_parts(args: &Value) -> Result<Value, ToolError> {
+    let op = str_arg(args, "op")?;
+    let project = crate::policy::policy().project_root;
+    let root = args
+        .get("parts_root")
+        .and_then(|v| v.as_str())
+        .map(PathBuf::from)
+        .unwrap_or_else(|| project.join("parts"));
+    let payload = match op {
+        "search" => parts_search(
+            &root,
+            args.get("query").and_then(|v| v.as_str()).unwrap_or(""),
+        )?,
+        "fetch" => parts_fetch(&root, str_arg(args, "id")?)?,
+        "lock" => {
+            let id = str_arg(args, "id")?;
+            let project = args
+                .get("project")
+                .and_then(|v| v.as_str())
+                .map(PathBuf::from)
+                .unwrap_or_else(|| infer_parts_project(&root, &project));
+            let lock_path = args
+                .get("lock")
+                .and_then(|v| v.as_str())
+                .map(PathBuf::from)
+                .unwrap_or_else(|| project.join("parts.lock"));
+            let key = args.get("key").and_then(|v| v.as_str()).unwrap_or(id);
+            parts_lock(&project, &root, &lock_path, id, key)?
+        }
+        other => {
+            return Err(ToolError::msg(format!(
+                "unknown parts op {other:?} (search|fetch|lock)"
+            )))
+        }
+    };
+    Ok(json!({
+        "content": [{"type": "text", "text": serde_json::to_string_pretty(&payload).unwrap()}]
+    }))
+}
+
+fn infer_parts_project(parts_root: &Path, policy_root: &Path) -> PathBuf {
+    if parts_root.file_name().is_some_and(|n| n == "parts") {
+        if let Some(parent) = parts_root.parent() {
+            if parent.as_os_str().is_empty() {
+                return policy_root.to_path_buf();
+            }
+            return parent.to_path_buf();
+        }
+    }
+    policy_root.to_path_buf()
+}
+
+fn parts_rel_to_project(project: &Path, file: &Path) -> String {
+    let file_c = file.canonicalize().unwrap_or_else(|_| file.to_path_buf());
+    let proj_c = project
+        .canonicalize()
+        .unwrap_or_else(|_| project.to_path_buf());
+    file_c
+        .strip_prefix(&proj_c)
+        .map(|p| p.to_string_lossy().replace('\\', "/"))
+        .unwrap_or_else(|_| file.to_string_lossy().replace('\\', "/"))
+}
+
+fn parts_search(root: &Path, query: &str) -> Result<Value, ToolError> {
+    let prov = LocalFsProvider::new(root);
+    let results = prov
+        .search(query)
+        .map_err(|e| ToolError::msg(e.to_string()))?;
+    Ok(json!({
+        "ok": true,
+        "provider": prov.id(),
+        "parts_root": root,
+        "results": results,
+        "storefront": false
+    }))
+}
+
+fn parts_fetch(root: &Path, id: &str) -> Result<Value, ToolError> {
+    let prov = LocalFsProvider::new(root);
+    match prov.fetch(id) {
+        Ok(meta) => Ok(json!({
+            "ok": true,
+            "provider": prov.id(),
+            "meta": meta,
+            "downloaded": false,
+            "storefront": false
+        })),
+        Err(cadrion_parts::ProviderError::NotFound(id)) => Err(ToolError::msg(format!(
+            "CADRION-E-PARTS-NOT-FOUND: no local STEP for {id}"
+        ))),
+        Err(e) => Err(ToolError::msg(e.to_string())),
+    }
+}
+
+fn parts_lock(
+    project: &Path,
+    root: &Path,
+    lock_path: &Path,
+    id: &str,
+    key: &str,
+) -> Result<Value, ToolError> {
+    let fetch = parts_fetch(root, id)?;
+    let meta = &fetch["meta"];
+    let path = PathBuf::from(meta["path"].as_str().unwrap_or(""));
+    let entry = PartsLockEntry {
+        provider: fetch["provider"].as_str().unwrap_or("local").into(),
+        id: meta["id"].as_str().unwrap_or(id).into(),
+        version: None,
+        sha256: meta["sha256"].as_str().unwrap_or("").into(),
+        path: parts_rel_to_project(project, &path),
+        license: meta["license"].as_str().map(|s| s.to_string()),
+    };
+    let written = upsert_lock_entry(lock_path, key, entry.clone())
+        .map_err(|e| ToolError::msg(format!("CADRION-E-PARTS-LOCK: {e}")))?;
+    verify_lock_entry(&written, key, project)
+        .map_err(|e| ToolError::msg(format!("CADRION-E-PARTS-LOCK: {e}")))?;
+    Ok(json!({
+        "ok": true,
+        "key": key,
+        "entry": entry,
+        "lock": lock_path,
+        "verified": true,
+        "storefront": false
+    }))
+}
+
 fn load_robot_spec(path: &Path) -> Result<RobotSpec, ToolError> {
     let text = fs::read_to_string(path).map_err(|e| ToolError::msg(e.to_string()))?;
     serde_json::from_str(&text).map_err(|e| {
@@ -1252,6 +1399,85 @@ mod tests {
         )
         .unwrap_err();
         assert!(err.to_string().contains("inertial"), "{err}");
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    fn assembly_parts_root() -> PathBuf {
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/assembly/parts")
+    }
+
+    #[test]
+    fn parts_search_fetch_lock_local_only() {
+        let root = assembly_parts_root();
+        let project = root.parent().unwrap();
+        let hits = call_tool(
+            "parts",
+            &json!({
+                "op": "search",
+                "query": "m6",
+                "parts_root": root.display().to_string()
+            }),
+        )
+        .unwrap();
+        let p: Value = serde_json::from_str(hits["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(p["ok"], true, "{p}");
+        assert_eq!(p["storefront"], false);
+        assert!(p["results"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|c| c["id"] == "m6_bolt"));
+
+        let fetched = call_tool(
+            "parts",
+            &json!({
+                "op": "fetch",
+                "id": "m6_bolt",
+                "parts_root": root.display().to_string()
+            }),
+        )
+        .unwrap();
+        let f: Value =
+            serde_json::from_str(fetched["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(f["ok"], true, "{f}");
+        assert_eq!(f["downloaded"], false);
+        assert_eq!(f["meta"]["sha256"].as_str().unwrap().len(), 64);
+
+        let dir = std::env::temp_dir().join(format!("cadrion-h6-1-{}", std::process::id()));
+        fs::create_dir_all(&dir).unwrap();
+        let lock = dir.join("parts.lock");
+        let locked = call_tool(
+            "parts",
+            &json!({
+                "op": "lock",
+                "id": "m6_bolt",
+                "parts_root": root.display().to_string(),
+                "lock": lock.display().to_string()
+            }),
+        )
+        .unwrap();
+        let l: Value =
+            serde_json::from_str(locked["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(l["ok"], true, "{l}");
+        assert_eq!(l["verified"], true);
+        assert_eq!(l["entry"]["path"], "parts/m6_bolt.step");
+        assert!(lock.is_file());
+        let on_disk = cadrion_parts::load_parts_lock(&lock).unwrap();
+        cadrion_parts::verify_lock_entry(&on_disk, "m6_bolt", project).unwrap();
+
+        let err = call_tool(
+            "parts",
+            &json!({
+                "op": "fetch",
+                "id": "no-such-part",
+                "parts_root": root.display().to_string()
+            }),
+        )
+        .unwrap_err();
+        assert!(
+            err.to_string().contains("CADRION-E-PARTS-NOT-FOUND"),
+            "{err}"
+        );
         let _ = fs::remove_dir_all(&dir);
     }
 }
