@@ -19,5 +19,6 @@ cadrion schema --json errors
 Adding a diagnostic code: put it in `ERROR_CATALOG` **and** emit that string at the call site.
 Adding an MCP tool: `tool_defs` + `TOOL_NAMES` + tests. The schema dump will follow.
 
-OpenAPI remains hand-maintained alpha (`openapi.rs`); H4-3 extends paths there. Drift tests
+OpenAPI remains hand-maintained alpha (`openapi.rs`); H4-3 added measure / dims / sdf paths.
+Drift tests
 require the dump to match those live functions — they do not invent a second catalog.

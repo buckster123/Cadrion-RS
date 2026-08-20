@@ -31,6 +31,24 @@ pub fn openapi_doc() -> Value {
                     "responses": {"200": {"description": "refs report"}}
                 }
             },
+            "/v1/inspect/measure": {
+                "post": {
+                    "summary": "Measure between selectors (H4-3 / MCP measure)",
+                    "responses": {"200": {"description": "measure result"}}
+                }
+            },
+            "/v1/inspect/dims": {
+                "post": {
+                    "summary": "PMI drawing packet (H4-3 / MCP inspect_dims)",
+                    "responses": {"200": {"description": "drawing packet"}}
+                }
+            },
+            "/v1/sdf/sample": {
+                "post": {
+                    "summary": "Secondary SDF sample (H4-3 / MCP sdf_sample). Not modeling.",
+                    "responses": {"200": {"description": "raw + NRRD paths"}}
+                }
+            },
             "/v1/snapshot": {
                 "post": {
                     "summary": "Snapshot packet",
