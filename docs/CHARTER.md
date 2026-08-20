@@ -257,3 +257,8 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-21** — **H5-10 truck G1 refuse:** pinned truck crates have no STEP writer.
   `write_step` is `CADRION-E-UNSUPPORTED` and writes no file. Bid **N2 stays No**.
   `parity_eligible` stays false. Horizon-5 complete.
+- **2026-08-21** — **Horizon-6 chartered:** `docs/HORIZON6.md` Top-N H6-1…H6-10
+  (remaining `design.md` names: parts, viewer_open, gcode_check, fab_slice,
+  printer status/dry-run/start, migrate, assembly emit, fab dxf, project_artifacts).
+  No live re-score, no `load()`, no truck default, no invented `printer_upload`.
+  Default next **H6-1**.

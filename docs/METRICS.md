@@ -77,6 +77,6 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 
 **v1 ship bar (this table):** rows 1–16 green; 17–20 may remain amber/red with honesty notes.
 
-Last updated: 2026-08-21 (H5-10 truck STEP refuse).  
+Last updated: 2026-08-21 (Horizon-6 chartered; H5-10 still the last code slice).  
 Harness live log: [`HARNESS_LIVE.md`](HARNESS_LIVE.md).  
 As-built companion: [`STATUS.md`](STATUS.md).

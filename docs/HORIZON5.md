@@ -1,6 +1,7 @@
 # Horizon-5 — in-tree agent leftovers
 
-**Status:** **COMPLETE** (H5-1…H5-10 merged 2026-08-20/21)  
+**Status:** **COMPLETE** (H5-1…H5-10 merged 2026-08-20/21). **Archive.**  
+**Successor (active):** [`docs/HORIZON6.md`](HORIZON6.md)  
 **Predecessor:** [`docs/HORIZON4.md`](HORIZON4.md) — H4-1…H4-3 done  
 **H3 note:** H3-2 live score **4.0/10** published 2026-08-20 ([PR #60](https://github.com/buckster123/Cadrion-RS/pull/60)) — miss ≥6, not invented. Not re-opened here.
 
@@ -161,7 +162,7 @@ the same PR. `STDLIB_DEPTH.md` still claims OCCT cone≈cylinder — fix that li
 5. Default next = next unchecked H5-N  
 6. Truck work must cite bid G-criteria  
 
-**Default next if “cook on” with no pref:** Horizon-5 **complete** — do not invent a board.
+**Default next if “cook on” with no pref:** [`docs/HORIZON6.md`](HORIZON6.md).
 
 ---
 
