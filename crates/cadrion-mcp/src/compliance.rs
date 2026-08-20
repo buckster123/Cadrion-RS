@@ -49,6 +49,7 @@ pub const TOOL_NAMES: &[&str] = &[
     "schema",
     "robot",
     "parts",
+    "viewer_open",
 ];
 
 #[cfg(test)]

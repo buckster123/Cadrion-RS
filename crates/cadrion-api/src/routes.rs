@@ -43,6 +43,7 @@ pub fn router(state: AppState) -> Router {
         .route("/v1/parts/search", post(parts_search))
         .route("/v1/parts/fetch", post(parts_fetch))
         .route("/v1/parts/lock", post(parts_lock))
+        .route("/v1/viewer/open", post(viewer_open))
         .route("/v1/assembly/validate", post(assembly_validate))
         .route("/v1/jobs", post(create_job))
         .route("/v1/jobs/{id}", get(get_job))
@@ -521,6 +522,37 @@ async fn parts_lock(
 ) -> Result<impl IntoResponse, ApiError> {
     auth(&st, &headers)?;
     call_tool("parts", &parts_args(&st, &body, "lock"))
+}
+
+#[derive(Debug, Deserialize)]
+struct ViewerBody {
+    #[serde(default)]
+    path: Option<String>,
+    #[serde(default)]
+    paths: Option<Vec<String>>,
+    #[serde(default)]
+    once: Option<bool>,
+}
+
+async fn viewer_open(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<ViewerBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let mut args = json!({});
+    if let Some(path) = body.path {
+        args["path"] = json!(resolve_path(&st, &path)?);
+    }
+    if let Some(paths) = body.paths {
+        let resolved: Result<Vec<String>, ApiError> =
+            paths.iter().map(|p| resolve_path(&st, p)).collect();
+        args["paths"] = json!(resolved?);
+    }
+    if let Some(once) = body.once {
+        args["once"] = json!(once);
+    }
+    call_tool("viewer_open", &args)
 }
 
 #[derive(Debug, Deserialize)]
