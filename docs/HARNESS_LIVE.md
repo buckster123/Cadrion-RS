@@ -27,16 +27,28 @@ cargo run -p cadrion-cli -- harness run --suite agent10 --cmd '@oracle' --json
 - This is a **control / plumbing** score, **not** a frontier LLM claim.  
 - Scripted CI path also scores 10/10 — different mode (`scripted-builtin`).  
 - At publish time, LocalRouter `http://127.0.0.1:8888/v1/models` was up but **all backends `status=down`** — no fair local/frontier LLM run was possible. **No fake ≥6.**
-- Re-probe **2026-08-20:** ApexRouter `:8888` process healthy (`provider=vast-gguf`); aliases `auto`/`garden-r1`/`garden-r2` have **no healthy targets**; listed Together backends `status=down`. H3-2 still blocked.
+- Re-probe **2026-08-20 (morning):** ApexRouter `:8888` process healthy; aliases had **no healthy targets**. H3-2 still blocked then.
+- Re-run **2026-08-20 (evening):** verified DE RTX 6000 Ada + Qwen3.8-27B UD-Q6_K — see frontier row.
 
-## Frontier / strong-local (not yet)
+## Frontier / strong-local (H3-2)
 
 | Field | Value |
 |-------|--------|
-| Date | — |
-| Model | — |
-| Score | **not run** |
-| Notes | Re-run when a healthy OpenAI-compat backend is available |
+| **Date** | **2026-08-20** |
+| **Suite** | `agent10` |
+| **Mode** | `live` |
+| **Cmd** | `python3 harness/drivers/openai_starlark.py` |
+| **Model id** | `unsloth/Qwen3.8-27B-UD-Q6_K` |
+| **Score** | **4.0 / 10** (target ≥ 6.0 — **miss**) |
+| **Median loops** | **1.0** (on the 4 passes) |
+| **Passed** | 4 / 10 (`01_block`, `03_plate_hole`, `06_repair_hole`, `10_size_repair`) |
+| **Failed** | `02` volume 1k&lt;15k · `04` label cylinder≠pin · `05` label union≠union_body · `07` vol 48k&gt;14k · `08` label o1≠cube · `09` vol 1k&lt;2.9k |
+| **Kernel** | mock |
+| **Rig** | Vast `48237851` · verified DE RTX 6000 Ada · ctx 32768 · `max_tokens` 8192 · ApexRouter `auto` |
+| **Wall** | 1393 s |
+| **Artifact** | [`harness/scores/h3-2-2026-08-20-qwen38-27b-q6.json`](../harness/scores/h3-2-2026-08-20-qwen38-27b-q6.json) |
+
+Fair driver: prompt only — does **not** read `CADRION_HARNESS_TASK_FILE`. Failures are mostly exact labels / sizes that the prompt never names. **No invented ≥6.**
 
 ### How to publish a real agent score
 

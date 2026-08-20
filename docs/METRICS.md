@@ -45,7 +45,7 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 | 57 | HTTP H4-3 | measure / dims / sdf routes | **green** | http_api + OpenAPI paths |
 | A1 | OCCT cone | no silent cylinder | **green** | H3-1 fail-closed |
 | A2 | truck-seed label | version JSON tag | **green** | truck_implementation field |
-| A3 | H3-2 frontier | live LLM score | **blocked** | ApexRouter backends all down 2026-08-06 |
+| A3 | H3-2 frontier | live LLM score | **amber** | 4.0/10 miss 2026-08-20 Qwen3.8-27B Q6 (`h3-2-2026-08-20-qwen38-27b-q6.json`) |
 | 5 | Snapshot packet | multi-view PNG + orbit GIF | **green** | `cli_snapshot` tests |
 | 6 | MCP stdio | Content-Length tools | **green** | `cargo test -p cadrion-mcp` |
 | 7 | HTTP API | `/v1/*` + OpenAPI + jobs | **green** | `http_api` 5 tests |
@@ -68,6 +68,6 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 
 **v1 ship bar (this table):** rows 1–16 green; 17–20 may remain amber/red with honesty notes.
 
-Last updated: 2026-08-20 (H4-3 HTTP catch-up).  
+Last updated: 2026-08-20 (H3-2 live 4.0/10).  
 Harness live log: [`HARNESS_LIVE.md`](HARNESS_LIVE.md).  
 As-built companion: [`STATUS.md`](STATUS.md).

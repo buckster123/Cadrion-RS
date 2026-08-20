@@ -1,0 +1,41 @@
+{
+  "published": "2026-08-20",
+  "utc": "2026-08-20T20:37:50Z",
+  "suite": "agent10",
+  "mode": "live",
+  "cmd": "python3 harness/drivers/openai_starlark.py",
+  "model_id": "unsloth/Qwen3.8-27B-UD-Q6_K",
+  "score_over_10": 4.0,
+  "target": 6.0,
+  "meets_target": false,
+  "passed": 4,
+  "failed": 6,
+  "total": 10,
+  "median_loops": 1.0,
+  "wall_ms": 1393247,
+  "notes": [
+    "fair live: prompt-only openai_starlark; no TASK_FILE",
+    "Vast 48237851 DE RTX 6000Ada; Q6_K; ctx 32768; max_tokens 8192",
+    "ApexRouter auto @ 127.0.0.1:8888/v1",
+    "below target 6.0 — published as measured, not invented"
+  ],
+  "tasks": [
+    {"id": "01_block", "ok": true, "loops_used": 1, "detail": "live ok loop 1/3"},
+    {"id": "02_repair_label", "ok": false, "loops_used": 3, "detail": "volume 1000 < min 14900"},
+    {"id": "03_plate_hole", "ok": true, "loops_used": 3, "detail": "live ok loop 3/3"},
+    {"id": "04_cylinder", "ok": false, "loops_used": 3, "detail": "label got \"cylinder\" want pin"},
+    {"id": "05_union", "ok": false, "loops_used": 3, "detail": "label got \"union\" want union_body"},
+    {"id": "06_repair_hole", "ok": true, "loops_used": 1, "detail": "live ok loop 1/3"},
+    {"id": "07_bracket", "ok": false, "loops_used": 3, "detail": "volume 48000 > max 14000"},
+    {"id": "08_selectors", "ok": false, "loops_used": 3, "detail": "label got \"o1\" want cube"},
+    {"id": "09_snapshot_policy", "ok": false, "loops_used": 3, "detail": "volume 1000 < min 2900"},
+    {"id": "10_size_repair", "ok": true, "loops_used": 1, "detail": "live ok loop 1/3"}
+  ],
+  "honesty": {
+    "frontier_llm_run": true,
+    "control_is_oracle": false,
+    "kernel": "mock",
+    "meets_target": false,
+    "reason": "Fair prompt-only driver. Underspecified repair/snapshot prompts and exact-label asserts (pin, union_body, cube) failed. Dims-explicit tasks passed."
+  }
+}

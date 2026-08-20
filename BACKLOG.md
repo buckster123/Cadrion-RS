@@ -91,7 +91,7 @@ Priority suggestions when resuming:
 | # | Slice | Status |
 |---|-------|--------|
 | H3-1 | Honesty pass (cone + fences + truck naming) | ✅ this slice |
-| H3-2 | Live harness frontier score | blocked — backends down |
+| H3-2 | Live harness frontier score | ✅ 4.0/10 2026-08-20 (miss ≥6) |
 | H3-3 | MCP surface depth (dims/assembly/sdf) | ✅ PR #48 |
 | H3-4 | Assembly / OQ-4 bite | ✅ PR #49 |
 | H3-5 | PMI → viewer overlay | ✅ PR #50 |
@@ -102,7 +102,7 @@ Priority suggestions when resuming:
 | H3-10 | OQ-1 name decision packet | ✅ this slice — Cadrion-RS |
 
 Default when resuming with no pref: **Horizon-4** ([`docs/HORIZON4.md`](docs/HORIZON4.md)).
-**H3-2** stays blocked until a healthy router backend exists (re-probed 2026-08-20: all down).
+H3-2 published 2026-08-20: **4.0/10** Qwen3.8-27B UD-Q6_K (fair live; below ≥6).
 
 ## Horizon-4 board (ordered) — ACTIVE
 
