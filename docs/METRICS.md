@@ -53,6 +53,7 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 | 65 | Migrate H5-9 | mirror map + structured refuse | **green** | fixture 07; sweep/Workplane notes |
 | 66 | Truck H5-10 | G1 STEP or refuse | **green** | CADRION-E-UNSUPPORTED; N2 stays No |
 | 67 | Parts H6-1 | CLI + MCP/HTTP catalog | **green** | search/fetch/lock; storefront false |
+| 68 | Viewer H6-2 | MCP/HTTP viewer_open | **green** | once-only; served false; no wgpu |
 | A1 | OCCT cone | no silent cylinder | **green** | H3-1 fail-closed |
 | A2 | truck-seed label | version JSON tag | **green** | truck_implementation field |
 | A3 | H3-2 frontier | live LLM score | **amber** | 4.0/10 miss 2026-08-20 Qwen3.8-27B Q6; H5-1 made prompts fair — score unchanged until a live re-run |
@@ -78,6 +79,6 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 
 **v1 ship bar (this table):** rows 1–16 green; 17–20 may remain amber/red with honesty notes.
 
-Last updated: 2026-08-21 (H6-1 parts search/fetch/lock).  
+Last updated: 2026-08-21 (H6-2 viewer_open once-only).  
 Harness live log: [`HARNESS_LIVE.md`](HARNESS_LIVE.md).  
 As-built companion: [`STATUS.md`](STATUS.md).

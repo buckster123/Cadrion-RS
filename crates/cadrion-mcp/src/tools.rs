@@ -283,6 +283,18 @@ pub fn tool_defs() -> Value {
                 },
                 "required": ["op"]
             }
+        },
+        {
+            "name": "viewer_open",
+            "description": "Loopback viewer links (--once). Does not start a server or claim wgpu CAD.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string"},
+                    "paths": {"type": "array", "items": {"type": "string"}},
+                    "once": {"type": "boolean", "default": true}
+                }
+            }
         }
     ])
 }
@@ -307,6 +319,7 @@ pub fn call_tool(name: &str, args: &Value) -> Result<Value, ToolError> {
         "schema" => tool_schema(args),
         "robot" => tool_robot(args),
         "parts" => tool_parts(args),
+        "viewer_open" => tool_viewer_open(args),
         other => Err(ToolError::msg(format!("unknown tool: {other}"))),
     }
 }
@@ -988,6 +1001,80 @@ fn parts_lock(
     }))
 }
 
+fn tool_viewer_open(args: &Value) -> Result<Value, ToolError> {
+    let once = args.get("once").and_then(|v| v.as_bool()).unwrap_or(true);
+    if !once {
+        return Err(ToolError::msg(
+            "CADRION-E-VIEW: MCP/HTTP will not start the accept loop (use cadrion view, or once=true)",
+        ));
+    }
+    let mut paths: Vec<PathBuf> = Vec::new();
+    if let Some(arr) = args.get("paths").and_then(|v| v.as_array()) {
+        for p in arr {
+            if let Some(s) = p.as_str() {
+                paths.push(PathBuf::from(s));
+            }
+        }
+    }
+    if let Some(p) = args.get("path").and_then(|v| v.as_str()) {
+        paths.push(PathBuf::from(p));
+    }
+    if paths.is_empty() {
+        return Err(ToolError::msg(
+            "CADRION-E-USAGE: viewer_open needs path or paths",
+        ));
+    }
+    let mut links = Vec::new();
+    for p in paths {
+        if !p.exists() {
+            return Err(ToolError::msg(format!(
+                "CADRION-E-VIEW: not found: {}",
+                p.display()
+            )));
+        }
+        let kind = viewer_kind(&p);
+        links.push(json!({
+            "path": p,
+            "kind": kind,
+            "url": null,
+            "note": "prepared; run cadrion view without --once to serve loopback HTML"
+        }));
+    }
+    let payload = json!({
+        "ok": true,
+        "once": true,
+        "served": false,
+        "interactive_cad": false,
+        "wgpu": false,
+        "links": links
+    });
+    Ok(json!({
+        "content": [{"type": "text", "text": serde_json::to_string_pretty(&payload).unwrap()}]
+    }))
+}
+
+fn viewer_kind(p: &Path) -> &'static str {
+    if p.is_dir() {
+        return "snap";
+    }
+    let name = p
+        .file_name()
+        .and_then(|s| s.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase();
+    if name.ends_with(".cad.star") || name.ends_with(".star") {
+        "star"
+    } else if name.ends_with(".gcode") || name.ends_with(".gco") || name.ends_with(".nc") {
+        "gcode"
+    } else if name.ends_with(".robot.json") || name.ends_with(".urdf") {
+        "robot"
+    } else if name.ends_with(".png") || name.ends_with(".gif") || name.ends_with(".jpg") {
+        "image"
+    } else {
+        "file"
+    }
+}
+
 fn load_robot_spec(path: &Path) -> Result<RobotSpec, ToolError> {
     let text = fs::read_to_string(path).map_err(|e| ToolError::msg(e.to_string()))?;
     serde_json::from_str(&text).map_err(|e| {
@@ -1479,5 +1566,27 @@ mod tests {
             "{err}"
         );
         let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn viewer_open_once_does_not_serve() {
+        let path = simple_arm_json();
+        let v = call_tool("viewer_open", &json!({"path": path.display().to_string()})).unwrap();
+        let p: Value = serde_json::from_str(v["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(p["ok"], true, "{p}");
+        assert_eq!(p["once"], true);
+        assert_eq!(p["served"], false);
+        assert_eq!(p["interactive_cad"], false);
+        assert_eq!(p["wgpu"], false);
+        assert_eq!(p["links"][0]["kind"], "robot");
+        assert!(p["links"][0]["url"].is_null());
+
+        let err = call_tool(
+            "viewer_open",
+            &json!({"path": path.display().to_string(), "once": false}),
+        )
+        .unwrap_err();
+        assert!(err.to_string().contains("CADRION-E-VIEW"), "{err}");
+        assert!(err.to_string().contains("accept loop"), "{err}");
     }
 }

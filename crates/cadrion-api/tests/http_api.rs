@@ -46,6 +46,7 @@ async fn health_and_openapi() {
     assert!(v["paths"]["/v1/parts/search"].is_object());
     assert!(v["paths"]["/v1/parts/fetch"].is_object());
     assert!(v["paths"]["/v1/parts/lock"].is_object());
+    assert!(v["paths"]["/v1/viewer/open"].is_object());
 }
 
 fn mcp_payload(v: &serde_json::Value) -> serde_json::Value {
@@ -179,6 +180,30 @@ async fn parts_fetch_and_lock() {
     assert_eq!(l["verified"], true);
     assert!(lock_path.is_file());
     let _ = std::fs::remove_file(&lock_path);
+}
+
+#[tokio::test]
+async fn viewer_open_once() {
+    let server = TestServer::new(app()).unwrap();
+    let r = server
+        .post("/v1/viewer/open")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({"path": "cad/plate.cad.star"}))
+        .await;
+    r.assert_status_ok();
+    let p = mcp_payload(&r.json());
+    assert_eq!(p["ok"], true, "{p}");
+    assert_eq!(p["served"], false);
+    assert_eq!(p["interactive_cad"], false);
+    assert_eq!(p["links"][0]["kind"], "star");
+    assert!(p["links"][0]["url"].is_null());
+
+    let refuse = server
+        .post("/v1/viewer/open")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({"path": "cad/plate.cad.star", "once": false}))
+        .await;
+    refuse.assert_status_bad_request();
 }
 
 #[tokio::test]

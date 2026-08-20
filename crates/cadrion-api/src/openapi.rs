@@ -121,6 +121,12 @@ pub fn openapi_doc() -> Value {
                     "responses": {"200": {"description": "meta"}, "400": {"description": "not found"}}
                 }
             },
+            "/v1/viewer/open": {
+                "post": {
+                    "summary": "Viewer deep links (H6-2 / MCP viewer_open). once=true only — no accept loop, not wgpu.",
+                    "responses": {"200": {"description": "links"}, "400": {"description": "missing path or once=false"}}
+                }
+            },
             "/v1/parts/lock": {
                 "post": {
                     "summary": "Pin a local part into parts.lock and verify sha256.",

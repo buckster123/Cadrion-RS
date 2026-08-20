@@ -165,6 +165,11 @@ mod tests {
             .unwrap()
             .iter()
             .any(|n| n == "parts"));
+        assert!(v["mcp"]["tool_names"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|n| n == "viewer_open"));
         assert!(v["cli"]["commands"]
             .as_array()
             .unwrap()

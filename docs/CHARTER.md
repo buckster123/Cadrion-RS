@@ -265,3 +265,6 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-21** — **H6-1 parts catalog:** `cadrion parts search|fetch|show|lock`, MCP `parts`
   (`op=`), `/v1/parts/search|fetch|lock`. Local filesystem only (`storefront: false`,
   `downloaded: false`). Lock writes + verifies sha256. Default next **H6-2**.
+- **2026-08-21** — **H6-2 viewer_open:** MCP + `/v1/viewer/open`. Default `once=true`
+  (no accept loop). `once=false` is `CADRION-E-VIEW`. Not wgpu / not interactive CAD.
+  Default next **H6-3**.
