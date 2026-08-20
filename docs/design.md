@@ -235,7 +235,8 @@ Config precedence: **flags > env (`CADRION_*`) > project `cadrion.toml` > user c
 
 - Entry points: `gen_step()`, `gen_dxf()`, `gen_urdf()`, `gen_srdf()`, `gen_sdf()`.
 - Evaluation emits **feature IR** (persisted, hashed, diffable). Kernel executes IR.
-- Model code is hermetic: no clock/env/net/fs; fueled caps; deterministic iteration and float formatting (details OQ-2).
+- Model code is hermetic: no clock/env/net/fs; fueled caps; deterministic iteration.
+  Floats and stdlib names: [`DIALECT.md`](DIALECT.md) (H5-7). User `load()` still open (OQ-2).
 - Parameter overrides at build: `--set width=120` (recorded in build metadata).
 - Selectors: `#o<obj>[.<solid>][.f<face>|.e<edge>|.v<vertex>]` with kernel-independent ordering
   (centroid/area tuple + tie-breakers). In-language queries (`faces(">Z")`, …) for authoring;
@@ -466,7 +467,8 @@ env only**, never committed, never full-printed (lengths/heads only).
 
 See charter OQ-1…OQ-7. Design-level watches:
 
-- Exact stdlib symbol names and selector query grammar — freeze with golden-IR tests in M1.
+- Stdlib symbol names + IR float JSON: pinned H5-7 (`docs/DIALECT.md` + dialect goldens).
+  Selector query grammar still open.
 - Default viewer/API ports (7411/7410 above) — change only with schema + docs together.
 - ~~Whether the facade remains public on crates.io~~ **Resolved (OQ-1 / H3-10):**
   product is **Cadrion**. First public install crate is `cadrion-cli`. See `docs/NAME_OQ1.md`.

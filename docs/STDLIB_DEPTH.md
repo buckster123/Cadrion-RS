@@ -7,7 +7,7 @@ IR schema **v2**. Additive nodes + stdlib expansions for agent-friendly patterns
 | Starlark | IR | Mock | OCCT |
 |----------|----|------|------|
 | `sphere(r, at=CENTER)` | `sphere` | true 4/3πr³ | `MakeSphere` + STEP place |
-| `cone(r, h, at=CENTER)` | `cone` | true πr²h/3 | **approx cylinder** (no MakeCone in sys 0.2) |
+| `cone(r, h, at=CENTER)` | `cone` | true πr²h/3 | **Unsupported** (H3-1; no cylinder stand-in) |
 | `box` / `cylinder` | unchanged | — | — |
 
 ## Transforms
@@ -38,5 +38,7 @@ cargo run -p cadrion-cli -- build examples/stdlib/pattern_hub.cad.star
 ## Honesty
 
 - Mock boolean pattern unions **overcount** volume when copies overlap (same as all mock unions).
-- OCCT `cone` is a **cylinder stand-in** until MakeCone is wired.
+- OCCT `cone` is **Unsupported** (`CADRION-E-UNSUPPORTED`) — no silent cylinder. See
+  [`KERNEL_HONESTY.md`](KERNEL_HONESTY.md).
+- Dialect pin (floats + symbol names): [`DIALECT.md`](DIALECT.md) (H5-7 / OQ-2 partial).
 - OCCT sphere/mirror/rotate still use STEP round-trips where `Shape.inner` is private (H3 target).

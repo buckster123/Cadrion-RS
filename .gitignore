@@ -10,5 +10,6 @@
 # keep example catalog stubs
 !examples/**/*.step
 !examples/**/*.ir.json
+!crates/cadrion-lang/fixtures/**/*.ir.json
 examples/**/*.view/
 sdf_out/

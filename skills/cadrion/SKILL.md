@@ -65,6 +65,7 @@ Local agents already have FS tools — prefer those on stdio. HTTP agents need M
 |-----|---------|
 | `cadrion://doc/status` | live status |
 | `cadrion://doc/stdlib` | stdlib depth |
+| `cadrion://doc/dialect` | float + stdlib name pin |
 | `cadrion://doc/viewer` | viewer gcode/robot |
 | `cadrion://doc/slicer-dfm` | slicer gates + DFM |
 | `cadrion://doc/fillet` | fillet doctrine |

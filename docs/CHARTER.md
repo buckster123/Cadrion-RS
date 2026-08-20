@@ -133,6 +133,9 @@ From PRD §16 — still unresolved; do not silently assume answers in code:
    First install crate = `cadrion-cli`. Legacy `CADRE_*` / `cadre://` / `cadre.*` schemas
    still accepted. No trademark filing this slice.
 2. **OQ-2** Starlark dialect details: float formatting, module system for shared libraries, stdlib naming via LLM A/B.
+   **Partial (H5-7):** floats → IR `f64` (`int` or `float` literals); stdlib names frozen in
+   `cadrion_lang::STDLIB_SYMBOLS` + dialect goldens. `use()` not shipped. **User `load()` /
+   library modules stay open (and refused until chartered).** See [`docs/DIALECT.md`](DIALECT.md).
 3. **OQ-3** Migration assistant scope/timing (M6 vs defer).
 4. **OQ-4** Depth of assembly joint model in STEP for 1.0 (kinematic AP242 vs labels+placements).
    **Partial (H3-4):** labels+placements+joint envelope → `cadrion.assembly_kinematics` sidecar and
@@ -240,3 +243,6 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-20** — **H5-6 MCP prompts:** `prompts/list` ships `cadrion-loop`,
   `write-source-policy`, `hermetic-load`. `prompts/get` returns the text. Not a fourth
   face. Default next **H5-7**.
+- **2026-08-20** — **H5-7 dialect bite:** pin float→IR f64 and `STDLIB_SYMBOLS` via goldens.
+  `STDLIB_DEPTH.md` cone row corrected (OCCT Unsupported, not cylinder). OQ-2 **partial** —
+  user modules still open. Default next **H5-8**.
