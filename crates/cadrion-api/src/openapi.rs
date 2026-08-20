@@ -111,8 +111,20 @@ pub fn openapi_doc() -> Value {
             },
             "/v1/parts/search": {
                 "post": {
-                    "summary": "Search local parts provider",
+                    "summary": "Search local STEP catalog (H6-1 / MCP parts search). Not a storefront.",
                     "responses": {"200": {"description": "candidates"}}
+                }
+            },
+            "/v1/parts/fetch": {
+                "post": {
+                    "summary": "Resolve local part id → path + sha256. Does not download.",
+                    "responses": {"200": {"description": "meta"}, "400": {"description": "not found"}}
+                }
+            },
+            "/v1/parts/lock": {
+                "post": {
+                    "summary": "Pin a local part into parts.lock and verify sha256.",
+                    "responses": {"200": {"description": "lock entry"}, "400": {"description": "missing or checksum"}}
                 }
             },
             "/v1/assembly/validate": {

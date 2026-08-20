@@ -15,7 +15,10 @@ pub use kinematics::{
     assembly_kinematics, assembly_to_robot_json, AssemblyKinematics, KinematicJoint, KinematicLink,
     PlacementRecord,
 };
-pub use lock::{load_parts_lock, verify_lock_entry, PartsLock, PartsLockEntry, PartsLockError};
+pub use lock::{
+    load_parts_lock, upsert_lock_entry, verify_lock_entry, write_parts_lock, PartsLock,
+    PartsLockEntry, PartsLockError,
+};
 pub use provider::{
     LocalFsProvider, PartCandidate, PartMeta, PartProvider, PartRef, ProviderError,
 };

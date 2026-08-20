@@ -13,6 +13,7 @@ mod kernel_pick;
 mod mcp_cmd;
 mod migrate_cmd;
 mod output;
+mod parts_cmd;
 mod robot_cmd;
 mod schema_cmd;
 mod sdf_cmd;
@@ -42,6 +43,7 @@ fn main() {
         Commands::Serve(args) => serve_cmd::run(&cli, args),
         Commands::Robot(args) => robot_cmd::run(&cli, args),
         Commands::Assembly(args) => assembly_cmd::run(&cli, args),
+        Commands::Parts(args) => parts_cmd::run(&cli, args),
         Commands::Fab(args) => fab_cmd::run_fab(&cli, args),
         Commands::Printer(args) => fab_cmd::run_printer(&cli, args),
         Commands::Migrate(args) => migrate_cmd::run(&cli, args),

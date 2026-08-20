@@ -43,6 +43,9 @@ async fn health_and_openapi() {
     assert!(v["paths"]["/v1/schema"].is_object());
     assert!(v["paths"]["/v1/robot/gen"].is_object());
     assert!(v["paths"]["/v1/robot/validate"].is_object());
+    assert!(v["paths"]["/v1/parts/search"].is_object());
+    assert!(v["paths"]["/v1/parts/fetch"].is_object());
+    assert!(v["paths"]["/v1/parts/lock"].is_object());
 }
 
 fn mcp_payload(v: &serde_json::Value) -> serde_json::Value {
@@ -132,12 +135,50 @@ async fn parts_search() {
         .json(&json!({"path": ".", "query": "m6", "parts_root": example_root().join("parts").display().to_string()}))
         .await;
     r.assert_status_ok();
-    let v: serde_json::Value = r.json();
+    let v = mcp_payload(&r.json());
+    assert_eq!(v["storefront"], false);
     assert!(v["results"]
         .as_array()
         .unwrap()
         .iter()
         .any(|c| c["id"] == "m6_bolt"));
+}
+
+#[tokio::test]
+async fn parts_fetch_and_lock() {
+    let server = TestServer::new(app()).unwrap();
+    let fetch = server
+        .post("/v1/parts/fetch")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({"id": "m6_bolt"}))
+        .await;
+    fetch.assert_status_ok();
+    let f = mcp_payload(&fetch.json());
+    assert_eq!(f["ok"], true, "{f}");
+    assert_eq!(f["downloaded"], false);
+    assert_eq!(f["meta"]["id"], "m6_bolt");
+
+    let miss = server
+        .post("/v1/parts/fetch")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({"id": "no-such-part"}))
+        .await;
+    miss.assert_status_bad_request();
+
+    let lock_path =
+        std::env::temp_dir().join(format!("cadrion-h6-1-http-{}.lock", std::process::id()));
+    let _ = std::fs::remove_file(&lock_path);
+    let locked = server
+        .post("/v1/parts/lock")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({"id": "m6_bolt", "lock": lock_path.display().to_string()}))
+        .await;
+    locked.assert_status_ok();
+    let l = mcp_payload(&locked.json());
+    assert_eq!(l["ok"], true, "{l}");
+    assert_eq!(l["verified"], true);
+    assert!(lock_path.is_file());
+    let _ = std::fs::remove_file(&lock_path);
 }
 
 #[tokio::test]

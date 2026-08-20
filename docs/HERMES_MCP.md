@@ -33,7 +33,7 @@ Cadrion auto-detects NDJSON vs Content-Length. Override with `CADRION_MCP_FRAMIN
 
 ```sh
 hermes mcp test cadrion
-# → Connected, 17 tools: … engine schema robot
+# → Connected, 18 tools: … engine schema robot parts
 ```
 
 ## Live session
@@ -51,6 +51,7 @@ After reload, tools appear as `mcp_cadrion_*` / deferred catalog names depending
 - **H5-4:** `fab_check` (DFM preflight; no printer start)
 - **H5-5:** `engine` (info / fail-closed install) · `schema` (mcp/errors)
 - **H5-8:** `robot` (`op=gen|validate`; inertials required)
+- **H6-1:** `parts` (`op=search|fetch|lock`; local STEP catalog, not a storefront)
 - resources: `resources/list` · `resources/read` (`cadrion://doc/**`)
 - **H5-6:** `prompts/list` · `prompts/get` (cadrion-loop, write-source-policy, hermetic-load)
 

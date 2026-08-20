@@ -262,3 +262,6 @@ Dated entries. A decision changes here first, then in the code.
   printer status/dry-run/start, migrate, assembly emit, fab dxf, project_artifacts).
   No live re-score, no `load()`, no truck default, no invented `printer_upload`.
   Default next **H6-1**.
+- **2026-08-21** — **H6-1 parts catalog:** `cadrion parts search|fetch|show|lock`, MCP `parts`
+  (`op=`), `/v1/parts/search|fetch|lock`. Local filesystem only (`storefront: false`,
+  `downloaded: false`). Lock writes + verifies sha256. Default next **H6-2**.

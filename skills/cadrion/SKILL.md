@@ -38,6 +38,7 @@ cadrion build path.cad.star --json
 cadrion inspect refs path.cad.star --facts --json
 cadrion snapshot path.cad.star --json
 cadrion robot gen arm.robot.json -o out/ --json
+cadrion parts search m6 --json
 cadrion fab check --part-json plate.flat.json --json
 cadrion fab gcode-check print.gcode --json
 cadrion printer dry-run print.gcode --json
@@ -47,7 +48,7 @@ cadrion mcp
 ## MCP tools
 `build`, `write_source`, `read_source`, `inspect_refs`, `measure`, `snapshot`,
 `inspect_dims`, `assembly_validate`, `sdf_sample`, `align_check`, `frame`, `diff`,
-`export`, `fab_check`, `engine`, `schema`, `robot`
+`export`, `fab_check`, `engine`, `schema`, `robot`, `parts`
 
 ### write_source policy (H7)
 | Transport | Default | Override |

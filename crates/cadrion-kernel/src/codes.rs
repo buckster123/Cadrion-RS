@@ -115,6 +115,14 @@ pub const ERROR_CATALOG: &[ErrorCode] = &[
         meaning: "module must define gen_step()",
     },
     ErrorCode {
+        code: "CADRION-E-PARTS-LOCK",
+        meaning: "parts.lock missing, checksum mismatch, or artifact gone",
+    },
+    ErrorCode {
+        code: "CADRION-E-PARTS-NOT-FOUND",
+        meaning: "local catalog has no STEP for that id",
+    },
+    ErrorCode {
         code: "CADRION-E-RENDER",
         meaning: "snapshot / raster failed",
     },

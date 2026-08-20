@@ -2,7 +2,7 @@
 
 > AI-oriented status block. Prefer this + `docs/METRICS.md` + `BACKLOG.md` + Horizon boards.
 
-**As of:** 2026-08-21 · **tip:** Horizon-6 chartered (H6-1 parts next) · **version:** 0.1.0  
+**As of:** 2026-08-21 · **tip:** H6-1 parts search/fetch/lock · **version:** 0.1.0  
 **agent_id:** `CADRION` · **repo:** https://github.com/buckster123/Cadrion-RS  
 **kernels:** mock (default CI) · occt (`--features occt`) · truck (experimental NON-PARITY)
 
@@ -19,7 +19,7 @@
 - Binary: `cadrion` (`~/.local/bin/cadrion` for Hermes MCP). **Not** `cargo install cadre`.
 
 ## Next board
-**Active:** Horizon-6 — default next **H6-1** (parts search \| fetch \| lock).  
+**Active:** Horizon-6 — default next **H6-2** (viewer_open).  
 **Archive:** H5 + H4 + H3 + H2 + H1. Live harness re-score is parked (ApexRouter + spend).
 
 ## Crate map (as-built)
@@ -46,7 +46,7 @@
 
 ## CLI surface (high signal)
 ```
-build | inspect refs|measure|align|frame|diff | export | migrate
+build | inspect refs|measure|align|frame|diff | export | migrate | parts search|fetch|lock
 snapshot | view | bench run | harness run
 mcp | serve api|mcp | skills export [--all]
 robot gen|validate
@@ -59,7 +59,7 @@ version --json
 
 ## Hermes MCP
 - Config: `~/.hermes/config.yaml` → `mcp_servers.cadrion` · binary `~/.local/bin/cadrion mcp`
-- Tools: 17 — see [`HERMES_MCP.md`](HERMES_MCP.md) (H5-8 added robot)
+- Tools: 18 — see [`HERMES_MCP.md`](HERMES_MCP.md) (H6-1 added parts)
 - Docs: [`HERMES_MCP.md`](HERMES_MCP.md) · framing auto-detect NDJSON (Hermes) / Content-Length
 
 ## Examples

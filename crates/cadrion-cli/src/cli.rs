@@ -72,6 +72,8 @@ pub enum Commands {
     Robot(RobotArgs),
     /// Assembly spec validate (joints + components).
     Assembly(AssemblyArgs),
+    /// Local parts catalog: search / fetch / pin to parts.lock (not a storefront).
+    Parts(PartsArgs),
     /// Fabrication: DXF, DFM, slicer, gcode-check.
     Fab(FabArgs),
     /// Printer adapters (Bambu / Klipper dry-run / gated start).
@@ -519,6 +521,55 @@ pub enum AssemblyCmd {
     EmitKinematics(AssemblyEmitArgs),
     /// Emit minimal robot JSON (placeholder solids) for `cadrion robot gen`.
     EmitRobot(AssemblyEmitArgs),
+}
+
+#[derive(Debug, clap::Args)]
+pub struct PartsArgs {
+    #[command(subcommand)]
+    pub cmd: PartsCmd,
+}
+
+#[derive(Debug, Subcommand)]
+pub enum PartsCmd {
+    /// Search local `.step` / `.stp` stems (query optional = list all).
+    Search(PartsSearchArgs),
+    /// Resolve id → path + sha256. Local only — does not download.
+    Fetch(PartsIdArgs),
+    /// Alias of fetch (`design.md` `parts show`).
+    Show(PartsIdArgs),
+    /// Pin a fetched part into `parts.lock` and verify the checksum.
+    Lock(PartsLockCliArgs),
+}
+
+#[derive(Debug, clap::Args)]
+pub struct PartsSearchArgs {
+    /// Substring match on filename (empty = every STEP in --root).
+    pub query: Option<String>,
+    /// Catalog directory (default: `<project>/parts`).
+    #[arg(long)]
+    pub root: Option<PathBuf>,
+}
+
+#[derive(Debug, clap::Args)]
+pub struct PartsIdArgs {
+    /// Part id = STEP stem.
+    pub id: String,
+    #[arg(long)]
+    pub root: Option<PathBuf>,
+}
+
+#[derive(Debug, clap::Args)]
+pub struct PartsLockCliArgs {
+    /// Part id = STEP stem.
+    pub id: String,
+    #[arg(long)]
+    pub root: Option<PathBuf>,
+    /// Lockfile path (default: `<project>/parts.lock`).
+    #[arg(long)]
+    pub lock: Option<PathBuf>,
+    /// Lock map key (default: same as id).
+    #[arg(long)]
+    pub key: Option<String>,
 }
 
 #[derive(Debug, clap::Args)]
