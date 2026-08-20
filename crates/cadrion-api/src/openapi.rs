@@ -43,6 +43,24 @@ pub fn openapi_doc() -> Value {
                     "responses": {"200": {"description": "drawing packet"}}
                 }
             },
+            "/v1/inspect/align": {
+                "post": {
+                    "summary": "Align two selectors (H5-2 / MCP align_check)",
+                    "responses": {"200": {"description": "align report"}}
+                }
+            },
+            "/v1/inspect/frame": {
+                "post": {
+                    "summary": "Local frame for a selector (H5-2 / MCP frame)",
+                    "responses": {"200": {"description": "frame report"}}
+                }
+            },
+            "/v1/inspect/diff": {
+                "post": {
+                    "summary": "Diff two builds (H5-2 / MCP diff)",
+                    "responses": {"200": {"description": "diff report"}}
+                }
+            },
             "/v1/sdf/sample": {
                 "post": {
                     "summary": "Secondary SDF sample (H4-3 / MCP sdf_sample). Not modeling.",

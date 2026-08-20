@@ -144,6 +144,11 @@ mod tests {
             .unwrap()
             .iter()
             .any(|n| n == "inspect_dims"));
+        assert!(v["mcp"]["tool_names"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|n| n == "align_check"));
         assert_eq!(v["api"]["openapi"], "3.1.0");
         assert!(v["errors"]["count"].as_u64().unwrap() >= 20);
     }

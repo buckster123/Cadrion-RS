@@ -29,6 +29,9 @@ pub fn router(state: AppState) -> Router {
         .route("/v1/inspect/refs", post(inspect_refs))
         .route("/v1/inspect/measure", post(inspect_measure))
         .route("/v1/inspect/dims", post(inspect_dims))
+        .route("/v1/inspect/align", post(inspect_align))
+        .route("/v1/inspect/frame", post(inspect_frame))
+        .route("/v1/inspect/diff", post(inspect_diff))
         .route("/v1/sdf/sample", post(sdf_sample))
         .route("/v1/snapshot", post(snapshot))
         .route("/v1/parts/search", post(parts_search))
@@ -166,6 +169,77 @@ async fn inspect_dims(
         args["dims"] = dims;
     }
     call_tool("inspect_dims", &args)
+}
+
+#[derive(Debug, Deserialize)]
+struct AlignBody {
+    path: String,
+    a: String,
+    b: String,
+    #[serde(default)]
+    expect: Option<String>,
+    #[serde(default)]
+    distance: Option<f64>,
+    #[serde(default)]
+    tol: Option<f64>,
+    #[serde(default)]
+    tol_deg: Option<f64>,
+}
+
+async fn inspect_align(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<AlignBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let path = resolve_path(&st, &body.path)?;
+    let mut args = json!({"path": path, "a": body.a, "b": body.b});
+    if let Some(expect) = body.expect {
+        args["expect"] = json!(expect);
+    }
+    if let Some(distance) = body.distance {
+        args["distance"] = json!(distance);
+    }
+    if let Some(tol) = body.tol {
+        args["tol"] = json!(tol);
+    }
+    if let Some(tol_deg) = body.tol_deg {
+        args["tol_deg"] = json!(tol_deg);
+    }
+    call_tool("align_check", &args)
+}
+
+#[derive(Debug, Deserialize)]
+struct FrameBody {
+    path: String,
+    selector: String,
+}
+
+async fn inspect_frame(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<FrameBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let path = resolve_path(&st, &body.path)?;
+    call_tool("frame", &json!({"path": path, "selector": body.selector}))
+}
+
+#[derive(Debug, Deserialize)]
+struct DiffBody {
+    old: String,
+    new: String,
+}
+
+async fn inspect_diff(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<DiffBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let old = resolve_path(&st, &body.old)?;
+    let new = resolve_path(&st, &body.new)?;
+    call_tool("diff", &json!({"old": old, "new": new}))
 }
 
 #[derive(Debug, Deserialize)]
@@ -361,7 +435,8 @@ async fn run_job(st: AppState, id: String, kind: String, payload: Value) {
     });
 
     let result = match kind.as_str() {
-        "build" | "inspect_refs" | "snapshot" | "measure" | "inspect_dims" => {
+        "build" | "inspect_refs" | "snapshot" | "measure" | "inspect_dims" | "align_check"
+        | "frame" => {
             let path = payload.get("path").and_then(|p| p.as_str()).map(|p| {
                 if std::path::Path::new(p).is_absolute() {
                     p.to_string()
@@ -382,6 +457,21 @@ async fn run_job(st: AppState, id: String, kind: String, payload: Value) {
                     }
                 }
                 None => Err("missing path".into()),
+            }
+        }
+        "diff" => {
+            let mut args = payload.clone();
+            for key in ["old", "new"] {
+                if let Some(p) = args.get(key).and_then(|v| v.as_str()) {
+                    args[key] = json!(resolve_out_path(&st, p));
+                }
+            }
+            if args.get("old").and_then(|v| v.as_str()).is_none()
+                || args.get("new").and_then(|v| v.as_str()).is_none()
+            {
+                Err("missing old/new".into())
+            } else {
+                cadrion_mcp::tools_call_for_api("diff", &args)
             }
         }
         "sdf_sample" => {

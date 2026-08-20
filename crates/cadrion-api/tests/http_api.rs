@@ -33,6 +33,9 @@ async fn health_and_openapi() {
     assert_eq!(v["openapi"], "3.1.0");
     assert!(v["paths"]["/v1/inspect/measure"].is_object());
     assert!(v["paths"]["/v1/inspect/dims"].is_object());
+    assert!(v["paths"]["/v1/inspect/align"].is_object());
+    assert!(v["paths"]["/v1/inspect/frame"].is_object());
+    assert!(v["paths"]["/v1/inspect/diff"].is_object());
     assert!(v["paths"]["/v1/sdf/sample"].is_object());
 }
 
@@ -176,6 +179,45 @@ async fn inspect_measure_plate_thickness() {
     let m = mcp_payload(&r.json());
     let val = m["value"].as_f64().unwrap_or(0.0);
     assert!((val - 5.0).abs() < 1e-6, "thickness {m}");
+
+    let a = server
+        .post("/v1/inspect/align")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({
+            "path": "cad/plate.cad.star",
+            "a": top["selector"],
+            "b": bot["selector"],
+            "expect": "coaxial"
+        }))
+        .await;
+    a.assert_status_ok();
+    let ar = mcp_payload(&a.json());
+    assert_eq!(ar["ok"], true, "{ar}");
+
+    let f = server
+        .post("/v1/inspect/frame")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({
+            "path": "cad/plate.cad.star",
+            "selector": top["selector"]
+        }))
+        .await;
+    f.assert_status_ok();
+    let fr = mcp_payload(&f.json());
+    assert_eq!(fr["kind"], "face", "{fr}");
+
+    let d = server
+        .post("/v1/inspect/diff")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({
+            "old": "cad/plate.cad.star",
+            "new": "cad/plate.cad.star"
+        }))
+        .await;
+    d.assert_status_ok();
+    let dr = mcp_payload(&d.json());
+    assert_eq!(dr["ok"], true);
+    assert_eq!(dr["diff"]["volume_delta_mm3"], 0.0);
 }
 
 #[tokio::test]
