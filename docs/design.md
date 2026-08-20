@@ -123,7 +123,7 @@ Hand-rolled JSON-RPC (OQ-7 SDK deferred). Logs on **stderr** only.
 cargo run -p cadrion-cli -- serve api --port 7410 --token secret
 # GET  /v1/health
 # GET  /v1/openapi.json
-# POST /v1/build|inspect/refs|snapshot  (Bearer token)
+# POST /v1/build|inspect/refs|inspect/measure|inspect/dims|snapshot|sdf/sample  (Bearer token)
 # POST /v1/parts/search
 # POST /v1/assembly/validate
 # POST /v1/jobs  + GET /v1/jobs/{id}  + GET /v1/jobs/{id}/events (SSE)

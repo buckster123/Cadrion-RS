@@ -42,6 +42,7 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 | 54 | Name H3-10 | OQ-1 Cadrion-RS | **green** | docs/NAME_OQ1.md; crates/bin renamed |
 | 55 | Schema H4-1 | cadrion schema dump | **green** | cli_schema + ERROR_CATALOG |
 | 56 | Engine H4-2 | engine info / fail-closed install | **green** | cli_engine; no fake fetch |
+| 57 | HTTP H4-3 | measure / dims / sdf routes | **green** | http_api + OpenAPI paths |
 | A1 | OCCT cone | no silent cylinder | **green** | H3-1 fail-closed |
 | A2 | truck-seed label | version JSON tag | **green** | truck_implementation field |
 | A3 | H3-2 frontier | live LLM score | **blocked** | ApexRouter backends all down 2026-08-06 |
@@ -67,6 +68,6 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 
 **v1 ship bar (this table):** rows 1–16 green; 17–20 may remain amber/red with honesty notes.
 
-Last updated: 2026-08-20 (H4-2 engine inventory).  
+Last updated: 2026-08-20 (H4-3 HTTP catch-up).  
 Harness live log: [`HARNESS_LIVE.md`](HARNESS_LIVE.md).  
 As-built companion: [`STATUS.md`](STATUS.md).

@@ -27,6 +27,9 @@ pub fn router(state: AppState) -> Router {
         .route("/v1/openapi.json", get(openapi))
         .route("/v1/build", post(build))
         .route("/v1/inspect/refs", post(inspect_refs))
+        .route("/v1/inspect/measure", post(inspect_measure))
+        .route("/v1/inspect/dims", post(inspect_dims))
+        .route("/v1/sdf/sample", post(sdf_sample))
         .route("/v1/snapshot", post(snapshot))
         .route("/v1/parts/search", post(parts_search))
         .route("/v1/assembly/validate", post(assembly_validate))
@@ -114,6 +117,99 @@ async fn inspect_refs(
         "facts": body.facts.unwrap_or(true)
     });
     call_tool("inspect_refs", &args)
+}
+
+#[derive(Debug, Deserialize)]
+struct MeasureBody {
+    path: String,
+    a: String,
+    #[serde(default)]
+    b: Option<String>,
+    kind: String,
+}
+
+async fn inspect_measure(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<MeasureBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let path = resolve_path(&st, &body.path)?;
+    let mut args = json!({"path": path, "a": body.a, "kind": body.kind});
+    if let Some(b) = body.b {
+        args["b"] = json!(b);
+    }
+    call_tool("measure", &args)
+}
+
+#[derive(Debug, Deserialize)]
+struct DimsBody {
+    path: String,
+    #[serde(default)]
+    out: Option<String>,
+    #[serde(default)]
+    dims: Option<Value>,
+}
+
+async fn inspect_dims(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<DimsBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let path = resolve_path(&st, &body.path)?;
+    let mut args = json!({"path": path});
+    if let Some(out) = body.out {
+        args["out"] = json!(resolve_out_path(&st, &out));
+    }
+    if let Some(dims) = body.dims {
+        args["dims"] = dims;
+    }
+    call_tool("inspect_dims", &args)
+}
+
+#[derive(Debug, Deserialize)]
+struct SdfBody {
+    prim: String,
+    a: f64,
+    b: f64,
+    #[serde(default)]
+    c: Option<f64>,
+    #[serde(default)]
+    res: Option<u64>,
+    #[serde(default)]
+    pad: Option<f64>,
+    #[serde(default)]
+    out: Option<String>,
+    #[serde(default)]
+    stem: Option<String>,
+}
+
+async fn sdf_sample(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<SdfBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let mut args = json!({"prim": body.prim, "a": body.a, "b": body.b});
+    if let Some(c) = body.c {
+        args["c"] = json!(c);
+    }
+    if let Some(res) = body.res {
+        args["res"] = json!(res);
+    }
+    if let Some(pad) = body.pad {
+        args["pad"] = json!(pad);
+    }
+    if let Some(stem) = body.stem {
+        args["stem"] = json!(stem);
+    }
+    let out = body
+        .out
+        .map(|p| resolve_out_path(&st, &p))
+        .unwrap_or_else(|| st.cfg.project_root.join("sdf_out").display().to_string());
+    args["out"] = json!(out);
+    call_tool("sdf_sample", &args)
 }
 
 async fn snapshot(
@@ -265,7 +361,7 @@ async fn run_job(st: AppState, id: String, kind: String, payload: Value) {
     });
 
     let result = match kind.as_str() {
-        "build" | "inspect_refs" | "snapshot" => {
+        "build" | "inspect_refs" | "snapshot" | "measure" | "inspect_dims" => {
             let path = payload.get("path").and_then(|p| p.as_str()).map(|p| {
                 if std::path::Path::new(p).is_absolute() {
                     p.to_string()
@@ -287,6 +383,13 @@ async fn run_job(st: AppState, id: String, kind: String, payload: Value) {
                 }
                 None => Err("missing path".into()),
             }
+        }
+        "sdf_sample" => {
+            let mut args = payload.clone();
+            if let Some(out) = args.get("out").and_then(|v| v.as_str()) {
+                args["out"] = json!(resolve_out_path(&st, out));
+            }
+            cadrion_mcp::tools_call_for_api("sdf_sample", &args)
         }
         other => Err(format!("unsupported job kind: {other}")),
     };
@@ -365,6 +468,16 @@ fn call_tool(name: &str, args: &Value) -> Result<Json<Value>, ApiError> {
 
 fn resolve_path(st: &AppState, p: &str) -> Result<String, ApiError> {
     Ok(resolve_path_buf(st, p)?.display().to_string())
+}
+
+/// Output path that may not exist yet (dims / sdf writes).
+fn resolve_out_path(st: &AppState, p: &str) -> String {
+    let path = PathBuf::from(p);
+    if path.is_absolute() {
+        path.display().to_string()
+    } else {
+        st.cfg.project_root.join(path).display().to_string()
+    }
 }
 
 fn resolve_path_buf(st: &AppState, p: &str) -> Result<PathBuf, ApiError> {

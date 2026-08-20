@@ -217,3 +217,5 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-20** — **H4-2 engine inventory:** `cadrion engine info` lists compile-time kernels.
   `engine install` does not download a prebuilt — already-present or `CADRION-E-ENGINE-MISSING`.
   Checksummed fetch remains a later packaging slice.
+- **2026-08-20** — **H4-3 HTTP catch-up:** `/v1/inspect/measure`, `/v1/inspect/dims`,
+  `/v1/sdf/sample` wrap the H3-3 MCP tools. Faces stay co-equal (D5). SDF remains secondary.

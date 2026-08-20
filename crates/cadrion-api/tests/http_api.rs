@@ -31,6 +31,14 @@ async fn health_and_openapi() {
     o.assert_status_ok();
     let v: serde_json::Value = o.json();
     assert_eq!(v["openapi"], "3.1.0");
+    assert!(v["paths"]["/v1/inspect/measure"].is_object());
+    assert!(v["paths"]["/v1/inspect/dims"].is_object());
+    assert!(v["paths"]["/v1/sdf/sample"].is_object());
+}
+
+fn mcp_payload(v: &serde_json::Value) -> serde_json::Value {
+    let text = v["content"][0]["text"].as_str().expect("mcp text content");
+    serde_json::from_str(text).expect("mcp payload json")
 }
 
 #[tokio::test]
@@ -121,4 +129,93 @@ async fn parts_search() {
         .unwrap()
         .iter()
         .any(|c| c["id"] == "m6_bolt"));
+}
+
+#[tokio::test]
+async fn inspect_measure_plate_thickness() {
+    let server = TestServer::new(app()).unwrap();
+    let refs = server
+        .post("/v1/inspect/refs")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({"path": "cad/plate.cad.star"}))
+        .await;
+    refs.assert_status_ok();
+    let report = mcp_payload(&refs.json());
+    let refs = report["refs"].as_array().unwrap();
+    let top = refs
+        .iter()
+        .find(|r| {
+            r["kind"] == "face"
+                && r["normal"]
+                    .as_object()
+                    .map(|n| n.get("z").and_then(|z| z.as_f64()) == Some(1.0))
+                    .unwrap_or(false)
+        })
+        .unwrap();
+    let bot = refs
+        .iter()
+        .find(|r| {
+            r["kind"] == "face"
+                && r["normal"]
+                    .as_object()
+                    .map(|n| n.get("z").and_then(|z| z.as_f64()) == Some(-1.0))
+                    .unwrap_or(false)
+        })
+        .unwrap();
+    let r = server
+        .post("/v1/inspect/measure")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({
+            "path": "cad/plate.cad.star",
+            "a": top["selector"],
+            "b": bot["selector"],
+            "kind": "thickness"
+        }))
+        .await;
+    r.assert_status_ok();
+    let m = mcp_payload(&r.json());
+    let val = m["value"].as_f64().unwrap_or(0.0);
+    assert!((val - 5.0).abs() < 1e-6, "thickness {m}");
+}
+
+#[tokio::test]
+async fn inspect_dims_writes_packet() {
+    let dir = tempfile::tempdir().unwrap();
+    let out = dir.path().join("plate.drawing.json");
+    let server = TestServer::new(app()).unwrap();
+    let r = server
+        .post("/v1/inspect/dims")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({
+            "path": "cad/plate.cad.star",
+            "out": out.display().to_string()
+        }))
+        .await;
+    r.assert_status_ok();
+    let p = mcp_payload(&r.json());
+    assert_eq!(p["ok"], true);
+    assert!(out.is_file(), "expected {}", out.display());
+}
+
+#[tokio::test]
+async fn sdf_sample_box() {
+    let dir = tempfile::tempdir().unwrap();
+    let server = TestServer::new(app()).unwrap();
+    let r = server
+        .post("/v1/sdf/sample")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({
+            "prim": "box",
+            "a": 10.0,
+            "b": 8.0,
+            "c": 6.0,
+            "res": 16,
+            "out": dir.path().display().to_string(),
+            "stem": "http_box"
+        }))
+        .await;
+    r.assert_status_ok();
+    let p = mcp_payload(&r.json());
+    assert_eq!(p["ok"], true);
+    assert_eq!(p["secondary"], true);
 }

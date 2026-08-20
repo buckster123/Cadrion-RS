@@ -63,7 +63,7 @@ Re-probe 2026-08-20: process up, **all backends `status=down`**, aliases unhealt
 2. Merge when CI green (user trust, 2026-08-20)  
 3. Tick checklist + BACKLOG on merge  
 
-**Default next:** **H4-3**. If a healthy router backend appears, **H3-2** jumps the queue.
+**Default next:** Horizon-4 cook list complete. If a healthy router backend appears, **H3-2** jumps the queue.
 
 ---
 
@@ -71,7 +71,7 @@ Re-probe 2026-08-20: process up, **all backends `status=down`**, aliases unhealt
 
 - [x] **H4-1** `cadrion schema`  
 - [x] **H4-2** `cadrion engine info|install`  
-- [ ] **H4-3** HTTP measure / dims / sdf  
+- [x] **H4-3** HTTP measure / dims / sdf  
 
 ---
 

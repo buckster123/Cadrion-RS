@@ -99,7 +99,7 @@ pub fn camera_orbit(center: Point3, radius: f64, theta: f64, elev: f64) -> Camer
 pub fn mesh_bounds(mesh: &Mesh) -> (Point3, Point3) {
     let mut min = Point3::new(f64::INFINITY, f64::INFINITY, f64::INFINITY);
     let mut max = Point3::new(f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY);
-    for c in mesh.positions.chunks_exact(3) {
+    for c in mesh.positions.as_chunks::<3>().0 {
         let x = c[0] as f64;
         let y = c[1] as f64;
         let z = c[2] as f64;

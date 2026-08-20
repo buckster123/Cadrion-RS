@@ -2,7 +2,7 @@
 
 > AI-oriented status block. Prefer this + `docs/METRICS.md` + `BACKLOG.md` + Horizon boards.
 
-**As of:** 2026-08-20 · **tip:** H4-2 engine inventory · **version:** 0.1.0  
+**As of:** 2026-08-20 · **tip:** H4-3 HTTP catch-up · **version:** 0.1.0  
 **agent_id:** `CADRION` · **repo:** https://github.com/buckster123/Cadrion-RS  
 **kernels:** mock (default CI) · occt (`--features occt`) · truck (experimental NON-PARITY)
 
@@ -17,7 +17,7 @@
 - Binary: `cadrion` (`~/.local/bin/cadrion` for Hermes MCP). **Not** `cargo install cadre`.
 
 ## Next board
-**Active:** [`docs/HORIZON4.md`](HORIZON4.md). Default next: **H4-3**.  
+**Active:** [`docs/HORIZON4.md`](HORIZON4.md) — H4-1…H4-3 complete.  
 **H3-2** jumps the queue if a healthy ApexRouter/LocalRouter backend appears.  
 **Archive:** H3 (minus H3-2) + H2 + H1.
 

@@ -154,7 +154,7 @@ Otherwise cook [`docs/HORIZON4.md`](HORIZON4.md). Horizon-3 cook list is complet
 ## 7. Checklist
 
 - [x] **H3-1** Honesty pass (cone + fences + truck naming)  
-- [ ] **H3-2** Live harness frontier score *(blocked: all router backends down 2026-08-06)*  
+- [ ] **H3-2** Live harness frontier score *(blocked: backends still down 2026-08-20)*  
 - [x] **H3-3** MCP surface depth  
 - [x] **H3-4** Assembly / OQ-4 bite  
 - [x] **H3-5** PMI → viewer overlay  
