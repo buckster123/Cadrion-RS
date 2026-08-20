@@ -21,6 +21,7 @@ cargo run -p cadrion-cli --features occt -- --kernel occt export part.cad.star -
 | `inspect refs <target>` | stable `#o…` inventory (`--facts`) |
 | `inspect measure <target> <a> [b] --kind …` | distance / angle / diameter / thickness |
 | `export <target> --format step\|stl\|glb` | secondary formats (tessellation needs OCCT) |
+| `schema [cli\|mcp\|api\|errors]` | live surface dump (D13) |
 | `version` | versions + feature flags |
 
 Global: `--json`, `-q`, `--project`, `--kernel mock|occt`, `-v`.

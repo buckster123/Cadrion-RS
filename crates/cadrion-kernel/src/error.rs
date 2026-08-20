@@ -1,7 +1,7 @@
 //! Shared error type for kernel operations.
 //!
 //! Codes are stable strings agents branch on (`CADRION-E-…`). Keep them aligned with
-//! `cadrion schema errors` once that surface exists.
+//! [`crate::ERROR_CATALOG`] / `cadrion schema errors`.
 
 use serde::{Deserialize, Serialize};
 use thiserror::Error;

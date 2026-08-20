@@ -13,6 +13,7 @@ mod mcp_cmd;
 mod migrate_cmd;
 mod output;
 mod robot_cmd;
+mod schema_cmd;
 mod sdf_cmd;
 mod serve_cmd;
 mod snapshot_cmd;
@@ -44,6 +45,7 @@ fn main() {
         Commands::Printer(args) => fab_cmd::run_printer(&cli, args),
         Commands::Migrate(args) => migrate_cmd::run(&cli, args),
         Commands::Sdf(args) => sdf_cmd::run(&cli, args),
+        Commands::Schema(args) => schema_cmd::run(&cli, args),
         Commands::Version => {
             let v = serde_json::json!({
                 "ok": true,

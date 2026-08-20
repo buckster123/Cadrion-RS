@@ -27,6 +27,8 @@ jobs:
         run: cargo build
       - name: skills export both agents
         run: cargo run -q -p cadrion-cli -- skills export --all -o /tmp/cadrion-skills --json
+      - name: schema dump (D13)
+        run: cargo run -q -p cadrion-cli -- schema --json
 
   wasm:
     runs-on: ubuntu-latest

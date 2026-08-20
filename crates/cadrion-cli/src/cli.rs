@@ -80,8 +80,25 @@ pub enum Commands {
     Migrate(MigrateArgs),
     /// Experimental secondary SDF sample (analytic box/cyl → raw/NRRD). Not modeling.
     Sdf(SdfArgs),
+    /// Dump live CLI / MCP / API / error schemas (D13).
+    Schema(SchemaArgs),
     /// Print versions / feature flags.
     Version,
+}
+
+#[derive(Debug, clap::Args)]
+pub struct SchemaArgs {
+    /// Face: `cli`, `mcp`, `api`, `errors` (default: all four).
+    pub face: Option<SchemaFace>,
+}
+
+#[derive(Debug, Clone, Copy, ValueEnum, PartialEq, Eq)]
+pub enum SchemaFace {
+    Cli,
+    Mcp,
+    Api,
+    Errors,
+    All,
 }
 
 #[derive(Debug, clap::Args)]

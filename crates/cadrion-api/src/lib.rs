@@ -7,6 +7,7 @@ mod openapi;
 mod routes;
 mod state;
 
+pub use openapi::openapi_doc;
 pub use routes::router;
 pub use state::{AppConfig, AppState};
 

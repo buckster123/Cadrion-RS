@@ -145,8 +145,9 @@ Three pillars:
 5. Default next = next unchecked H3-N  
 6. Truck work must cite bid G-criteria in PR  
 
-**Default next if “cook on” with no pref:** **H3-2** when a live router backend exists.
-Otherwise Horizon-3 cook list is complete (H3-10 closed 2026-08-19).
+**Default next if “cook on” with no pref:** **H3-2** when a *healthy* router backend exists.
+Otherwise cook [`docs/HORIZON4.md`](HORIZON4.md). Horizon-3 cook list is complete except H3-2
+(H3-10 closed 2026-08-19; backends still down 2026-08-20).
 
 ---
 
