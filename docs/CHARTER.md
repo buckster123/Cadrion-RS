@@ -254,3 +254,6 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-21** — **H5-9 migrator bite:** `mirror(Plane.XY|YZ|ZX)` maps to stdlib `mirror`.
   Workplane / faces / sweep / loft / scale are structured refuse notes (not faked).
   Fixture `07_sweep_workplane.py`. OQ-3 still open. Default next **H5-10**.
+- **2026-08-21** — **H5-10 truck G1 refuse:** pinned truck crates have no STEP writer.
+  `write_step` is `CADRION-E-UNSUPPORTED` and writes no file. Bid **N2 stays No**.
+  `parity_eligible` stays false. Horizon-5 complete.

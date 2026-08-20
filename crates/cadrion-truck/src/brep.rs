@@ -1,7 +1,8 @@
 //! H3-6 spike: **upstream** `truck` B-rep (Apache-2.0).
 //!
 //! Scope: box + cylinder + boolean (and/or/cut) + tessellate.
-//! STEP / fillet / chamfer remain Unsupported. `parity_eligible() == false`.
+//! STEP / fillet / chamfer remain Unsupported (H5-10: pinned crates have no STEP).
+//! `parity_eligible() == false`.
 //! Not the CLI default.
 
 use std::collections::HashMap;
@@ -287,6 +288,7 @@ impl GeomKernel for TruckBrepKernel {
     }
 
     fn write_step(&self, _shape: ShapeId, _path: &Path, _opts: &StepWriteOpts) -> KernelResult<()> {
+        // H5-10 / G1: truck-modeling/shapeops/meshalgo do not write STEP. No truck-stepio pin.
         Err(KernelError::unsupported(self.backend_id(), "write_step"))
     }
 
@@ -372,9 +374,15 @@ mod tests {
     #[test]
     fn step_still_unsupported() {
         let mut k = TruckBrepKernel::new();
+        assert!(!k.parity_eligible());
         let b = k.box_at(1.0, 1.0, 1.0, Point3::ORIGIN).unwrap();
-        assert!(k
-            .write_step(b, Path::new("/tmp/x.step"), &StepWriteOpts::default())
-            .is_err());
+        let path =
+            std::env::temp_dir().join(format!("cadrion-h5-10-brep-{}.step", std::process::id()));
+        let _ = std::fs::remove_file(&path);
+        let err = k
+            .write_step(b, &path, &StepWriteOpts::default())
+            .unwrap_err();
+        assert_eq!(err.code(), "CADRION-E-UNSUPPORTED");
+        assert!(!path.exists(), "refuse must not write a STEP file");
     }
 }

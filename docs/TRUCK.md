@@ -13,7 +13,7 @@
 |------|--|
 | Default kernel | **never** truck / truck-brep |
 | Parity-10 | **`parity_eligible() == false`** always |
-| STEP | unsupported (both) |
+| STEP | **Unsupported** (both; H5-10 — pinned crates have no writer; no fake file) |
 | Fillet/chamfer | unsupported (both) |
 | Seed | not upstream truck |
 | Spike | real B-rep box/cyl + boolean + triangulation — **still NO-GO** for default |

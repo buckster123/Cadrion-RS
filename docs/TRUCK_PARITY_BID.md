@@ -123,7 +123,7 @@ Legend: **Y** = real enough for agent fab loops · **~** = approximate / honesty
 | # | Criterion | Met? |
 |---|-----------|------|
 | N1 | Real BREP booleans | **Partial (H3-6)** — spike `and`/`or`/`cut`; not suite-proven |
-| N2 | STEP primary artifact path | **No** |
+| N2 | STEP primary artifact path | **No** (H5-10: pinned truck crates have no STEP; `CADRION-E-UNSUPPORTED`; no file) |
 | N3 | Fillet path or honest permanent skip policy in suite | **No** |
 | N4 | Parity suite green under truck | **No** |
 | N5 | Agent fab loops prefer truck over OCCT on real parts | **No** (OCCT remains) |
@@ -135,7 +135,7 @@ Legend: **Y** = real enough for agent fab loops · **~** = approximate / honesty
 
 | # | Criterion |
 |---|-----------|
-| G1 | BREP boolean + tessellate + STEP write on ≥ parts 01–04 class (**H3-6 partial:** boolean+mesh; no STEP) |
+| G1 | BREP boolean + tessellate + STEP write on ≥ parts 01–04 class (**H3-6 partial:** boolean+mesh; **H5-10:** STEP is honest refuse — `truck-stepio` not pinned) |
 | G2 | `parity_eligible` still false until G3 |
 | G3 | Documented suite (`parts1-10` truck or explicit subset) green in CI optional job |
 | G4 | Fillet: implemented **or** CHARTER + suite mark fillets OCCT-only forever |
@@ -162,7 +162,7 @@ Promotion target earliest: **Horizon-3** (not H2).
 
 1. ~~Spike: `truck-modeling` box + boolean cut + mesh~~ **done H3-6** (`--kernel truck-brep`)
 2. Seed remains `--kernel truck` (analytic)
-3. Golden: single STEP from truck vs OCCT volume delta (still open — G1 remainder)
+3. Golden: single STEP from truck vs OCCT volume delta — **H5-10 closed as refuse** (`CADRION-E-UNSUPPORTED`). Reopen only by pinning `truck-stepio` + CHARTER.
 4. Only then draft Parity-truck suite
 
 ## 7. Sign-off

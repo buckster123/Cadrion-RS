@@ -285,6 +285,7 @@ impl GeomKernel for TruckKernel {
     }
 
     fn write_step(&self, _shape: ShapeId, _path: &Path, _opts: &StepWriteOpts) -> KernelResult<()> {
+        // H5-10 / G1: pinned truck crates have no STEP writer. truck-stepio is a new dep — not taken.
         Err(KernelError::unsupported(self.backend_id(), "write_step"))
     }
 
@@ -349,9 +350,15 @@ mod tests {
     #[test]
     fn step_unsupported() {
         let mut k = TruckKernel::new();
+        assert!(!k.parity_eligible());
         let b = k.box_at(1.0, 1.0, 1.0, Point3::ORIGIN).unwrap();
-        assert!(k
-            .write_step(b, Path::new("/tmp/x.step"), &StepWriteOpts::default())
-            .is_err());
+        let path =
+            std::env::temp_dir().join(format!("cadrion-h5-10-seed-{}.step", std::process::id()));
+        let _ = std::fs::remove_file(&path);
+        let err = k
+            .write_step(b, &path, &StepWriteOpts::default())
+            .unwrap_err();
+        assert_eq!(err.code(), "CADRION-E-UNSUPPORTED");
+        assert!(!path.exists(), "refuse must not write a STEP file");
     }
 }
