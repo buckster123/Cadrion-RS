@@ -63,14 +63,14 @@ Re-probe 2026-08-20: process up, **all backends `status=down`**, aliases unhealt
 2. Merge when CI green (user trust, 2026-08-20)  
 3. Tick checklist + BACKLOG on merge  
 
-**Default next:** next unchecked H4-N. If a healthy router backend appears, **H3-2** jumps the queue.
+**Default next:** **H4-3**. If a healthy router backend appears, **H3-2** jumps the queue.
 
 ---
 
 ## 6. Checklist
 
 - [x] **H4-1** `cadrion schema`  
-- [ ] **H4-2** `cadrion engine info|install`  
+- [x] **H4-2** `cadrion engine info|install`  
 - [ ] **H4-3** HTTP measure / dims / sdf  
 
 ---

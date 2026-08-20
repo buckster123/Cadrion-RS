@@ -36,6 +36,10 @@
 - **Printer start is triple-gated.** Allow-list + gcode hash match + explicit confirm string/flag.
   Don't add a "dev convenience" default that skips confirm on any surface.
 
+- **`cadrion engine install` does not fetch.** H4-2 reports compile-time features only.
+  Don't treat `ok: true` on install as "downloaded OCCT" — it means the backend was already
+  in the binary. Missing backend is `CADRION-E-ENGINE-MISSING`, never a fake cache hit.
+
 - **Schema dump is live surfaces, not invented JSON Schema.** `cadrion schema` reads clap,
   `tool_defs`, `openapi_doc`, and `ERROR_CATALOG`. Don't hand-maintain a second catalog.
   New `CADRION-E-*` codes go in `ERROR_CATALOG` in the same PR as the first emit.

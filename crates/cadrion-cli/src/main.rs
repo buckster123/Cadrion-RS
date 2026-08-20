@@ -4,6 +4,7 @@ mod assembly_cmd;
 mod bench_cmd;
 mod build_cmd;
 mod cli;
+mod engine_cmd;
 mod export_cmd;
 mod fab_cmd;
 mod harness_cmd;
@@ -45,6 +46,7 @@ fn main() {
         Commands::Printer(args) => fab_cmd::run_printer(&cli, args),
         Commands::Migrate(args) => migrate_cmd::run(&cli, args),
         Commands::Sdf(args) => sdf_cmd::run(&cli, args),
+        Commands::Engine(args) => engine_cmd::run(&cli, &args.cmd),
         Commands::Schema(args) => schema_cmd::run(&cli, args),
         Commands::Version => {
             let v = serde_json::json!({

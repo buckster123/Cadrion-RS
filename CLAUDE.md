@@ -129,6 +129,7 @@ cargo build -p cadrion-cli --release
 
 cargo run -p cadrion-cli -- version --json
 cargo run -p cadrion-cli -- schema --json
+cargo run -p cadrion-cli -- engine info --json
 cargo run -p cadrion-cli -- build parity/parts/01_calibration_block/part.cad.star --json
 cargo run -p cadrion-cli -- snapshot parity/parts/01_calibration_block/part.cad.star --json
 cargo run -p cadrion-cli -- mcp          # stdio; logs on stderr
