@@ -161,7 +161,7 @@ the same PR. `STDLIB_DEPTH.md` still claims OCCT cone≈cylinder — fix that li
 5. Default next = next unchecked H5-N  
 6. Truck work must cite bid G-criteria  
 
-**Default next if “cook on” with no pref:** **H5-9** (H5-8 done).
+**Default next if “cook on” with no pref:** **H5-10** (H5-9 done).
 
 ---
 
@@ -175,7 +175,7 @@ the same PR. `STDLIB_DEPTH.md` still claims OCCT cone≈cylinder — fix that li
 - [x] **H5-6** MCP prompts  
 - [x] **H5-7** OQ-2 dialect bite  
 - [x] **H5-8** MCP/HTTP robot gen \| validate  
-- [ ] **H5-9** Migrator bite  
+- [x] **H5-9** Migrator bite  
 - [ ] **H5-10** Truck G1 STEP or honest refuse  
 
 ---

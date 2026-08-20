@@ -137,6 +137,8 @@ From PRD §16 — still unresolved; do not silently assume answers in code:
    `cadrion_lang::STDLIB_SYMBOLS` + dialect goldens. `use()` not shipped. **User `load()` /
    library modules stay open (and refused until chartered).** See [`docs/DIALECT.md`](DIALECT.md).
 3. **OQ-3** Migration assistant scope/timing (M6 vs defer).
+   **Partial (H5-9):** fixture `07_*` + `mirror` map + structured refuse for Workplane/faces/sweep/loft/scale.
+   Full assistant scope still open. See [`docs/MIGRATE.md`](MIGRATE.md).
 4. **OQ-4** Depth of assembly joint model in STEP for 1.0 (kinematic AP242 vs labels+placements).
    **Partial (H3-4):** labels+placements+joint envelope → `cadrion.assembly_kinematics` sidecar and
    `assembly emit-robot` → URDF path. **AP242 STEP joint entities still open.**
@@ -249,3 +251,6 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-21** — **H5-8 robot:** MCP `robot` (`op=gen|validate`) + `/v1/robot/gen` /
   `/validate`. `simple_arm` green. Validate does not write. Inertials required (not invented).
   Default next **H5-9**.
+- **2026-08-21** — **H5-9 migrator bite:** `mirror(Plane.XY|YZ|ZX)` maps to stdlib `mirror`.
+  Workplane / faces / sweep / loft / scale are structured refuse notes (not faked).
+  Fixture `07_sweep_workplane.py`. OQ-3 still open. Default next **H5-10**.
