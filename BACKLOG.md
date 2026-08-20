@@ -101,12 +101,12 @@ Priority suggestions when resuming:
 | H3-9 | Migrator / WASM polish | ✅ this slice |
 | H3-10 | OQ-1 name decision packet | ✅ this slice — Cadrion-RS |
 
-Default when resuming with no pref: **Horizon-5** ([`docs/HORIZON5.md`](docs/HORIZON5.md)).
-H3-2 published 2026-08-20: **4.0/10** on PR #60 (miss ≥6). Live re-score is not an H5 slice.
+Default when resuming with no pref: **Horizon-6** ([`docs/HORIZON6.md`](docs/HORIZON6.md)).
+H3-2 published 2026-08-20: **4.0/10** on PR #60 (miss ≥6). Live re-score is not an H6 slice.
 
 ## Horizon-4 board (ordered) — COMPLETE
 
-**Archive:** [`docs/HORIZON4.md`](docs/HORIZON4.md). **Active:** [`docs/HORIZON5.md`](docs/HORIZON5.md).
+**Archive:** [`docs/HORIZON4.md`](docs/HORIZON4.md). **Active:** [`docs/HORIZON6.md`](docs/HORIZON6.md).
 
 | # | Slice | Status |
 |---|-------|--------|
@@ -131,7 +131,26 @@ H3-2 published 2026-08-20: **4.0/10** on PR #60 (miss ≥6). Live re-score is no
 | H5-9 | Migrator bite | ✅ this slice |
 | H5-10 | Truck G1 STEP or honest refuse | ✅ this slice |
 
-Horizon-5 **complete**. Default next: do not invent a board.
+Horizon-5 **complete**. Successor: [`docs/HORIZON6.md`](docs/HORIZON6.md).
+
+## Horizon-6 board (ordered) — ACTIVE
+
+**Source of truth:** [`docs/HORIZON6.md`](docs/HORIZON6.md).
+
+| # | Slice | Status |
+|---|-------|--------|
+| H6-1 | CLI + MCP/HTTP parts search \| fetch \| lock | ☐ this board |
+| H6-2 | MCP/HTTP viewer_open | ☐ |
+| H6-3 | MCP/HTTP gcode_check | ☐ |
+| H6-4 | MCP/HTTP fab_slice | ☐ |
+| H6-5 | MCP/HTTP printer status + dry-run | ☐ |
+| H6-6 | MCP/HTTP printer_start (D10) | ☐ |
+| H6-7 | MCP/HTTP migrate | ☐ |
+| H6-8 | MCP/HTTP assembly emit | ☐ |
+| H6-9 | MCP/HTTP fab dxf \| profiles | ☐ |
+| H6-10 | project_artifacts + OpenAPI honesty | ☐ |
+
+Default next: **H6-1**.
 
 ## Post-v1 parking (still deferred)
 

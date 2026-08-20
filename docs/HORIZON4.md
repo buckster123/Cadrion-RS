@@ -1,7 +1,7 @@
 # Horizon-4 — Cadrion contract surfaces
 
 **Status:** **COMPLETE** 2026-08-20 (H4-1…H4-3). **Archive.**  
-**Successor (active):** [`docs/HORIZON5.md`](HORIZON5.md)  
+**Successor (active):** [`docs/HORIZON6.md`](HORIZON6.md)  
 **Predecessor:** [`docs/HORIZON3.md`](HORIZON3.md)
 
 Horizon-4 is **not** a new CAD kernel and **not** SaaS.  
@@ -64,7 +64,7 @@ Re-probe 2026-08-20: process up, **all backends `status=down`**, aliases unhealt
 2. Merge when CI green (user trust, 2026-08-20)  
 3. Tick checklist + BACKLOG on merge  
 
-**Default next:** [`docs/HORIZON5.md`](HORIZON5.md). H3-2 published 2026-08-20 (PR #60, 4.0/10 miss). Live re-score is **not** Horizon-5.
+**Default next:** [`docs/HORIZON6.md`](HORIZON6.md). H3-2 published 2026-08-20 (PR #60, 4.0/10 miss). Live re-score is **not** Horizon-6.
 
 ---
 

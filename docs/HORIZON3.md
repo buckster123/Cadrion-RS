@@ -1,7 +1,7 @@
 # Horizon-3 — Cadrion depth, honesty, and optional pure-Rust BREP
 
 **Status:** **COMPLETE** 2026-08-20 (H3-1…H3-10; H3-2 via PR #60). **Archive.**  
-**Successor (active):** [`docs/HORIZON5.md`](HORIZON5.md)  
+**Successor (active):** [`docs/HORIZON6.md`](HORIZON6.md)  
 **Predecessor:** [`docs/HORIZON2.md`](HORIZON2.md) — **archive complete** (H2-1…H2-10)  
 **H1 archive:** [`docs/HORIZON.md`](HORIZON.md)
 
@@ -146,7 +146,7 @@ Three pillars:
 5. Default next = next unchecked H3-N  
 6. Truck work must cite bid G-criteria in PR  
 
-**Default next if “cook on” with no pref:** [`docs/HORIZON5.md`](HORIZON5.md).
+**Default next if “cook on” with no pref:** [`docs/HORIZON6.md`](HORIZON6.md).
 H3-2 live score published 2026-08-20 on [PR #60](https://github.com/buckster123/Cadrion-RS/pull/60)
 (4.0/10 miss). Horizon-4 is archive-complete.
 
