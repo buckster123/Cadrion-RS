@@ -1,6 +1,6 @@
 {
   "id": "08_selectors",
-  "prompt": "Must expose #o1 face selectors",
+  "prompt": "10 mm cube labeled cube; must expose #o1 face selectors",
   "max_loops": 3,
   "loops": [
     [

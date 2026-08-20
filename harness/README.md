@@ -14,7 +14,8 @@ cargo test -p cadrion-harness
 cargo run -p cadrion-cli -- harness run --suite agent10 --json
 ```
 
-Target bar (PRD M3): **≥ 6/10**.
+Target bar (PRD M3): **≥ 6/10**.  
+Prompts must name labels/sizes the asserts check (`prompt_covers_asserts`, H5-1).
 
 ## Live driver protocol
 

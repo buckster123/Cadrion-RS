@@ -1,6 +1,6 @@
 {
   "id": "01_block",
-  "prompt": "40\u00d720\u00d710 mm block labeled block",
+  "prompt": "40\u00d720\u00d710 mm block labeled block with #o1 selectors",
   "max_loops": 3,
   "loops": [
     [

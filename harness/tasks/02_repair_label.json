@@ -1,6 +1,6 @@
 {
   "id": "02_repair_label",
-  "prompt": "Block must be labeled calibration",
+  "prompt": "50\u00d730\u00d710 mm block labeled calibration",
   "max_loops": 3,
   "loops": [
     [

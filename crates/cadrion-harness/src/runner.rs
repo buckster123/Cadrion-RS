@@ -461,6 +461,25 @@ mod tests {
     }
 
     #[test]
+    fn agent10_prompts_cover_asserts() {
+        let root = default_tasks_root();
+        assert!(root.is_dir(), "expected {}", root.display());
+        let mut n = 0;
+        for e in std::fs::read_dir(&root).expect("tasks dir").flatten() {
+            let p = e.path();
+            if p.extension().and_then(|x| x.to_str()) != Some("json") {
+                continue;
+            }
+            let task: Task = serde_json::from_str(&std::fs::read_to_string(&p).expect("read"))
+                .unwrap_or_else(|e| panic!("parse {}: {e}", p.display()));
+            task.prompt_covers_asserts()
+                .unwrap_or_else(|e| panic!("{e} ({})", p.display()));
+            n += 1;
+        }
+        assert_eq!(n, 10, "expected 10 agent10 tasks");
+    }
+
+    #[test]
     fn live_model_id_oracle_and_env() {
         let prev = std::env::var("CADRION_HARNESS_MODEL_ID").ok();
         std::env::remove_var("CADRION_HARNESS_MODEL_ID");
