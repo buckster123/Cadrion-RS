@@ -262,7 +262,7 @@ fn write_mesh_json(path: &Path, mesh: &cadrion_kernel::Mesh) -> Result<(), Strin
     let mut xmax = f32::NEG_INFINITY;
     let mut ymax = f32::NEG_INFINITY;
     let mut zmax = f32::NEG_INFINITY;
-    for c in mesh.positions.chunks_exact(3) {
+    for c in mesh.positions.as_chunks::<3>().0 {
         xmin = xmin.min(c[0]);
         ymin = ymin.min(c[1]);
         zmin = zmin.min(c[2]);

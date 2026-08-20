@@ -113,7 +113,7 @@ impl TruckBrepKernel {
     fn signed_volume_mm3(mesh: &Mesh) -> f64 {
         let p = &mesh.positions;
         let mut acc = 0.0_f64;
-        for tri in mesh.indices.chunks_exact(3) {
+        for tri in mesh.indices.as_chunks::<3>().0 {
             let ia = (tri[0] as usize) * 3;
             let ib = (tri[1] as usize) * 3;
             let ic = (tri[2] as usize) * 3;
@@ -141,7 +141,7 @@ impl TruckBrepKernel {
         let mut xmax = f64::NEG_INFINITY;
         let mut ymax = f64::NEG_INFINITY;
         let mut zmax = f64::NEG_INFINITY;
-        for c in mesh.positions.chunks_exact(3) {
+        for c in mesh.positions.as_chunks::<3>().0 {
             xmin = xmin.min(c[0] as f64);
             ymin = ymin.min(c[1] as f64);
             zmin = zmin.min(c[2] as f64);

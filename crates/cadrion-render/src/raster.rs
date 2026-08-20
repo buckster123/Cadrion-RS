@@ -53,7 +53,7 @@ impl Framebuffer {
     /// RGBA8 → RGB8 for GIF.
     pub fn to_rgb8(&self) -> Vec<u8> {
         let mut out = Vec::with_capacity((self.width * self.height * 3) as usize);
-        for px in self.pixels.chunks_exact(4) {
+        for px in self.pixels.as_chunks::<4>().0 {
             out.push(px[0]);
             out.push(px[1]);
             out.push(px[2]);
@@ -99,7 +99,7 @@ pub fn render_mesh(mesh: &Mesh, cam: &Camera, width: u32, height: u32) -> Frameb
     });
 
     let pos = &mesh.positions;
-    for tri in mesh.indices.chunks_exact(3) {
+    for tri in mesh.indices.as_chunks::<3>().0 {
         let a = load(pos, tri[0]);
         let b = load(pos, tri[1]);
         let c = load(pos, tri[2]);
@@ -277,7 +277,9 @@ mod tests {
         let fb = render_mesh(&mesh, &cam, 64, 64);
         let lit = fb
             .pixels
-            .chunks_exact(4)
+            .as_chunks::<4>()
+            .0
+            .iter()
             .filter(|p| p[0] > 30 || p[1] > 30 || p[2] > 40)
             .count();
         assert!(lit > 50, "expected shaded pixels, got {lit}");

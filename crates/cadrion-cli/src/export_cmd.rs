@@ -185,7 +185,7 @@ fn write_stl_ascii(path: &std::path::Path, mesh: &Mesh) -> std::io::Result<()> {
     let mut f = fs::File::create(path)?;
     writeln!(f, "solid cadrion")?;
     let p = &mesh.positions;
-    for tri in mesh.indices.chunks_exact(3) {
+    for tri in mesh.indices.as_chunks::<3>().0 {
         let i0 = tri[0] as usize * 3;
         let i1 = tri[1] as usize * 3;
         let i2 = tri[2] as usize * 3;
