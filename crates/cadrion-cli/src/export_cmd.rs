@@ -3,8 +3,9 @@
 use std::fs;
 use std::path::PathBuf;
 
-use cadrion_kernel::{GeomKernel, Mesh, StepWriteOpts, TessTol};
+use cadrion_kernel::{GeomKernel, StepWriteOpts, TessTol};
 use cadrion_lang::{evaluate, execute_ir, EvalOptions};
+use cadrion_render::{write_gltf_json, write_stl_ascii};
 use serde_json::json;
 
 use crate::build_cmd::parse_sets;
@@ -178,140 +179,6 @@ fn load_shape(
             json!({"ok": false, "diagnostics": [{"code": e.code(), "message": e.to_string()}]}),
         )
     })
-}
-
-fn write_stl_ascii(path: &std::path::Path, mesh: &Mesh) -> std::io::Result<()> {
-    use std::io::Write;
-    let mut f = fs::File::create(path)?;
-    writeln!(f, "solid cadrion")?;
-    let p = &mesh.positions;
-    for tri in mesh.indices.as_chunks::<3>().0 {
-        let i0 = tri[0] as usize * 3;
-        let i1 = tri[1] as usize * 3;
-        let i2 = tri[2] as usize * 3;
-        let ax = p[i0];
-        let ay = p[i0 + 1];
-        let az = p[i0 + 2];
-        let bx = p[i1];
-        let by = p[i1 + 1];
-        let bz = p[i1 + 2];
-        let cx = p[i2];
-        let cy = p[i2 + 1];
-        let cz = p[i2 + 2];
-        // normal
-        let ux = bx - ax;
-        let uy = by - ay;
-        let uz = bz - az;
-        let vx = cx - ax;
-        let vy = cy - ay;
-        let vz = cz - az;
-        let nx = uy * vz - uz * vy;
-        let ny = uz * vx - ux * vz;
-        let nz = ux * vy - uy * vx;
-        writeln!(f, "  facet normal {nx} {ny} {nz}")?;
-        writeln!(f, "    outer loop")?;
-        writeln!(f, "      vertex {ax} {ay} {az}")?;
-        writeln!(f, "      vertex {bx} {by} {bz}")?;
-        writeln!(f, "      vertex {cx} {cy} {cz}")?;
-        writeln!(f, "    endloop")?;
-        writeln!(f, "  endfacet")?;
-    }
-    writeln!(f, "endsolid cadrion")?;
-    Ok(())
-}
-
-fn write_gltf_json(path: &std::path::Path, mesh: &Mesh) -> std::io::Result<PathBuf> {
-    // Force .gltf extension for honesty when binary glb not implemented.
-    let out = if path.extension().and_then(|e| e.to_str()) == Some("glb") {
-        path.with_extension("gltf")
-    } else {
-        path.to_path_buf()
-    };
-    // interleaved f32 positions
-    let mut bin = Vec::with_capacity(mesh.positions.len() * 4);
-    for f in &mesh.positions {
-        bin.extend_from_slice(&f.to_le_bytes());
-    }
-    let b64 = base64_encode(&bin);
-    let n_verts = mesh.positions.len() / 3;
-    let indices: Vec<u32> = mesh.indices.clone();
-    let mut idx_bin = Vec::with_capacity(indices.len() * 4);
-    for i in &indices {
-        idx_bin.extend_from_slice(&i.to_le_bytes());
-    }
-    let idx_b64 = base64_encode(&idx_bin);
-
-    // Single buffer with positions then indices is more complex; two data URIs via two buffers.
-    let gltf = json!({
-        "asset": {"version": "2.0", "generator": "cadrion-cli"},
-        "buffers": [
-            {"byteLength": bin.len(), "uri": format!("data:application/octet-stream;base64,{b64}")},
-            {"byteLength": idx_bin.len(), "uri": format!("data:application/octet-stream;base64,{idx_b64}")},
-        ],
-        "bufferViews": [
-            {"buffer": 0, "byteOffset": 0, "byteLength": bin.len(), "target": 34962},
-            {"buffer": 1, "byteOffset": 0, "byteLength": idx_bin.len(), "target": 34963},
-        ],
-        "accessors": [
-            {
-                "bufferView": 0,
-                "componentType": 5126,
-                "count": n_verts,
-                "type": "VEC3",
-            },
-            {
-                "bufferView": 1,
-                "componentType": 5125,
-                "count": indices.len(),
-                "type": "SCALAR",
-            }
-        ],
-        "meshes": [{
-            "primitives": [{
-                "attributes": {"POSITION": 0},
-                "indices": 1,
-                "mode": 4
-            }]
-        }],
-        "nodes": [{"mesh": 0}],
-        "scenes": [{"nodes": [0]}],
-        "scene": 0
-    });
-    fs::write(&out, serde_json::to_vec_pretty(&gltf).unwrap())?;
-    Ok(out)
-}
-
-fn base64_encode(data: &[u8]) -> String {
-    // Minimal base64 without extra dep
-    const T: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    let mut out = String::new();
-    let mut i = 0;
-    while i + 3 <= data.len() {
-        let n = ((data[i] as u32) << 16) | ((data[i + 1] as u32) << 8) | (data[i + 2] as u32);
-        out.push(T[((n >> 18) & 63) as usize] as char);
-        out.push(T[((n >> 12) & 63) as usize] as char);
-        out.push(T[((n >> 6) & 63) as usize] as char);
-        out.push(T[(n & 63) as usize] as char);
-        i += 3;
-    }
-    match data.len() - i {
-        1 => {
-            let n = (data[i] as u32) << 16;
-            out.push(T[((n >> 18) & 63) as usize] as char);
-            out.push(T[((n >> 12) & 63) as usize] as char);
-            out.push('=');
-            out.push('=');
-        }
-        2 => {
-            let n = ((data[i] as u32) << 16) | ((data[i + 1] as u32) << 8);
-            out.push(T[((n >> 18) & 63) as usize] as char);
-            out.push(T[((n >> 12) & 63) as usize] as char);
-            out.push(T[((n >> 6) & 63) as usize] as char);
-            out.push('=');
-        }
-        _ => {}
-    }
-    out
 }
 
 fn strip_export_stem(path: &std::path::Path) -> PathBuf {

@@ -33,8 +33,7 @@ Cadrion auto-detects NDJSON vs Content-Length. Override with `CADRION_MCP_FRAMIN
 
 ```sh
 hermes mcp test cadrion
-# → Connected, 12 tools: build write_source read_source inspect_refs measure snapshot
-#   inspect_dims assembly_validate sdf_sample align_check frame diff
+# → Connected, 13 tools: … align_check frame diff export
 ```
 
 ## Live session
@@ -48,6 +47,7 @@ After reload, tools appear as `mcp_cadrion_*` / deferred catalog names depending
 - `build` · `write_source` · `read_source` · `inspect_refs` · `measure` · `snapshot`
 - **H3-3:** `inspect_dims` · `assembly_validate` · `sdf_sample` (secondary)
 - **H5-2:** `align_check` · `frame` · `diff`
+- **H5-3:** `export` (stl/gltf preview mesh; mock STEP = Unsupported)
 - resources: `resources/list` · `resources/read` (`cadrion://doc/**`)
 
 ## Drive example

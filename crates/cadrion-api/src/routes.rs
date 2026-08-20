@@ -32,6 +32,7 @@ pub fn router(state: AppState) -> Router {
         .route("/v1/inspect/align", post(inspect_align))
         .route("/v1/inspect/frame", post(inspect_frame))
         .route("/v1/inspect/diff", post(inspect_diff))
+        .route("/v1/export", post(export))
         .route("/v1/sdf/sample", post(sdf_sample))
         .route("/v1/snapshot", post(snapshot))
         .route("/v1/parts/search", post(parts_search))
@@ -243,6 +244,28 @@ async fn inspect_diff(
 }
 
 #[derive(Debug, Deserialize)]
+struct ExportBody {
+    path: String,
+    format: String,
+    #[serde(default)]
+    out: Option<String>,
+}
+
+async fn export(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<ExportBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let path = resolve_path(&st, &body.path)?;
+    let mut args = json!({"path": path, "format": body.format});
+    if let Some(out) = body.out {
+        args["out"] = json!(resolve_out_path(&st, &out));
+    }
+    call_tool("export", &args)
+}
+
+#[derive(Debug, Deserialize)]
 struct SdfBody {
     prim: String,
     a: f64,
@@ -436,7 +459,7 @@ async fn run_job(st: AppState, id: String, kind: String, payload: Value) {
 
     let result = match kind.as_str() {
         "build" | "inspect_refs" | "snapshot" | "measure" | "inspect_dims" | "align_check"
-        | "frame" => {
+        | "frame" | "export" => {
             let path = payload.get("path").and_then(|p| p.as_str()).map(|p| {
                 if std::path::Path::new(p).is_absolute() {
                     p.to_string()

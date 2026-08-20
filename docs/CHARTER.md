@@ -230,3 +230,5 @@ Dated entries. A decision changes here first, then in the code.
   score stays **4.0/10** (no invented ≥6). Default next **H5-2**.
 - **2026-08-20** — **H5-2 inspect faces:** MCP `align_check` / `frame` / `diff` and HTTP
   `/v1/inspect/align|frame|diff`. Names match `docs/design.md`. Default next **H5-3**.
+- **2026-08-20** — **H5-3 export:** MCP `export` + `/v1/export`. STL/glTF from IR-analytic
+  preview mesh; mock STEP is `CADRION-E-UNSUPPORTED` and writes no file. Default next **H5-4**.

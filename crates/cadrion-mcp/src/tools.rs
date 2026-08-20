@@ -8,9 +8,13 @@ use cadrion_inspect::{
     align_refs, build_drawing_packet, diff_snapshots, frame_of, inspect_refs, measure, AlignExpect,
     DimSpec, MeasureKind, MeasureRequest,
 };
-use cadrion_lang::{evaluate, EvalOptions};
+use cadrion_kernel::{GeomKernel, MockKernel, StepWriteOpts};
+use cadrion_lang::{evaluate, execute_ir, EvalOptions};
 use cadrion_parts::{validate_assembly, AssemblySpec};
-use cadrion_render::{mesh_from_ir, write_snapshot_packet, SnapshotOptions, ViewName};
+use cadrion_render::{
+    mesh_from_ir, write_gltf_json, write_snapshot_packet, write_stl_ascii, SnapshotOptions,
+    ViewName,
+};
 use cadrion_sdf::{grid_for_prim, sample_analytic, write_nrrd, write_raw, SdfPrim};
 use serde_json::{json, Value};
 
@@ -188,6 +192,19 @@ pub fn tool_defs() -> Value {
                 },
                 "required": ["old", "new"]
             }
+        },
+        {
+            "name": "export",
+            "description": "Export stl/gltf preview mesh, or STEP when the kernel writes it. Mock STEP is Unsupported.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string"},
+                    "format": {"type": "string", "enum": ["step", "stl", "gltf", "glb"]},
+                    "out": {"type": "string"}
+                },
+                "required": ["path", "format"]
+            }
         }
     ])
 }
@@ -206,6 +223,7 @@ pub fn call_tool(name: &str, args: &Value) -> Result<Value, ToolError> {
         "align_check" => tool_align_check(args),
         "frame" => tool_frame(args),
         "diff" => tool_diff(args),
+        "export" => tool_export(args),
         other => Err(ToolError::msg(format!("unknown tool: {other}"))),
     }
 }
@@ -591,6 +609,90 @@ fn tool_diff(args: &Value) -> Result<Value, ToolError> {
     }))
 }
 
+fn tool_export(args: &Value) -> Result<Value, ToolError> {
+    let path = PathBuf::from(str_arg(args, "path")?);
+    let format = str_arg(args, "format")?;
+    let ir = eval_path(&path, None)?;
+    let stem = export_stem(&path);
+    match format {
+        "step" => {
+            let out = args
+                .get("out")
+                .and_then(|v| v.as_str())
+                .map(PathBuf::from)
+                .unwrap_or_else(|| path.with_file_name(format!("{stem}.step")));
+            let mut kernel = MockKernel::new();
+            let shape = execute_ir(&mut kernel, &ir).map_err(|e| ToolError::msg(e.to_string()))?;
+            match kernel.write_step(shape, &out, &StepWriteOpts::default()) {
+                Ok(()) => Ok(json!({
+                    "content": [{"type": "text", "text": serde_json::to_string_pretty(&json!({
+                        "ok": true,
+                        "path": out,
+                        "format": "step"
+                    })).unwrap()}]
+                })),
+                Err(e) => {
+                    if out.exists() {
+                        let _ = fs::remove_file(&out);
+                    }
+                    Err(ToolError::msg(format!("{}: {e}", e.code())))
+                }
+            }
+        }
+        "stl" => {
+            let out = args
+                .get("out")
+                .and_then(|v| v.as_str())
+                .map(PathBuf::from)
+                .unwrap_or_else(|| path.with_file_name(format!("{stem}.stl")));
+            let (mesh, notes) = mesh_from_ir(&ir).map_err(ToolError::msg)?;
+            write_stl_ascii(&out, &mesh).map_err(|e| ToolError::msg(e.to_string()))?;
+            Ok(json!({
+                "content": [{"type": "text", "text": serde_json::to_string_pretty(&json!({
+                    "ok": true,
+                    "path": out,
+                    "format": "stl",
+                    "triangles": mesh.triangle_count(),
+                    "mesh": "ir-analytic-preview",
+                    "notes": notes
+                })).unwrap()}]
+            }))
+        }
+        "gltf" | "glb" => {
+            let requested = args
+                .get("out")
+                .and_then(|v| v.as_str())
+                .map(PathBuf::from)
+                .unwrap_or_else(|| path.with_file_name(format!("{stem}.{format}")));
+            let (mesh, notes) = mesh_from_ir(&ir).map_err(ToolError::msg)?;
+            let out =
+                write_gltf_json(&requested, &mesh).map_err(|e| ToolError::msg(e.to_string()))?;
+            Ok(json!({
+                "content": [{"type": "text", "text": serde_json::to_string_pretty(&json!({
+                    "ok": true,
+                    "path": out,
+                    "format": "gltf",
+                    "note": "JSON glTF (embedded buffer); binary .glb container is follow-up",
+                    "triangles": mesh.triangle_count(),
+                    "mesh": "ir-analytic-preview",
+                    "notes": notes
+                })).unwrap()}]
+            }))
+        }
+        other => Err(ToolError::msg(format!(
+            "format must be step|stl|gltf|glb, got {other}"
+        ))),
+    }
+}
+
+fn export_stem(path: &Path) -> String {
+    let name = path.file_name().and_then(|s| s.to_str()).unwrap_or("part");
+    name.strip_suffix(".cad.star")
+        .or_else(|| name.strip_suffix(".star"))
+        .unwrap_or_else(|| path.file_stem().and_then(|s| s.to_str()).unwrap_or("part"))
+        .to_string()
+}
+
 fn topo_from_ir(
     ir: &cadrion_lang::FeatureIr,
 ) -> Result<cadrion_inspect::TopologySnapshot, ToolError> {
@@ -722,6 +824,47 @@ mod tests {
         let diff_p: Value =
             serde_json::from_str(diff["content"][0]["text"].as_str().unwrap()).unwrap();
         assert_eq!(diff_p["diff"]["volume_delta_mm3"], 0.0);
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn export_stl_writes_and_step_refuses() {
+        let dir = std::env::temp_dir().join(format!("cadrion-h5-3-{}", std::process::id()));
+        fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("box.cad.star");
+        fs::write(
+            &path,
+            "def gen_step():\n    return solid(box(10.0, 10.0, 10.0, at=CENTER), label=\"cube\")\n",
+        )
+        .unwrap();
+        let stl = dir.join("box.stl");
+        let ok = call_tool(
+            "export",
+            &json!({
+                "path": path.display().to_string(),
+                "format": "stl",
+                "out": stl.display().to_string()
+            }),
+        )
+        .unwrap();
+        let p: Value = serde_json::from_str(ok["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(p["ok"], true);
+        assert_eq!(p["mesh"], "ir-analytic-preview");
+        let body = fs::read_to_string(&stl).unwrap();
+        assert!(body.starts_with("solid cadrion"), "{body}");
+
+        let step = dir.join("box.step");
+        let err = call_tool(
+            "export",
+            &json!({
+                "path": path.display().to_string(),
+                "format": "step",
+                "out": step.display().to_string()
+            }),
+        )
+        .unwrap_err();
+        assert!(err.to_string().contains("CADRION-E-UNSUPPORTED"), "{err}");
+        assert!(!step.exists(), "mock must not write a STEP file");
         let _ = fs::remove_dir_all(&dir);
     }
 }

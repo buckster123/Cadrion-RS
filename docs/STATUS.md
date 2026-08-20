@@ -2,7 +2,7 @@
 
 > AI-oriented status block. Prefer this + `docs/METRICS.md` + `BACKLOG.md` + Horizon boards.
 
-**As of:** 2026-08-20 · **tip:** H5-2 MCP/HTTP align · frame · diff · **version:** 0.1.0  
+**As of:** 2026-08-20 · **tip:** H5-3 MCP/HTTP export · **version:** 0.1.0  
 **agent_id:** `CADRION` · **repo:** https://github.com/buckster123/Cadrion-RS  
 **kernels:** mock (default CI) · occt (`--features occt`) · truck (experimental NON-PARITY)
 
@@ -18,7 +18,7 @@
 - Binary: `cadrion` (`~/.local/bin/cadrion` for Hermes MCP). **Not** `cargo install cadre`.
 
 ## Next board
-**Active:** [`docs/HORIZON5.md`](HORIZON5.md) — default **H5-3**.  
+**Active:** [`docs/HORIZON5.md`](HORIZON5.md) — default **H5-4**.  
 **Archive:** H4 + H3 + H2 + H1. Live harness re-score is parked (ApexRouter + spend).
 
 ## Crate map (as-built)
@@ -58,7 +58,7 @@ version --json
 
 ## Hermes MCP
 - Config: `~/.hermes/config.yaml` → `mcp_servers.cadrion` · binary `~/.local/bin/cadrion mcp`
-- Tools: 12 — see [`HERMES_MCP.md`](HERMES_MCP.md) (H5-2 added align_check · frame · diff)
+- Tools: 13 — see [`HERMES_MCP.md`](HERMES_MCP.md) (H5-3 added export)
 - Docs: [`HERMES_MCP.md`](HERMES_MCP.md) · framing auto-detect NDJSON (Hermes) / Content-Length
 
 ## Examples
