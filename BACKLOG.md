@@ -124,14 +124,14 @@ H3-2 published 2026-08-20: **4.0/10** on PR #60 (miss ≥6). Live re-score is no
 | H5-2 | MCP/HTTP align · frame · diff | ✅ this slice |
 | H5-3 | MCP/HTTP export | ✅ this slice |
 | H5-4 | MCP/HTTP fab check | ✅ this slice |
-| H5-5 | MCP engine + schema | |
+| H5-5 | MCP engine + schema | ✅ this slice |
 | H5-6 | MCP prompts | |
 | H5-7 | OQ-2 dialect bite | |
 | H5-8 | MCP/HTTP robot gen \| validate | |
 | H5-9 | Migrator bite | |
 | H5-10 | Truck G1 STEP or honest refuse | |
 
-Default next: **H5-5**.
+Default next: **H5-6**.
 
 ## Post-v1 parking (still deferred)
 

@@ -7,8 +7,6 @@
 use clap::{Command, CommandFactory};
 use serde_json::{json, Value};
 
-use cadrion_kernel::ERROR_CATALOG;
-
 use crate::cli::{Cli, SchemaArgs, SchemaFace};
 use crate::output::{emit, ExitCode};
 
@@ -102,13 +100,7 @@ fn args_of(cmd: &Command) -> Vec<Value> {
 }
 
 fn mcp_schema() -> Value {
-    let defs = cadrion_mcp::tool_defs();
-    json!({
-        "implementation": "hand-rolled",
-        "protocol": cadrion_mcp::PROTOCOL_VERSION,
-        "tools": defs,
-        "tool_names": cadrion_mcp::TOOL_NAMES,
-    })
+    cadrion_mcp::mcp_schema()
 }
 
 fn api_schema() -> Value {
@@ -116,13 +108,7 @@ fn api_schema() -> Value {
 }
 
 fn errors_schema() -> Value {
-    json!({
-        "codes": ERROR_CATALOG
-            .iter()
-            .map(|c| json!({"code": c.code, "meaning": c.meaning}))
-            .collect::<Vec<_>>(),
-        "count": ERROR_CATALOG.len(),
-    })
+    cadrion_mcp::errors_schema()
 }
 
 #[cfg(test)]
@@ -159,6 +145,16 @@ mod tests {
             .unwrap()
             .iter()
             .any(|n| n == "fab_check"));
+        assert!(v["mcp"]["tool_names"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|n| n == "engine"));
+        assert!(v["mcp"]["tool_names"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|n| n == "schema"));
         assert_eq!(v["api"]["openapi"], "3.1.0");
         assert!(v["errors"]["count"].as_u64().unwrap() >= 20);
     }

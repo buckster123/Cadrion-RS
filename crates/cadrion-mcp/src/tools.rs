@@ -223,6 +223,27 @@ pub fn tool_defs() -> Value {
                 },
                 "required": ["path"]
             }
+        },
+        {
+            "name": "engine",
+            "description": "Kernel inventory. install is fail-closed (no tarball). See cadrion://doc/schema.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "action": {"type": "string", "enum": ["info", "install"], "default": "info"},
+                    "backend": {"type": "string", "enum": ["occt", "truck-brep"]}
+                }
+            }
+        },
+        {
+            "name": "schema",
+            "description": "Live MCP/error surface. cli/api faces: cadrion schema or /v1/schema.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "face": {"type": "string", "enum": ["mcp", "errors"], "default": "mcp"}
+                }
+            }
         }
     ])
 }
@@ -243,6 +264,8 @@ pub fn call_tool(name: &str, args: &Value) -> Result<Value, ToolError> {
         "diff" => tool_diff(args),
         "export" => tool_export(args),
         "fab_check" => tool_fab_check(args),
+        "engine" => tool_engine(args),
+        "schema" => tool_schema(args),
         other => Err(ToolError::msg(format!("unknown tool: {other}"))),
     }
 }
@@ -748,6 +771,39 @@ fn tool_fab_check(args: &Value) -> Result<Value, ToolError> {
     }))
 }
 
+fn tool_engine(args: &Value) -> Result<Value, ToolError> {
+    let action = args
+        .get("action")
+        .and_then(|v| v.as_str())
+        .unwrap_or("info");
+    let payload = match action {
+        "info" => crate::engine::info_json(),
+        "install" => {
+            let backend = args
+                .get("backend")
+                .and_then(|v| v.as_str())
+                .unwrap_or("occt");
+            crate::engine::install(backend).map_err(ToolError::msg)?
+        }
+        other => {
+            return Err(ToolError::msg(format!(
+                "unknown engine action {other:?} (info|install)"
+            )))
+        }
+    };
+    Ok(json!({
+        "content": [{"type": "text", "text": serde_json::to_string_pretty(&payload).unwrap()}]
+    }))
+}
+
+fn tool_schema(args: &Value) -> Result<Value, ToolError> {
+    let face = args.get("face").and_then(|v| v.as_str()).unwrap_or("mcp");
+    let payload = crate::schema::dump(face).map_err(ToolError::msg)?;
+    Ok(json!({
+        "content": [{"type": "text", "text": serde_json::to_string_pretty(&payload).unwrap()}]
+    }))
+}
+
 fn topo_from_ir(
     ir: &cadrion_lang::FeatureIr,
 ) -> Result<cadrion_inspect::TopologySnapshot, ToolError> {
@@ -969,5 +1025,38 @@ mod tests {
         .unwrap_err();
         assert!(err.to_string().contains("unknown profile"), "{err}");
         let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn engine_info_and_fail_closed_install() {
+        let info = call_tool("engine", &json!({})).unwrap();
+        let p: Value = serde_json::from_str(info["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(p["ok"], true);
+        assert_eq!(p["compiled"]["mock"], true);
+        assert_eq!(p["prebuilt_fetch"], false);
+
+        let inst = call_tool("engine", &json!({"action": "install", "backend": "occt"}));
+        match inst {
+            Ok(v) => {
+                let p: Value =
+                    serde_json::from_str(v["content"][0]["text"].as_str().unwrap()).unwrap();
+                assert_eq!(p["already_present"], true);
+                assert_eq!(p["prebuilt_fetch"], false);
+            }
+            Err(e) => assert!(e.to_string().contains("CADRION-E-ENGINE-MISSING"), "{e}"),
+        }
+    }
+
+    #[test]
+    fn schema_mcp_lists_engine_and_schema() {
+        let v = call_tool("schema", &json!({})).unwrap();
+        let p: Value = serde_json::from_str(v["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(p["ok"], true);
+        assert_eq!(p["source"], "live-surfaces");
+        let names = p["mcp"]["tool_names"].as_array().unwrap();
+        assert!(names.iter().any(|n| n == "engine"));
+        assert!(names.iter().any(|n| n == "schema"));
+        let err = call_tool("schema", &json!({"face": "cli"})).unwrap_err();
+        assert!(err.to_string().contains("unknown schema face"), "{err}");
     }
 }

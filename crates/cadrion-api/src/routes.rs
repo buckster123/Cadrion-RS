@@ -34,6 +34,8 @@ pub fn router(state: AppState) -> Router {
         .route("/v1/inspect/diff", post(inspect_diff))
         .route("/v1/export", post(export))
         .route("/v1/fab/check", post(fab_check))
+        .route("/v1/engine", post(engine))
+        .route("/v1/schema", post(schema))
         .route("/v1/sdf/sample", post(sdf_sample))
         .route("/v1/snapshot", post(snapshot))
         .route("/v1/parts/search", post(parts_search))
@@ -295,6 +297,58 @@ async fn fab_check(
         args["override_file"] = json!(resolve_path(&st, &ov)?);
     }
     call_tool("fab_check", &args)
+}
+
+#[derive(Debug, Deserialize)]
+struct EngineBody {
+    #[serde(default)]
+    action: Option<String>,
+    #[serde(default)]
+    backend: Option<String>,
+}
+
+async fn engine(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<EngineBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let mut args = json!({});
+    if let Some(action) = body.action {
+        args["action"] = json!(action);
+    }
+    if let Some(backend) = body.backend {
+        args["backend"] = json!(backend);
+    }
+    call_tool("engine", &args)
+}
+
+#[derive(Debug, Deserialize)]
+struct SchemaBody {
+    #[serde(default)]
+    face: Option<String>,
+}
+
+async fn schema(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<SchemaBody>,
+) -> Result<Json<Value>, ApiError> {
+    auth(&st, &headers)?;
+    let face = body.face.as_deref().unwrap_or("mcp");
+    if face == "api" {
+        return Ok(Json(json!({
+            "ok": true,
+            "source": "live-surfaces",
+            "honesty": "OpenAPI face from cadrion_api::openapi_doc — clap CLI is `cadrion schema cli`",
+            "api": openapi_doc(),
+        })));
+    }
+    let mut args = json!({});
+    if let Some(face) = body.face {
+        args["face"] = json!(face);
+    }
+    call_tool("schema", &args)
 }
 
 #[derive(Debug, Deserialize)]

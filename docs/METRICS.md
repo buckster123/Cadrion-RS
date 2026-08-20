@@ -46,6 +46,7 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 | 58 | Inspect H5-2 | MCP/HTTP align · frame · diff | **green** | align_check/frame/diff + `/v1/inspect/*` |
 | 59 | Export H5-3 | MCP/HTTP export | **green** | stl/gltf preview; mock STEP Unsupported |
 | 60 | Fab H5-4 | MCP/HTTP fab check | **green** | DFM report cites profile version; no START |
+| 61 | Engine/schema H5-5 | MCP/HTTP engine + schema | **green** | install fail-closed; mcp/errors dump |
 | A1 | OCCT cone | no silent cylinder | **green** | H3-1 fail-closed |
 | A2 | truck-seed label | version JSON tag | **green** | truck_implementation field |
 | A3 | H3-2 frontier | live LLM score | **amber** | 4.0/10 miss 2026-08-20 Qwen3.8-27B Q6; H5-1 made prompts fair — score unchanged until a live re-run |
@@ -71,6 +72,6 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 
 **v1 ship bar (this table):** rows 1–16 green; 17–20 may remain amber/red with honesty notes.
 
-Last updated: 2026-08-20 (H5-4 fab check).  
+Last updated: 2026-08-20 (H5-5 engine + schema).  
 Harness live log: [`HARNESS_LIVE.md`](HARNESS_LIVE.md).  
 As-built companion: [`STATUS.md`](STATUS.md).

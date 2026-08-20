@@ -37,6 +37,11 @@ pub fn list_resources(project_root: &Path) -> Value {
             "text/markdown",
         ),
         res(
+            "cadrion://doc/schema",
+            "Schema dump honesty (H4-1 / H5-5)",
+            "text/markdown",
+        ),
+        res(
             "cadrion://artifact/index",
             "Index of local IR/snap/gcode artifacts under project",
             "application/json",
@@ -184,6 +189,7 @@ fn doc_body(id: &str, project_root: &Path) -> Result<String, ToolError> {
         "viewer" => Some("docs/VIEWER.md"),
         "slicer-dfm" => Some("docs/SLICER_DFM.md"),
         "fillet" => Some("docs/FILLET_CHAMFER.md"),
+        "schema" => Some("docs/SCHEMA.md"),
         "write-source-policy" => None,
         other => return Err(ToolError::msg(format!("unknown doc id: {other}"))),
     };

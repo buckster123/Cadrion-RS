@@ -21,5 +21,7 @@ Adding an MCP tool: `tool_defs` + `TOOL_NAMES` + tests. The schema dump will fol
 
 OpenAPI remains hand-maintained alpha (`openapi.rs`); H4-3 added measure / dims / sdf paths;
 H5-2 added align / frame / diff. H5-3 added `/v1/export`. H5-4 added `/v1/fab/check`.
+H5-5 added MCP `engine` / `schema` and `/v1/engine` / `/v1/schema` (MCP dumps mcp/errors;
+OpenAPI face is HTTP-only; clap remains `cadrion schema`).
 Drift tests
 require the dump to match those live functions — they do not invent a second catalog.

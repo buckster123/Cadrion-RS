@@ -39,6 +39,8 @@ async fn health_and_openapi() {
     assert!(v["paths"]["/v1/sdf/sample"].is_object());
     assert!(v["paths"]["/v1/export"].is_object());
     assert!(v["paths"]["/v1/fab/check"].is_object());
+    assert!(v["paths"]["/v1/engine"].is_object());
+    assert!(v["paths"]["/v1/schema"].is_object());
 }
 
 fn mcp_payload(v: &serde_json::Value) -> serde_json::Value {
@@ -332,4 +334,57 @@ async fn fab_check_plate_and_unknown_profile() {
     assert_eq!(bad.status_code().as_u16(), 400);
     let body = format!("{}", bad.text());
     assert!(body.contains("unknown profile"), "{body}");
+}
+
+#[tokio::test]
+async fn engine_info_and_schema_faces() {
+    let server = TestServer::new(app()).unwrap();
+    let info = server
+        .post("/v1/engine")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({}))
+        .await;
+    info.assert_status_ok();
+    let p = mcp_payload(&info.json());
+    assert_eq!(p["ok"], true);
+    assert_eq!(p["compiled"]["mock"], true);
+    assert_eq!(p["prebuilt_fetch"], false);
+
+    let inst = server
+        .post("/v1/engine")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({"action": "install", "backend": "occt"}))
+        .await;
+    if inst.status_code().as_u16() == 200 {
+        let p = mcp_payload(&inst.json());
+        assert_eq!(p["already_present"], true);
+        assert_eq!(p["prebuilt_fetch"], false);
+    } else {
+        assert_eq!(inst.status_code().as_u16(), 400);
+        let body = format!("{}", inst.text());
+        assert!(body.contains("CADRION-E-ENGINE-MISSING"), "{body}");
+    }
+
+    let mcp = server
+        .post("/v1/schema")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({"face": "mcp"}))
+        .await;
+    mcp.assert_status_ok();
+    let p = mcp_payload(&mcp.json());
+    assert!(p["mcp"]["tool_names"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|n| n == "engine"));
+
+    let api = server
+        .post("/v1/schema")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({"face": "api"}))
+        .await;
+    api.assert_status_ok();
+    let v: serde_json::Value = api.json();
+    assert_eq!(v["api"]["openapi"], "3.1.0");
+    assert!(v["api"]["paths"]["/v1/engine"].is_object());
 }

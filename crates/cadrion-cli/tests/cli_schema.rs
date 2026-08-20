@@ -34,6 +34,8 @@ fn schema_all_json() {
     assert!(v["api"]["paths"]["/v1/inspect/diff"].is_object());
     assert!(v["api"]["paths"]["/v1/export"].is_object());
     assert!(v["api"]["paths"]["/v1/fab/check"].is_object());
+    assert!(v["api"]["paths"]["/v1/engine"].is_object());
+    assert!(v["api"]["paths"]["/v1/schema"].is_object());
     let codes = v["errors"]["codes"].as_array().unwrap();
     assert!(codes.iter().any(|c| c["code"] == "CADRION-E-HERMETIC-LOAD"));
     assert!(codes
@@ -79,4 +81,6 @@ fn schema_mcp_matches_tool_names() {
     assert!(names.contains(&"diff"));
     assert!(names.contains(&"export"));
     assert!(names.contains(&"fab_check"));
+    assert!(names.contains(&"engine"));
+    assert!(names.contains(&"schema"));
 }

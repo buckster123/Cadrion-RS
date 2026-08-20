@@ -234,3 +234,6 @@ Dated entries. A decision changes here first, then in the code.
   preview mesh; mock STEP is `CADRION-E-UNSUPPORTED` and writes no file. Default next **H5-4**.
 - **2026-08-20** — **H5-4 fab check:** MCP `fab_check` + `/v1/fab/check`. DFM findings cite
   bundled profile id/version; no printer `START`. Default next **H5-5**.
+- **2026-08-20** — **H5-5 engine + schema:** MCP `engine` / `schema` + `/v1/engine` /
+  `/v1/schema`. Install stays fail-closed (`CADRION-E-ENGINE-MISSING`, no tarball).
+  MCP schema dumps mcp/errors; clap CLI remains `cadrion schema`. Default next **H5-6**.
