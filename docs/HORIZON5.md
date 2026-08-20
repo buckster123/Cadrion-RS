@@ -161,7 +161,7 @@ the same PR. `STDLIB_DEPTH.md` still claims OCCT cone≈cylinder — fix that li
 5. Default next = next unchecked H5-N  
 6. Truck work must cite bid G-criteria  
 
-**Default next if “cook on” with no pref:** **H5-3** (H5-2 done).
+**Default next if “cook on” with no pref:** **H5-4** (H5-3 done).
 
 ---
 
@@ -169,7 +169,7 @@ the same PR. `STDLIB_DEPTH.md` still claims OCCT cone≈cylinder — fix that li
 
 - [x] **H5-1** Harness prompt honesty  
 - [x] **H5-2** MCP/HTTP align · frame · diff  
-- [ ] **H5-3** MCP/HTTP export  
+- [x] **H5-3** MCP/HTTP export  
 - [ ] **H5-4** MCP/HTTP fab check  
 - [ ] **H5-5** MCP engine + schema  
 - [ ] **H5-6** MCP prompts  

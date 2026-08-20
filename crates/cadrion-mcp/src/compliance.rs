@@ -42,6 +42,7 @@ pub const TOOL_NAMES: &[&str] = &[
     "align_check",
     "frame",
     "diff",
+    "export",
 ];
 
 #[cfg(test)]

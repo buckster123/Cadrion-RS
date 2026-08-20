@@ -67,6 +67,12 @@ pub fn openapi_doc() -> Value {
                     "responses": {"200": {"description": "raw + NRRD paths"}}
                 }
             },
+            "/v1/export": {
+                "post": {
+                    "summary": "Export stl/gltf preview or STEP (H5-3 / MCP export). Mock STEP is Unsupported.",
+                    "responses": {"200": {"description": "export result"}, "400": {"description": "unsupported format/kernel"}}
+                }
+            },
             "/v1/snapshot": {
                 "post": {
                     "summary": "Snapshot packet",
