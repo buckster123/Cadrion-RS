@@ -73,6 +73,12 @@ pub fn openapi_doc() -> Value {
                     "responses": {"200": {"description": "export result"}, "400": {"description": "unsupported format/kernel"}}
                 }
             },
+            "/v1/fab/check": {
+                "post": {
+                    "summary": "DFM preflight on a FlatPart JSON (H5-4 / MCP fab_check). No printer start.",
+                    "responses": {"200": {"description": "dfm report"}, "400": {"description": "bad part or unknown profile"}}
+                }
+            },
             "/v1/snapshot": {
                 "post": {
                     "summary": "Snapshot packet",

@@ -38,6 +38,7 @@ async fn health_and_openapi() {
     assert!(v["paths"]["/v1/inspect/diff"].is_object());
     assert!(v["paths"]["/v1/sdf/sample"].is_object());
     assert!(v["paths"]["/v1/export"].is_object());
+    assert!(v["paths"]["/v1/fab/check"].is_object());
 }
 
 fn mcp_payload(v: &serde_json::Value) -> serde_json::Value {
@@ -297,4 +298,38 @@ async fn export_stl_and_refuse_step() {
     let body = format!("{}", bad.text());
     assert!(body.contains("CADRION-E-UNSUPPORTED"), "{body}");
     assert!(!step.exists(), "mock must not write STEP");
+}
+
+fn plate_flat_json() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/fab/plate.flat.json")
+}
+
+#[tokio::test]
+async fn fab_check_plate_and_unknown_profile() {
+    let server = TestServer::new(app()).unwrap();
+    let ok = server
+        .post("/v1/fab/check")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({
+            "path": plate_flat_json().display().to_string()
+        }))
+        .await;
+    ok.assert_status_ok();
+    let p = mcp_payload(&ok.json());
+    assert_eq!(p["ok"], true);
+    assert_eq!(p["printer_start"], false);
+    assert_eq!(p["report"]["profile_id"], "sendcutsend.laser");
+    assert_eq!(p["report"]["profile_version"], "1.0.0");
+
+    let bad = server
+        .post("/v1/fab/check")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({
+            "path": plate_flat_json().display().to_string(),
+            "profile": "not-a-vendor"
+        }))
+        .await;
+    assert_eq!(bad.status_code().as_u16(), 400);
+    let body = format!("{}", bad.text());
+    assert!(body.contains("unknown profile"), "{body}");
 }
