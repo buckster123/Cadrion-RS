@@ -5,7 +5,8 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use cadrion_inspect::{
-    build_drawing_packet, inspect_refs, measure, DimSpec, MeasureKind, MeasureRequest,
+    align_refs, build_drawing_packet, diff_snapshots, frame_of, inspect_refs, measure, AlignExpect,
+    DimSpec, MeasureKind, MeasureRequest,
 };
 use cadrion_lang::{evaluate, EvalOptions};
 use cadrion_parts::{validate_assembly, AssemblySpec};
@@ -146,6 +147,47 @@ pub fn tool_defs() -> Value {
                 },
                 "required": ["prim", "a", "b"]
             }
+        },
+        {
+            "name": "align_check",
+            "description": "Align two selectors (coplanar|coaxial|distance).",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string"},
+                    "a": {"type": "string"},
+                    "b": {"type": "string"},
+                    "expect": {"type": "string", "enum": ["coplanar","coaxial","distance"], "default": "distance"},
+                    "distance": {"type": "number"},
+                    "tol": {"type": "number", "default": 0.1},
+                    "tol_deg": {"type": "number", "default": 1.0}
+                },
+                "required": ["path", "a", "b"]
+            }
+        },
+        {
+            "name": "frame",
+            "description": "Local frame (origin + axes) for a selector.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string"},
+                    "selector": {"type": "string"}
+                },
+                "required": ["path", "selector"]
+            }
+        },
+        {
+            "name": "diff",
+            "description": "Diff two .cad.star builds (volume/faces + selector remap).",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "old": {"type": "string"},
+                    "new": {"type": "string"}
+                },
+                "required": ["old", "new"]
+            }
         }
     ])
 }
@@ -161,6 +203,9 @@ pub fn call_tool(name: &str, args: &Value) -> Result<Value, ToolError> {
         "inspect_dims" => tool_inspect_dims(args),
         "assembly_validate" => tool_assembly_validate(args),
         "sdf_sample" => tool_sdf_sample(args),
+        "align_check" => tool_align_check(args),
+        "frame" => tool_frame(args),
+        "diff" => tool_diff(args),
         other => Err(ToolError::msg(format!("unknown tool: {other}"))),
     }
 }
@@ -490,6 +535,62 @@ fn tool_sdf_sample(args: &Value) -> Result<Value, ToolError> {
     }))
 }
 
+fn tool_align_check(args: &Value) -> Result<Value, ToolError> {
+    let path = PathBuf::from(str_arg(args, "path")?);
+    let a = str_arg(args, "a")?.to_string();
+    let b = str_arg(args, "b")?.to_string();
+    let expect = match args
+        .get("expect")
+        .and_then(|v| v.as_str())
+        .unwrap_or("distance")
+    {
+        "coplanar" => AlignExpect::Coplanar,
+        "coaxial" => AlignExpect::Coaxial,
+        "distance" => AlignExpect::Distance,
+        other => return Err(ToolError::msg(format!("bad expect {other}"))),
+    };
+    let distance = args.get("distance").and_then(|v| v.as_f64());
+    let tol = args.get("tol").and_then(|v| v.as_f64()).unwrap_or(0.1);
+    let tol_deg = args.get("tol_deg").and_then(|v| v.as_f64()).unwrap_or(1.0);
+    let ir = eval_path(&path, None)?;
+    let snap = topo_from_ir(&ir)?;
+    let r = align_refs(&snap, &a, &b, expect, distance, tol, tol_deg)
+        .map_err(|e| ToolError::msg(e.to_string()))?;
+    Ok(json!({
+        "content": [{"type": "text", "text": serde_json::to_string_pretty(&r).unwrap()}]
+    }))
+}
+
+fn tool_frame(args: &Value) -> Result<Value, ToolError> {
+    let path = PathBuf::from(str_arg(args, "path")?);
+    let selector = str_arg(args, "selector")?.to_string();
+    let ir = eval_path(&path, None)?;
+    let snap = topo_from_ir(&ir)?;
+    let r = frame_of(&snap, &selector).map_err(|e| ToolError::msg(e.to_string()))?;
+    Ok(json!({
+        "content": [{"type": "text", "text": serde_json::to_string_pretty(&r).unwrap()}]
+    }))
+}
+
+fn tool_diff(args: &Value) -> Result<Value, ToolError> {
+    let old = PathBuf::from(str_arg(args, "old")?);
+    let new = PathBuf::from(str_arg(args, "new")?);
+    let ir_old = eval_path(&old, None)?;
+    let ir_new = eval_path(&new, None)?;
+    let snap_old = topo_from_ir(&ir_old)?;
+    let snap_new = topo_from_ir(&ir_new)?;
+    let r = diff_snapshots(&snap_old, &snap_new);
+    let payload = json!({
+        "ok": true,
+        "diff": r,
+        "old": old,
+        "new": new,
+    });
+    Ok(json!({
+        "content": [{"type": "text", "text": serde_json::to_string_pretty(&payload).unwrap()}]
+    }))
+}
+
 fn topo_from_ir(
     ir: &cadrion_lang::FeatureIr,
 ) -> Result<cadrion_inspect::TopologySnapshot, ToolError> {
@@ -556,4 +657,71 @@ fn topo_from_ir(
         .ok_or_else(|| ToolError::msg("missing root"))?
         .clone();
     Ok(TopologySnapshot::single_solid(root))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn align_frame_diff_on_box() {
+        let dir = std::env::temp_dir().join(format!("cadrion-h5-2-{}", std::process::id()));
+        fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("box.cad.star");
+        fs::write(
+            &path,
+            "def gen_step():\n    return solid(box(10.0, 10.0, 10.0, at=CENTER), label=\"cube\")\n",
+        )
+        .unwrap();
+        let refs = call_tool(
+            "inspect_refs",
+            &json!({"path": path.display().to_string(), "facts": true}),
+        )
+        .unwrap();
+        let text = refs["content"][0]["text"].as_str().unwrap();
+        let report: Value = serde_json::from_str(text).unwrap();
+        let faces: Vec<&Value> = report["refs"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|r| r["kind"] == "face")
+            .collect();
+        let top = faces
+            .iter()
+            .find(|r| r["normal"]["z"].as_f64() == Some(1.0))
+            .unwrap();
+        let bot = faces
+            .iter()
+            .find(|r| r["normal"]["z"].as_f64() == Some(-1.0))
+            .unwrap();
+        let a = top["selector"].as_str().unwrap();
+        let b = bot["selector"].as_str().unwrap();
+        let align = call_tool(
+            "align_check",
+            &json!({
+                "path": path.display().to_string(),
+                "a": a,
+                "b": b,
+                "expect": "coaxial"
+            }),
+        )
+        .unwrap();
+        let align_p: Value =
+            serde_json::from_str(align["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(align_p["ok"], true, "{align_p}");
+        let frame = call_tool(
+            "frame",
+            &json!({"path": path.display().to_string(), "selector": a}),
+        )
+        .unwrap();
+        let frame_p: Value =
+            serde_json::from_str(frame["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(frame_p["kind"], "face");
+        let p = path.display().to_string();
+        let diff = call_tool("diff", &json!({"old": p, "new": p})).unwrap();
+        let diff_p: Value =
+            serde_json::from_str(diff["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(diff_p["diff"]["volume_delta_mm3"], 0.0);
+        let _ = fs::remove_dir_all(&dir);
+    }
 }

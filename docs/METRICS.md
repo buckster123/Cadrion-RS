@@ -43,6 +43,7 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 | 55 | Schema H4-1 | cadrion schema dump | **green** | cli_schema + ERROR_CATALOG |
 | 56 | Engine H4-2 | engine info / fail-closed install | **green** | cli_engine; no fake fetch |
 | 57 | HTTP H4-3 | measure / dims / sdf routes | **green** | http_api + OpenAPI paths |
+| 58 | Inspect H5-2 | MCP/HTTP align · frame · diff | **green** | align_check/frame/diff + `/v1/inspect/*` |
 | A1 | OCCT cone | no silent cylinder | **green** | H3-1 fail-closed |
 | A2 | truck-seed label | version JSON tag | **green** | truck_implementation field |
 | A3 | H3-2 frontier | live LLM score | **amber** | 4.0/10 miss 2026-08-20 Qwen3.8-27B Q6; H5-1 made prompts fair — score unchanged until a live re-run |
@@ -68,6 +69,6 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 
 **v1 ship bar (this table):** rows 1–16 green; 17–20 may remain amber/red with honesty notes.
 
-Last updated: 2026-08-20 (H5-1 prompt honesty; A3 still 4.0/10).  
+Last updated: 2026-08-20 (H5-2 align/frame/diff).  
 Harness live log: [`HARNESS_LIVE.md`](HARNESS_LIVE.md).  
 As-built companion: [`STATUS.md`](STATUS.md).
