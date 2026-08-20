@@ -2,7 +2,7 @@
 
 > AI-oriented status block. Prefer this + `docs/METRICS.md` + `BACKLOG.md` + Horizon boards.
 
-**As of:** 2026-08-20 · **tip:** H3-2 live 4.0/10 · **version:** 0.1.0  
+**As of:** 2026-08-20 · **tip:** Horizon-5 chartered · **version:** 0.1.0  
 **agent_id:** `CADRION` · **repo:** https://github.com/buckster123/Cadrion-RS  
 **kernels:** mock (default CI) · occt (`--features occt`) · truck (experimental NON-PARITY)
 
@@ -10,15 +10,16 @@
 - **v1 surface (M0–M6 / S0–S12): COMPLETE**
 - **Horizon-1 (H1–H10): COMPLETE** (PRs #24–#34)
 - **Horizon-2 (H2-1…H2-10): COMPLETE** (PRs #35–#46)
-- **Horizon-3:** H3-1…H3-10 **complete** (H3-2 live 4.0/10, below ≥6 — published)
-- **Horizon-4:** active — [`HORIZON4.md`](HORIZON4.md)
+- **Horizon-3:** H3-1…H3-10 **complete** (H3-2 live 4.0/10, PR #60)
+- **Horizon-4:** COMPLETE (PRs #57–#59) — [`HORIZON4.md`](HORIZON4.md)
+- **Horizon-5:** active — [`HORIZON5.md`](HORIZON5.md)
 - **Name (OQ-1):** Cadrion / Cadrion-RS — [`NAME_OQ1.md`](NAME_OQ1.md)
 - CI: ubuntu + windows + wasm job; OCCT-free default workspace
 - Binary: `cadrion` (`~/.local/bin/cadrion` for Hermes MCP). **Not** `cargo install cadre`.
 
 ## Next board
-**Active:** [`docs/HORIZON4.md`](HORIZON4.md) — H4-1…H4-3 complete.  
-**Archive:** H3 + H2 + H1.
+**Active:** [`docs/HORIZON5.md`](HORIZON5.md) — default **H5-1**.  
+**Archive:** H4 + H3 + H2 + H1. Live harness re-score is parked (ApexRouter + spend).
 
 ## Crate map (as-built)
 | Crate | Role |

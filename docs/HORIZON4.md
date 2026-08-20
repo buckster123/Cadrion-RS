@@ -1,7 +1,8 @@
 # Horizon-4 — Cadrion contract surfaces
 
-**Status:** **active** board (chartered 2026-08-20 after Horizon-3 cook list complete except blocked H3-2)  
-**Predecessor:** [`docs/HORIZON3.md`](HORIZON3.md) — H3-1…H3-10 done; **H3-2** still blocked (no healthy LLM backend)
+**Status:** **COMPLETE** 2026-08-20 (H4-1…H4-3). **Archive.**  
+**Successor (active):** [`docs/HORIZON5.md`](HORIZON5.md)  
+**Predecessor:** [`docs/HORIZON3.md`](HORIZON3.md)
 
 Horizon-4 is **not** a new CAD kernel and **not** SaaS.  
 It closes **already-chartered** face gaps: machine-readable schema (D13), honest engine inventory (D4), and HTTP catching up to MCP (D5).
@@ -63,7 +64,7 @@ Re-probe 2026-08-20: process up, **all backends `status=down`**, aliases unhealt
 2. Merge when CI green (user trust, 2026-08-20)  
 3. Tick checklist + BACKLOG on merge  
 
-**Default next:** Horizon-4 cook list complete. If a healthy router backend appears, **H3-2** jumps the queue.
+**Default next:** [`docs/HORIZON5.md`](HORIZON5.md). H3-2 published 2026-08-20 (PR #60, 4.0/10 miss). Live re-score is **not** Horizon-5.
 
 ---
 

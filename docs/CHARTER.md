@@ -222,3 +222,6 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-20** — **H3-2 live harness:** fair `openai_starlark` vs Qwen3.8-27B UD-Q6_K on
   verified DE RTX 6000 Ada (Vast 48237851). Score **4.0/10** (target ≥6). Published
   `harness/scores/h3-2-2026-08-20-qwen38-27b-q6.json`. No invented pass.
+- **2026-08-20** — **Horizon-5 chartered:** `docs/HORIZON5.md` Top-N H5-1…H5-10 (fair harness
+  prompts, remaining MCP/HTTP verbs, OQ-2 dialect bite, migrator bite, truck G1 STEP-or-refuse).
+  No live re-score, no `load()`, no truck default, no ApexOS assimilation. Default next **H5-1**.
