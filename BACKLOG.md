@@ -114,7 +114,7 @@ H3-2 published 2026-08-20: **4.0/10** on PR #60 (miss ≥6). Live re-score is no
 | H4-2 | `cadrion engine info\|install` (D4) | ✅ PR #58 |
 | H4-3 | HTTP measure / dims / sdf (D5) | ✅ PR #59 |
 
-## Horizon-5 board (ordered) — ACTIVE
+## Horizon-5 board (ordered) — COMPLETE
 
 **Source of truth:** [`docs/HORIZON5.md`](docs/HORIZON5.md).
 
@@ -129,9 +129,9 @@ H3-2 published 2026-08-20: **4.0/10** on PR #60 (miss ≥6). Live re-score is no
 | H5-7 | OQ-2 dialect bite | ✅ this slice |
 | H5-8 | MCP/HTTP robot gen \| validate | ✅ this slice |
 | H5-9 | Migrator bite | ✅ this slice |
-| H5-10 | Truck G1 STEP or honest refuse | |
+| H5-10 | Truck G1 STEP or honest refuse | ✅ this slice |
 
-Default next: **H5-10**.
+Horizon-5 **complete**. Default next: do not invent a board.
 
 ## Post-v1 parking (still deferred)
 

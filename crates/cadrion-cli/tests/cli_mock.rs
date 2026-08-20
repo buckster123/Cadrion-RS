@@ -117,6 +117,31 @@ fn inspect_measure_thickness() {
 }
 
 #[test]
+fn truck_export_step_is_unsupported_and_writes_nothing() {
+    let dir = tempdir().unwrap();
+    let star = dir.path().join("block.cad.star");
+    fs::write(&star, BOX_STAR).unwrap();
+    let step = dir.path().join("block.step");
+    cargo_bin_cmd!("cadrion")
+        .current_dir(dir.path())
+        .args([
+            "--json",
+            "--kernel",
+            "truck",
+            "export",
+            "block.cad.star",
+            "--format",
+            "step",
+            "-o",
+            "block.step",
+        ])
+        .assert()
+        .failure()
+        .stdout(predicate::str::contains("CADRION-E-UNSUPPORTED"));
+    assert!(!step.exists(), "truck refuse must not write STEP");
+}
+
+#[test]
 fn version_json() {
     cargo_bin_cmd!("cadrion")
         .args(["--json", "version"])
