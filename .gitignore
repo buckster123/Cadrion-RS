@@ -13,3 +13,4 @@
 !crates/cadrion-lang/fixtures/**/*.ir.json
 examples/**/*.view/
 sdf_out/
+.fastembed_cache/

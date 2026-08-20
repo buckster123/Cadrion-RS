@@ -2,7 +2,7 @@
 
 > AI-oriented status block. Prefer this + `docs/METRICS.md` + `BACKLOG.md` + Horizon boards.
 
-**As of:** 2026-08-21 · **tip:** H5-8 MCP/HTTP robot gen|validate · **version:** 0.1.0  
+**As of:** 2026-08-21 · **tip:** H5-9 migrator bite · **version:** 0.1.0  
 **agent_id:** `CADRION` · **repo:** https://github.com/buckster123/Cadrion-RS  
 **kernels:** mock (default CI) · occt (`--features occt`) · truck (experimental NON-PARITY)
 
@@ -18,7 +18,7 @@
 - Binary: `cadrion` (`~/.local/bin/cadrion` for Hermes MCP). **Not** `cargo install cadre`.
 
 ## Next board
-**Active:** [`docs/HORIZON5.md`](HORIZON5.md) — default **H5-9**.  
+**Active:** [`docs/HORIZON5.md`](HORIZON5.md) — default **H5-10**.  
 **Archive:** H4 + H3 + H2 + H1. Live harness re-score is parked (ApexRouter + spend).
 
 ## Crate map (as-built)

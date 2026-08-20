@@ -174,6 +174,29 @@ pub fn migrate_build123d_skeleton(source: &str) -> MigrateReport {
         );
     }
 
+    // H5-9: mirror(Plane.XY|YZ|ZX) → stdlib mirror. scale/sweep/loft/Workplane/faces stay notes.
+    note_structured_refuses(source, &mut notes);
+    if source.to_ascii_lowercase().contains("mirror(") || source.contains("Mirror(") {
+        if let Some(plane) = detect_mirror_plane(source) {
+            if let Some(src) = solids.last().cloned() {
+                let name = unique_name("mir", body_lines.len());
+                body_lines.push(format!(
+                    "    {name} = mirror({src}, \"{plane}\")  # from Plane.{plane_label}",
+                    plane_label = plane_label(plane)
+                ));
+                solids.push(name);
+                notes.push(format!(
+                    "mirror(Plane.{}) → mirror(..., \"{plane}\") (transform of last solid, not Mode.ADD)",
+                    plane_label(plane)
+                ));
+            }
+        } else {
+            notes.push(
+                "mirror(...) seen — plane not recovered (need Plane.XY|YZ|ZX); not faked".into(),
+            );
+        }
+    }
+
     // Combine: if source has subtract/cut markers, cut later solids from first
     let has_cut = source.contains("-=")
         || source.contains(".cut(")
@@ -258,6 +281,62 @@ pub fn migrate_build123d_skeleton(source: &str) -> MigrateReport {
         } else {
             "generic-python-cad".into()
         },
+    }
+}
+
+fn note_structured_refuses(source: &str, notes: &mut Vec<String>) {
+    let checks = [
+        (
+            "Workplane(",
+            "Workplane(...) — not reconstructed (no CadQuery workplane stack)",
+        ),
+        ("faces(", "faces(...) / face-select — not reconstructed"),
+        (
+            "Sweep(",
+            "Sweep/sweep — no stdlib sweep; not faked as extrude",
+        ),
+        (
+            "sweep(",
+            "Sweep/sweep — no stdlib sweep; not faked as extrude",
+        ),
+        ("Loft(", "Loft/loft — no stdlib loft; not faked"),
+        ("loft(", "Loft/loft — no stdlib loft; not faked"),
+        (
+            "Scale(",
+            "Scale/scale — no stdlib scale; not faked as a resized box",
+        ),
+        (
+            "scale(",
+            "Scale/scale — no stdlib scale; not faked as a resized box",
+        ),
+    ];
+    let mut seen = Vec::new();
+    for (needle, msg) in checks {
+        if source.contains(needle) && !seen.contains(&msg) {
+            seen.push(msg);
+            notes.push(msg.into());
+        }
+    }
+}
+
+fn detect_mirror_plane(source: &str) -> Option<&'static str> {
+    if source.contains("Plane.XY") {
+        Some("xy")
+    } else if source.contains("Plane.YZ") {
+        Some("yz")
+    } else if source.contains("Plane.ZX") || source.contains("Plane.XZ") {
+        Some("zx")
+    } else {
+        None
+    }
+}
+
+fn plane_label(plane: &str) -> &'static str {
+    match plane {
+        "xy" => "XY",
+        "yz" => "YZ",
+        "zx" => "ZX",
+        _ => "?",
     }
 }
 
@@ -876,6 +955,35 @@ with BuildPart() as p:
     }
 
     #[test]
+    fn h5_9_mirror_maps_and_sweep_is_structured_refuse() {
+        let mirrored = r#"
+from build123d import *
+with BuildPart() as p:
+    Box(20, 10, 8)
+    mirror(about=Plane.XY)
+"#;
+        let r = migrate_build123d_skeleton(mirrored);
+        assert!(r.ok, "{r:?}");
+        assert!(r.skeleton.contains("mirror("), "{skel}", skel = r.skeleton);
+        assert!(r.skeleton.contains("\"xy\"") || r.skeleton.contains("'xy'"));
+        assert!(r.notes.iter().any(|n| n.contains("mirror(Plane.XY)")));
+
+        let src = std::fs::read_to_string(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../fixtures/migrate/07_sweep_workplane.py"),
+        )
+        .unwrap();
+        let s = migrate_build123d_skeleton(&src);
+        assert!(s.ok && !s.refused, "{s:?}");
+        assert!(s.notes.iter().any(|n| n.contains("sweep")));
+        assert!(s.skeleton.contains("box("));
+        assert!(
+            !s.skeleton.contains("sweep("),
+            "must not fake sweep in Starlark"
+        );
+    }
+
+    #[test]
     fn golden_fixtures_eval() {
         let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../fixtures/migrate");
         for name in [
@@ -885,6 +993,7 @@ with BuildPart() as p:
             "04_locations_offset.py",
             "05_fillet_extrude.py",
             "06_circle_extrude.py",
+            "07_sweep_workplane.py",
         ] {
             let p = root.join(name);
             let src = std::fs::read_to_string(&p).unwrap_or_else(|e| panic!("{p:?}: {e}"));

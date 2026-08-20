@@ -128,10 +128,10 @@ H3-2 published 2026-08-20: **4.0/10** on PR #60 (miss ≥6). Live re-score is no
 | H5-6 | MCP prompts | ✅ this slice |
 | H5-7 | OQ-2 dialect bite | ✅ this slice |
 | H5-8 | MCP/HTTP robot gen \| validate | ✅ this slice |
-| H5-9 | Migrator bite | |
+| H5-9 | Migrator bite | ✅ this slice |
 | H5-10 | Truck G1 STEP or honest refuse | |
 
-Default next: **H5-9**.
+Default next: **H5-10**.
 
 ## Post-v1 parking (still deferred)
 
