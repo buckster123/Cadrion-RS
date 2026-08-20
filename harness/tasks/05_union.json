@@ -1,6 +1,6 @@
 {
   "id": "05_union",
-  "prompt": "Union two overlapping 20mm cubes",
+  "prompt": "Union two overlapping 20\u00d720\u00d720 mm cubes labeled union_body",
   "max_loops": 3,
   "loops": [
     [

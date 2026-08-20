@@ -225,3 +225,6 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-20** — **Horizon-5 chartered:** `docs/HORIZON5.md` Top-N H5-1…H5-10 (fair harness
   prompts, remaining MCP/HTTP verbs, OQ-2 dialect bite, migrator bite, truck G1 STEP-or-refuse).
   No live re-score, no `load()`, no truck default, no ApexOS assimilation. Default next **H5-1**.
+- **2026-08-20** — **H5-1 harness prompt honesty:** `agent10` prompts name every asserted
+  label / selector / size band. `Task::prompt_covers_asserts` locks it. Published live
+  score stays **4.0/10** (no invented ≥6). Default next **H5-2**.

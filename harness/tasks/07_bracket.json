@@ -1,6 +1,6 @@
 {
   "id": "07_bracket",
-  "prompt": "L-bracket from two boxes",
+  "prompt": "L-bracket labeled l_bracket: 40\u00d730\u00d75 base union 5\u00d730\u00d740 wall",
   "max_loops": 3,
   "loops": [
     [

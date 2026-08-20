@@ -120,7 +120,7 @@ H3-2 published 2026-08-20: **4.0/10** on PR #60 (miss ≥6). Live re-score is no
 
 | # | Slice | Status |
 |---|-------|--------|
-| H5-1 | Harness prompt honesty (A3) | |
+| H5-1 | Harness prompt honesty (A3) | ✅ this slice |
 | H5-2 | MCP/HTTP align · frame · diff | |
 | H5-3 | MCP/HTTP export | |
 | H5-4 | MCP/HTTP fab check | |
@@ -131,7 +131,7 @@ H3-2 published 2026-08-20: **4.0/10** on PR #60 (miss ≥6). Live re-score is no
 | H5-9 | Migrator bite | |
 | H5-10 | Truck G1 STEP or honest refuse | |
 
-Default next: **H5-1**.
+Default next: **H5-2**.
 
 ## Post-v1 parking (still deferred)
 

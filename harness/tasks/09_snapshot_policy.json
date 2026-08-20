@@ -1,6 +1,6 @@
 {
   "id": "09_snapshot_policy",
-  "prompt": "Always snapshot after build",
+  "prompt": "Always snapshot after build. 25\u00d715\u00d78 mm brick labeled brick",
   "max_loops": 3,
   "loops": [
     [

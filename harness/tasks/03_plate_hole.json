@@ -1,6 +1,6 @@
 {
   "id": "03_plate_hole",
-  "prompt": "100\u00d760\u00d720 plate with 8mm center hole",
+  "prompt": "100\u00d760\u00d720 mm plate labeled plate with 8mm center hole",
   "max_loops": 3,
   "loops": [
     [

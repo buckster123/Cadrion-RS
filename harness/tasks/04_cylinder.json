@@ -1,6 +1,6 @@
 {
   "id": "04_cylinder",
-  "prompt": "r=10 h=30 cylinder",
+  "prompt": "r=10 h=30 cylinder labeled pin",
   "max_loops": 3,
   "loops": [
     [

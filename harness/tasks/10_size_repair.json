@@ -1,6 +1,6 @@
 {
   "id": "10_size_repair",
-  "prompt": "Final brick 30\u00d720\u00d710",
+  "prompt": "Final brick 30\u00d720\u00d710 labeled brick",
   "max_loops": 3,
   "loops": [
     [

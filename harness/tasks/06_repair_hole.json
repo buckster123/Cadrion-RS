@@ -1,6 +1,6 @@
 {
   "id": "06_repair_hole",
-  "prompt": "Plate volume must stay above 110k after hole",
+  "prompt": "100\u00d760\u00d720 mm plate labeled plate; 8mm hole; volume 110k\u2013120k after hole",
   "max_loops": 3,
   "loops": [
     [

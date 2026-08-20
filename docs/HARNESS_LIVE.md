@@ -48,7 +48,7 @@ cargo run -p cadrion-cli -- harness run --suite agent10 --cmd '@oracle' --json
 | **Wall** | 1393 s |
 | **Artifact** | [`harness/scores/h3-2-2026-08-20-qwen38-27b-q6.json`](../harness/scores/h3-2-2026-08-20-qwen38-27b-q6.json) |
 
-Fair driver: prompt only — does **not** read `CADRION_HARNESS_TASK_FILE`. Failures are mostly exact labels / sizes that the prompt never names. **No invented ≥6.**
+Fair driver: prompt only — does **not** read `CADRION_HARNESS_TASK_FILE`. Failures were mostly exact labels / sizes the prompt never named. **H5-1 (2026-08-20):** every `agent10` prompt now names those labels/sizes. The **4.0/10** row is still the published live number — no invented ≥6. Re-score is parked (ApexRouter + spend).
 
 ### How to publish a real agent score
 
