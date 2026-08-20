@@ -211,3 +211,6 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-19** — **H3-10 / OQ-1 resolved:** **Cadrion / Cadrion-RS** (Cadre dropped —
   cadre3d.com same-class). D15 agent `CADRION`. D18 amended. Crates/bin/skills renamed
   in-tree. `CADRE_*` + `cadre://` + `cadre.*` schemas still accepted. See `docs/NAME_OQ1.md`.
+- **2026-08-20** — **Horizon-4 chartered:** `docs/HORIZON4.md` Top-N H4-1…H4-3 (schema D13,
+  engine inventory D4, HTTP catch-up D5). H3-2 stays blocked until a healthy router backend
+  exists — no invented scores. Does not flip D4/truck default.

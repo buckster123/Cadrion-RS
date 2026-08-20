@@ -27,6 +27,7 @@ cargo run -p cadrion-cli -- harness run --suite agent10 --cmd '@oracle' --json
 - This is a **control / plumbing** score, **not** a frontier LLM claim.  
 - Scripted CI path also scores 10/10 — different mode (`scripted-builtin`).  
 - At publish time, LocalRouter `http://127.0.0.1:8888/v1/models` was up but **all backends `status=down`** — no fair local/frontier LLM run was possible. **No fake ≥6.**
+- Re-probe **2026-08-20:** ApexRouter `:8888` process healthy (`provider=vast-gguf`); aliases `auto`/`garden-r1`/`garden-r2` have **no healthy targets**; listed Together backends `status=down`. H3-2 still blocked.
 
 ## Frontier / strong-local (not yet)
 

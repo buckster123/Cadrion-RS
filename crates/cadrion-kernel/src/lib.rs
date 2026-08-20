@@ -19,6 +19,7 @@
 #![deny(unsafe_code)]
 // missing_docs is nice-to-have; clippy CI is -D warnings and field noise isn't the gate.
 
+mod codes;
 mod env;
 mod error;
 mod facts;
@@ -29,6 +30,7 @@ mod mock;
 mod step;
 mod types;
 
+pub use codes::{error_code, ErrorCode, ERROR_CATALOG};
 pub use env::{env_var, schema_matches};
 pub use error::{KernelError, KernelResult};
 pub use facts::{ShapeFacts, ValidityReport};

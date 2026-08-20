@@ -277,7 +277,7 @@ Global CLI flags: `--json`, `--quiet`, `--project <dir>`, `--kernel <backend>`, 
 | `cadrion skills export\|install` | L2 skill packs | Original prose; tool invocations → `cadrion` |
 | `cadrion bench run\|agent` | Parity-10 + agent harness | Local only; no phone-home |
 | `cadrion engine install\|info` | Kernel backend component | Checksummed fetch |
-| `cadrion schema [cli\|mcp\|api\|errors]` | Single schema dump | CI drift gate (D13) |
+| `cadrion schema [cli\|mcp\|api\|errors]` | Live schema dump | H4-1 shipped — see [`SCHEMA.md`](SCHEMA.md) |
 
 ### MCP tools (names final; schemas via `cadrion schema mcp`)
 

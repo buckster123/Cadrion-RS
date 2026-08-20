@@ -101,7 +101,18 @@ Priority suggestions when resuming:
 | H3-9 | Migrator / WASM polish | ✅ this slice |
 | H3-10 | OQ-1 name decision packet | ✅ this slice — Cadrion-RS |
 
-Default when resuming with no pref: **H3-2** (blocked until a live backend exists).
+Default when resuming with no pref: **Horizon-4** ([`docs/HORIZON4.md`](docs/HORIZON4.md)).
+**H3-2** stays blocked until a healthy router backend exists (re-probed 2026-08-20: all down).
+
+## Horizon-4 board (ordered) — ACTIVE
+
+**Source of truth:** [`docs/HORIZON4.md`](docs/HORIZON4.md).
+
+| # | Slice | Status |
+|---|-------|--------|
+| H4-1 | `cadrion schema` (D13) | ✅ this slice |
+| H4-2 | `cadrion engine info\|install` (D4) | queued |
+| H4-3 | HTTP measure / dims / sdf (D5) | queued |
 
 ## Post-v1 parking (still deferred)
 

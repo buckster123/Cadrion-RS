@@ -36,8 +36,9 @@
 - **Printer start is triple-gated.** Allow-list + gcode hash match + explicit confirm string/flag.
   Don't add a "dev convenience" default that skips confirm on any surface.
 
-- **Schema is one type layer.** CLI JSON, MCP tools, OpenAPI — generate together. Don't
-  hand-edit one surface's schema without the others; CI must fail on drift once S8+ lands.
+- **Schema dump is live surfaces, not invented JSON Schema.** `cadrion schema` reads clap,
+  `tool_defs`, `openapi_doc`, and `ERROR_CATALOG`. Don't hand-maintain a second catalog.
+  New `CADRION-E-*` codes go in `ERROR_CATALOG` in the same PR as the first emit.
 
 - **Fake success is a bug.** Missing engine, slicer, lock entry, or GPU snapshot path →
   structured error. Don't return empty artifacts with `ok: true`.
