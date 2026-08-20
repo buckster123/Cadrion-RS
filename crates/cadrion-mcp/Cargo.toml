@@ -13,6 +13,7 @@ cadrion-lang = { workspace = true }
 cadrion-render = { workspace = true }
 cadrion-parts = { workspace = true }
 cadrion-sdf = { workspace = true }
+cadrion-fab = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }

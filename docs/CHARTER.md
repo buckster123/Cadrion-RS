@@ -232,3 +232,5 @@ Dated entries. A decision changes here first, then in the code.
   `/v1/inspect/align|frame|diff`. Names match `docs/design.md`. Default next **H5-3**.
 - **2026-08-20** — **H5-3 export:** MCP `export` + `/v1/export`. STL/glTF from IR-analytic
   preview mesh; mock STEP is `CADRION-E-UNSUPPORTED` and writes no file. Default next **H5-4**.
+- **2026-08-20** — **H5-4 fab check:** MCP `fab_check` + `/v1/fab/check`. DFM findings cite
+  bundled profile id/version; no printer `START`. Default next **H5-5**.

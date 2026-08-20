@@ -47,7 +47,7 @@ cadrion mcp
 ## MCP tools
 `build`, `write_source`, `read_source`, `inspect_refs`, `measure`, `snapshot`,
 `inspect_dims`, `assembly_validate`, `sdf_sample`, `align_check`, `frame`, `diff`,
-`export`
+`export`, `fab_check`
 
 ### write_source policy (H7)
 | Transport | Default | Override |

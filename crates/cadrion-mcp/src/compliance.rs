@@ -43,6 +43,7 @@ pub const TOOL_NAMES: &[&str] = &[
     "frame",
     "diff",
     "export",
+    "fab_check",
 ];
 
 #[cfg(test)]

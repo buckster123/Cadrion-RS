@@ -43,11 +43,11 @@ See `cadrion_mcp::UNSUPPORTED_BUT_DOCUMENTED`:
 - `sampling/createMessage`
 - `roots/list`
 
-### Tools (13)
+### Tools (14)
 
 `build` · `write_source` · `read_source` · `inspect_refs` · `measure` · `snapshot` ·
 `inspect_dims` · `assembly_validate` · `sdf_sample` · `align_check` · `frame` · `diff` ·
-`export`  
+`export` · `fab_check`  
 (`cadrion_mcp::TOOL_NAMES`)
 
 ### Transports

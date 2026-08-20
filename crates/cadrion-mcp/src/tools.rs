@@ -4,6 +4,10 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+use cadrion_fab::{
+    apply_override, check_dfm, load_override_json, load_profile_json, resolve_bundled_profile,
+    FlatPart,
+};
 use cadrion_inspect::{
     align_refs, build_drawing_packet, diff_snapshots, frame_of, inspect_refs, measure, AlignExpect,
     DimSpec, MeasureKind, MeasureRequest,
@@ -205,6 +209,20 @@ pub fn tool_defs() -> Value {
                 },
                 "required": ["path", "format"]
             }
+        },
+        {
+            "name": "fab_check",
+            "description": "DFM preflight on a FlatPart JSON + bundled profile. No printer start.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "FlatPart JSON"},
+                    "profile": {"type": "string", "default": "sendcutsend.laser"},
+                    "profile_file": {"type": "string"},
+                    "override_file": {"type": "string"}
+                },
+                "required": ["path"]
+            }
         }
     ])
 }
@@ -224,6 +242,7 @@ pub fn call_tool(name: &str, args: &Value) -> Result<Value, ToolError> {
         "frame" => tool_frame(args),
         "diff" => tool_diff(args),
         "export" => tool_export(args),
+        "fab_check" => tool_fab_check(args),
         other => Err(ToolError::msg(format!("unknown tool: {other}"))),
     }
 }
@@ -693,6 +712,42 @@ fn export_stem(path: &Path) -> String {
         .to_string()
 }
 
+fn tool_fab_check(args: &Value) -> Result<Value, ToolError> {
+    let path = PathBuf::from(str_arg(args, "path")?);
+    let text = fs::read_to_string(&path).map_err(|e| ToolError::msg(e.to_string()))?;
+    let part: FlatPart =
+        serde_json::from_str(&text).map_err(|e| ToolError::msg(format!("FlatPart json: {e}")))?;
+    let mut profile = if let Some(pf) = args.get("profile_file").and_then(|v| v.as_str()) {
+        let t = fs::read_to_string(pf).map_err(|e| ToolError::msg(e.to_string()))?;
+        load_profile_json(&t).map_err(ToolError::msg)?
+    } else {
+        let id = args
+            .get("profile")
+            .and_then(|v| v.as_str())
+            .unwrap_or("sendcutsend.laser");
+        resolve_bundled_profile(id).ok_or_else(|| {
+            ToolError::msg(format!(
+                "unknown profile {id:?} (sendcutsend.laser|pcb.outline|waterjet.generic)"
+            ))
+        })?
+    };
+    if let Some(ovp) = args.get("override_file").and_then(|v| v.as_str()) {
+        let t = fs::read_to_string(ovp).map_err(|e| ToolError::msg(e.to_string()))?;
+        let ov = load_override_json(&t).map_err(ToolError::msg)?;
+        profile = apply_override(&profile, &ov).map_err(ToolError::msg)?;
+    }
+    let report = check_dfm(&profile, &part);
+    let payload = json!({
+        "ok": report.ok,
+        "report": report,
+        "part": part,
+        "printer_start": false
+    });
+    Ok(json!({
+        "content": [{"type": "text", "text": serde_json::to_string_pretty(&payload).unwrap()}]
+    }))
+}
+
 fn topo_from_ir(
     ir: &cadrion_lang::FeatureIr,
 ) -> Result<cadrion_inspect::TopologySnapshot, ToolError> {
@@ -865,6 +920,54 @@ mod tests {
         .unwrap_err();
         assert!(err.to_string().contains("CADRION-E-UNSUPPORTED"), "{err}");
         assert!(!step.exists(), "mock must not write a STEP file");
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    fn plate_flat_json() -> PathBuf {
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/fab/plate.flat.json")
+    }
+
+    #[test]
+    fn fab_check_plate_cites_profile_and_refuses_unknown() {
+        let path = plate_flat_json();
+        let ok = call_tool("fab_check", &json!({"path": path.display().to_string()})).unwrap();
+        let p: Value = serde_json::from_str(ok["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(p["ok"], true, "{p}");
+        assert_eq!(p["printer_start"], false);
+        assert_eq!(p["report"]["profile_id"], "sendcutsend.laser");
+        assert_eq!(p["report"]["profile_version"], "1.0.0");
+
+        let dir = std::env::temp_dir().join(format!("cadrion-h5-4-{}", std::process::id()));
+        fs::create_dir_all(&dir).unwrap();
+        let fail_path = dir.join("tiny-hole.flat.json");
+        fs::write(
+            &fail_path,
+            r#"{
+              "width_mm": 100.0,
+              "height_mm": 50.0,
+              "thickness_mm": 3.0,
+              "material": "Aluminum 5052",
+              "holes_dia_mm": [0.4]
+            }"#,
+        )
+        .unwrap();
+        let fail = call_tool(
+            "fab_check",
+            &json!({"path": fail_path.display().to_string()}),
+        )
+        .unwrap();
+        let fail_p: Value =
+            serde_json::from_str(fail["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(fail_p["ok"], false, "{fail_p}");
+        assert_eq!(fail_p["report"]["profile_version"], "1.0.0");
+        assert_eq!(fail_p["printer_start"], false);
+
+        let err = call_tool(
+            "fab_check",
+            &json!({"path": path.display().to_string(), "profile": "not-a-vendor"}),
+        )
+        .unwrap_err();
+        assert!(err.to_string().contains("unknown profile"), "{err}");
         let _ = fs::remove_dir_all(&dir);
     }
 }

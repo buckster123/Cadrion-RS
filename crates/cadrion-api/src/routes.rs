@@ -33,6 +33,7 @@ pub fn router(state: AppState) -> Router {
         .route("/v1/inspect/frame", post(inspect_frame))
         .route("/v1/inspect/diff", post(inspect_diff))
         .route("/v1/export", post(export))
+        .route("/v1/fab/check", post(fab_check))
         .route("/v1/sdf/sample", post(sdf_sample))
         .route("/v1/snapshot", post(snapshot))
         .route("/v1/parts/search", post(parts_search))
@@ -266,6 +267,37 @@ async fn export(
 }
 
 #[derive(Debug, Deserialize)]
+struct FabCheckBody {
+    path: String,
+    #[serde(default)]
+    profile: Option<String>,
+    #[serde(default)]
+    profile_file: Option<String>,
+    #[serde(default)]
+    override_file: Option<String>,
+}
+
+async fn fab_check(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<FabCheckBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let path = resolve_path(&st, &body.path)?;
+    let mut args = json!({"path": path});
+    if let Some(profile) = body.profile {
+        args["profile"] = json!(profile);
+    }
+    if let Some(pf) = body.profile_file {
+        args["profile_file"] = json!(resolve_path(&st, &pf)?);
+    }
+    if let Some(ov) = body.override_file {
+        args["override_file"] = json!(resolve_path(&st, &ov)?);
+    }
+    call_tool("fab_check", &args)
+}
+
+#[derive(Debug, Deserialize)]
 struct SdfBody {
     prim: String,
     a: f64,
@@ -459,7 +491,7 @@ async fn run_job(st: AppState, id: String, kind: String, payload: Value) {
 
     let result = match kind.as_str() {
         "build" | "inspect_refs" | "snapshot" | "measure" | "inspect_dims" | "align_check"
-        | "frame" | "export" => {
+        | "frame" | "export" | "fab_check" => {
             let path = payload.get("path").and_then(|p| p.as_str()).map(|p| {
                 if std::path::Path::new(p).is_absolute() {
                     p.to_string()
