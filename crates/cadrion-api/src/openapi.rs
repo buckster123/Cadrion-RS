@@ -91,6 +91,18 @@ pub fn openapi_doc() -> Value {
                     "responses": {"200": {"description": "face dump"}, "400": {"description": "unknown face"}}
                 }
             },
+            "/v1/robot/gen": {
+                "post": {
+                    "summary": "Generate URDF/SRDF/SDF from robot JSON (H5-8 / MCP robot gen). Inertials not invented.",
+                    "responses": {"200": {"description": "files + report"}, "400": {"description": "bad spec"}}
+                }
+            },
+            "/v1/robot/validate": {
+                "post": {
+                    "summary": "Validate robot JSON or URDF/SRDF/SDF (H5-8 / MCP robot validate). Does not write.",
+                    "responses": {"200": {"description": "validation report"}, "400": {"description": "bad spec"}}
+                }
+            },
             "/v1/snapshot": {
                 "post": {
                     "summary": "Snapshot packet",

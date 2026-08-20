@@ -19,6 +19,10 @@ use cadrion_render::{
     mesh_from_ir, write_gltf_json, write_snapshot_packet, write_stl_ascii, SnapshotOptions,
     ViewName,
 };
+use cadrion_robot::{
+    emit_and_validate, parse_urdf_xml, srdf_from_robot, validate_sdf_xml, validate_urdf_xml,
+    write_sdf, write_srdf, RobotSpec, ValidationReport,
+};
 use cadrion_sdf::{grid_for_prim, sample_analytic, write_nrrd, write_raw, SdfPrim};
 use serde_json::{json, Value};
 
@@ -244,6 +248,21 @@ pub fn tool_defs() -> Value {
                     "face": {"type": "string", "enum": ["mcp", "errors"], "default": "mcp"}
                 }
             }
+        },
+        {
+            "name": "robot",
+            "description": "URDF gen/validate from .robot.json. Inertials must be in the spec.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "op": {"type": "string", "enum": ["gen", "validate"]},
+                    "path": {"type": "string"},
+                    "out": {"type": "string"},
+                    "srdf": {"type": "boolean", "default": true},
+                    "sdf": {"type": "boolean", "default": true}
+                },
+                "required": ["op", "path"]
+            }
         }
     ])
 }
@@ -266,6 +285,7 @@ pub fn call_tool(name: &str, args: &Value) -> Result<Value, ToolError> {
         "fab_check" => tool_fab_check(args),
         "engine" => tool_engine(args),
         "schema" => tool_schema(args),
+        "robot" => tool_robot(args),
         other => Err(ToolError::msg(format!("unknown tool: {other}"))),
     }
 }
@@ -804,6 +824,119 @@ fn tool_schema(args: &Value) -> Result<Value, ToolError> {
     }))
 }
 
+fn tool_robot(args: &Value) -> Result<Value, ToolError> {
+    let op = str_arg(args, "op")?;
+    let path = PathBuf::from(str_arg(args, "path")?);
+    let payload = match op {
+        "gen" => robot_gen(&path, args)?,
+        "validate" => robot_validate(&path)?,
+        other => {
+            return Err(ToolError::msg(format!(
+                "unknown robot op {other:?} (gen|validate)"
+            )))
+        }
+    };
+    Ok(json!({
+        "content": [{"type": "text", "text": serde_json::to_string_pretty(&payload).unwrap()}]
+    }))
+}
+
+fn load_robot_spec(path: &Path) -> Result<RobotSpec, ToolError> {
+    let text = fs::read_to_string(path).map_err(|e| ToolError::msg(e.to_string()))?;
+    serde_json::from_str(&text).map_err(|e| {
+        ToolError::msg(format!(
+            "robot json: {e} (inertial is required per link; not invented)"
+        ))
+    })
+}
+
+fn robot_gen(path: &Path, args: &Value) -> Result<Value, ToolError> {
+    let robot = load_robot_spec(path)?;
+    let (urdf, report) = emit_and_validate(&robot);
+    if !report.ok {
+        return Ok(json!({
+            "ok": false,
+            "report": report,
+            "inertial_invented": false
+        }));
+    }
+    let out_dir = args
+        .get("out")
+        .and_then(|v| v.as_str())
+        .map(PathBuf::from)
+        .unwrap_or_else(|| path.parent().unwrap_or(Path::new(".")).to_path_buf());
+    fs::create_dir_all(&out_dir).map_err(|e| ToolError::msg(e.to_string()))?;
+    let urdf_path = out_dir.join(format!("{}.urdf", robot.name));
+    fs::write(&urdf_path, &urdf).map_err(|e| ToolError::msg(e.to_string()))?;
+    let mut files = vec![urdf_path.display().to_string()];
+    let with_srdf = args.get("srdf").and_then(|v| v.as_bool()).unwrap_or(true);
+    let with_sdf = args.get("sdf").and_then(|v| v.as_bool()).unwrap_or(true);
+    if with_srdf {
+        let srdf = srdf_from_robot(&robot, "arm");
+        let p = out_dir.join(format!("{}.srdf", robot.name));
+        fs::write(&p, write_srdf(&srdf)).map_err(|e| ToolError::msg(e.to_string()))?;
+        files.push(p.display().to_string());
+    }
+    if with_sdf {
+        let p = out_dir.join(format!("{}.sdf", robot.name));
+        fs::write(&p, write_sdf(&robot)).map_err(|e| ToolError::msg(e.to_string()))?;
+        files.push(p.display().to_string());
+    }
+    Ok(json!({
+        "ok": true,
+        "report": report,
+        "files": files,
+        "inertial_invented": false
+    }))
+}
+
+fn robot_validate(path: &Path) -> Result<Value, ToolError> {
+    let name = path
+        .file_name()
+        .and_then(|s| s.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase();
+    let report = if name.ends_with(".json") {
+        let robot = load_robot_spec(path)?;
+        emit_and_validate(&robot).1
+    } else {
+        let text = fs::read_to_string(path).map_err(|e| ToolError::msg(e.to_string()))?;
+        if name.ends_with(".urdf") {
+            let mut r = validate_urdf_xml(&text);
+            if let Err(e) = parse_urdf_xml(&text) {
+                r.errors.push(e);
+                r.ok = false;
+            }
+            r
+        } else if name.ends_with(".srdf") {
+            let mut r = ValidationReport {
+                ok: true,
+                kind: "srdf_xml".into(),
+                errors: vec![],
+                warnings: vec![],
+            };
+            if !text.contains("<robot") || !text.contains("<group") {
+                r.errors.push("SRDF missing robot/group".into());
+                r.ok = false;
+            }
+            r
+        } else if name.ends_with(".sdf") {
+            validate_sdf_xml(&text)
+        } else {
+            return Err(ToolError::msg(
+                "expected .json/.urdf/.srdf/.sdf (validate does not write files)",
+            ));
+        }
+    };
+    Ok(json!({
+        "ok": report.ok,
+        "report": report,
+        "target": path.display().to_string(),
+        "inertial_invented": false,
+        "wrote": false
+    }))
+}
+
 fn topo_from_ir(
     ir: &cadrion_lang::FeatureIr,
 ) -> Result<cadrion_inspect::TopologySnapshot, ToolError> {
@@ -1058,5 +1191,67 @@ mod tests {
         assert!(names.iter().any(|n| n == "schema"));
         let err = call_tool("schema", &json!({"face": "cli"})).unwrap_err();
         assert!(err.to_string().contains("unknown schema face"), "{err}");
+    }
+
+    fn simple_arm_json() -> PathBuf {
+        PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../examples/robots/simple_arm.robot.json")
+    }
+
+    #[test]
+    fn robot_gen_and_validate_simple_arm_no_invented_inertial() {
+        let spec = simple_arm_json();
+        let dir = std::env::temp_dir().join(format!("cadrion-h5-8-{}", std::process::id()));
+        fs::create_dir_all(&dir).unwrap();
+        let gen = call_tool(
+            "robot",
+            &json!({
+                "op": "gen",
+                "path": spec.display().to_string(),
+                "out": dir.display().to_string()
+            }),
+        )
+        .unwrap();
+        let p: Value = serde_json::from_str(gen["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(p["ok"], true, "{p}");
+        assert_eq!(p["inertial_invented"], false);
+        assert_eq!(p["report"]["ok"], true);
+        let urdf = dir.join("simple_arm.urdf");
+        assert!(urdf.is_file());
+
+        let val = call_tool(
+            "robot",
+            &json!({
+                "op": "validate",
+                "path": spec.display().to_string()
+            }),
+        )
+        .unwrap();
+        let v: Value = serde_json::from_str(val["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(v["ok"], true, "{v}");
+        assert_eq!(v["wrote"], false);
+        assert_eq!(v["inertial_invented"], false);
+
+        let urdf_val = call_tool(
+            "robot",
+            &json!({
+                "op": "validate",
+                "path": urdf.display().to_string()
+            }),
+        )
+        .unwrap();
+        let u: Value =
+            serde_json::from_str(urdf_val["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(u["ok"], true, "{u}");
+
+        let bad = dir.join("no-inertial.robot.json");
+        fs::write(&bad, r#"{"name":"x","links":[{"name":"a"}],"joints":[]}"#).unwrap();
+        let err = call_tool(
+            "robot",
+            &json!({"op": "validate", "path": bad.display().to_string()}),
+        )
+        .unwrap_err();
+        assert!(err.to_string().contains("inertial"), "{err}");
+        let _ = fs::remove_dir_all(&dir);
     }
 }

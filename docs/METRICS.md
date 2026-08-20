@@ -49,6 +49,7 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 | 61 | Engine/schema H5-5 | MCP/HTTP engine + schema | **green** | install fail-closed; mcp/errors dump |
 | 62 | Prompts H5-6 | MCP prompts/list + get | **green** | loop · write_source · hermetic load |
 | 63 | Dialect H5-7 | OQ-2 float + stdlib names | **green** | dialect goldens; cone lie fixed |
+| 64 | Robot H5-8 | MCP/HTTP robot gen|validate | **green** | simple_arm; no invented inertial |
 | A1 | OCCT cone | no silent cylinder | **green** | H3-1 fail-closed |
 | A2 | truck-seed label | version JSON tag | **green** | truck_implementation field |
 | A3 | H3-2 frontier | live LLM score | **amber** | 4.0/10 miss 2026-08-20 Qwen3.8-27B Q6; H5-1 made prompts fair — score unchanged until a live re-run |
@@ -74,6 +75,6 @@ Living scorecard. A row is **green** only with evidence (command + date), not in
 
 **v1 ship bar (this table):** rows 1–16 green; 17–20 may remain amber/red with honesty notes.
 
-Last updated: 2026-08-20 (H5-7 dialect).  
+Last updated: 2026-08-21 (H5-8 robot).  
 Harness live log: [`HARNESS_LIVE.md`](HARNESS_LIVE.md).  
 As-built companion: [`STATUS.md`](STATUS.md).

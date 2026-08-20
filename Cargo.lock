@@ -598,6 +598,7 @@ dependencies = [
  "cadrion-lang",
  "cadrion-parts",
  "cadrion-render",
+ "cadrion-robot",
  "cadrion-sdf",
  "serde",
  "serde_json",
