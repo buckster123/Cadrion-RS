@@ -214,3 +214,6 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-20** — **Horizon-4 chartered:** `docs/HORIZON4.md` Top-N H4-1…H4-3 (schema D13,
   engine inventory D4, HTTP catch-up D5). H3-2 stays blocked until a healthy router backend
   exists — no invented scores. Does not flip D4/truck default.
+- **2026-08-20** — **H4-2 engine inventory:** `cadrion engine info` lists compile-time kernels.
+  `engine install` does not download a prebuilt — already-present or `CADRION-E-ENGINE-MISSING`.
+  Checksummed fetch remains a later packaging slice.

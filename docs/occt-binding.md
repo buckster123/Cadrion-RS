@@ -89,7 +89,8 @@ Record any switch as a dated charter amendment — do not silent-pivot.
 - [x] `cadrion_lang::execute_ir` lowers IR onto any kernel
 - [x] Calibration block `.cad.star` → fillet → STEP (1524 ents) + volume/bbox facts
 - [x] Default CI excludes OCCT; local recipe documented (CMake 4 policy env)
-- [ ] Prebuilt `cadrion engine install` artifacts (still M6 / packaging)
+- [x] `cadrion engine info` reports compile-time kernels (H4-2)
+- [ ] Prebuilt `cadrion engine install` artifacts (still packaging). H4-2 `install` is **fail-closed** (`CADRION-E-ENGINE-MISSING`) unless the backend is already compiled in — it does not fetch.
 
 ### Local OCCT gotchas (2026-08-05)
 

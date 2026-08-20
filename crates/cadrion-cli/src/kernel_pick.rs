@@ -97,7 +97,7 @@ pub fn open_kernel(id: KernelId) -> Result<KernelBox, (ExitCode, serde_json::Val
                             "code": "CADRION-E-KERNEL-UNAVAILABLE",
                             "severity": "error",
                             "message": "occt kernel not compiled into this binary",
-                            "hint": "rebuild with: cargo build -p cadrion-cli --features occt (and CMAKE_POLICY_VERSION_MINIMUM=3.5 on CMake ≥ 4)"
+                            "hint": "cadrion engine info; rebuild with: CMAKE_POLICY_VERSION_MINIMUM=3.5 cargo build -p cadrion-cli --features occt"
                         }]
                     }),
                 ))

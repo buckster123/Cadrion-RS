@@ -110,8 +110,8 @@ Default when resuming with no pref: **Horizon-4** ([`docs/HORIZON4.md`](docs/HOR
 
 | # | Slice | Status |
 |---|-------|--------|
-| H4-1 | `cadrion schema` (D13) | ✅ this slice |
-| H4-2 | `cadrion engine info\|install` (D4) | queued |
+| H4-1 | `cadrion schema` (D13) | ✅ PR #57 |
+| H4-2 | `cadrion engine info\|install` (D4) | ✅ this slice |
 | H4-3 | HTTP measure / dims / sdf (D5) | queued |
 
 ## Post-v1 parking (still deferred)

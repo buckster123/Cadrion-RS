@@ -80,10 +80,40 @@ pub enum Commands {
     Migrate(MigrateArgs),
     /// Experimental secondary SDF sample (analytic box/cyl → raw/NRRD). Not modeling.
     Sdf(SdfArgs),
+    /// Kernel engine inventory (honest — no fake download).
+    Engine(EngineArgs),
     /// Dump live CLI / MCP / API / error schemas (D13).
     Schema(SchemaArgs),
     /// Print versions / feature flags.
     Version,
+}
+
+#[derive(Debug, clap::Args)]
+pub struct EngineArgs {
+    #[command(subcommand)]
+    pub cmd: EngineCmd,
+}
+
+#[derive(Debug, Subcommand)]
+pub enum EngineCmd {
+    /// Report which kernels are compiled into this binary.
+    Info,
+    /// Fail-closed unless the backend is already compiled in. Does not fetch.
+    Install(EngineInstallArgs),
+}
+
+#[derive(Debug, clap::Args)]
+pub struct EngineInstallArgs {
+    /// Backend to "install" (compile-time feature, not a download).
+    #[arg(long, value_enum, default_value_t = EngineBackend::Occt)]
+    pub backend: EngineBackend,
+}
+
+#[derive(Debug, Clone, Copy, ValueEnum, PartialEq, Eq, Default)]
+pub enum EngineBackend {
+    #[default]
+    Occt,
+    TruckBrep,
 }
 
 #[derive(Debug, clap::Args)]
