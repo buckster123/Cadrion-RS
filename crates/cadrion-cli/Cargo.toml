@@ -14,9 +14,9 @@ path = "src/main.rs"
 [features]
 default = []
 # Real STEP/tessellation via Open CASCADE (LGPL). Requires CMake policy on CMake ≥ 4.
-occt = ["dep:cadrion-occt", "cadrion-bench/occt"]
+occt = ["dep:cadrion-occt", "cadrion-bench/occt", "cadrion-mcp/occt"]
 # H3-6: upstream truck B-rep spike (optional; never default / never parity).
-truck-brep = ["cadrion-truck/brep"]
+truck-brep = ["cadrion-truck/brep", "cadrion-mcp/truck-brep"]
 
 [dependencies]
 anyhow = { workspace = true }

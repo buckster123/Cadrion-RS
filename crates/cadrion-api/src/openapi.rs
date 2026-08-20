@@ -79,6 +79,18 @@ pub fn openapi_doc() -> Value {
                     "responses": {"200": {"description": "dfm report"}, "400": {"description": "bad part or unknown profile"}}
                 }
             },
+            "/v1/engine": {
+                "post": {
+                    "summary": "Kernel inventory (H5-5 / MCP engine). install is fail-closed; no tarball.",
+                    "responses": {"200": {"description": "engine info or already_present"}, "400": {"description": "ENGINE-MISSING"}}
+                }
+            },
+            "/v1/schema": {
+                "post": {
+                    "summary": "Live MCP/error/OpenAPI dump (H5-5 / MCP schema). clap CLI remains `cadrion schema`.",
+                    "responses": {"200": {"description": "face dump"}, "400": {"description": "unknown face"}}
+                }
+            },
             "/v1/snapshot": {
                 "post": {
                     "summary": "Snapshot packet",

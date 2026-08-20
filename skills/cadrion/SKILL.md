@@ -47,7 +47,7 @@ cadrion mcp
 ## MCP tools
 `build`, `write_source`, `read_source`, `inspect_refs`, `measure`, `snapshot`,
 `inspect_dims`, `assembly_validate`, `sdf_sample`, `align_check`, `frame`, `diff`,
-`export`, `fab_check`
+`export`, `fab_check`, `engine`, `schema`
 
 ### write_source policy (H7)
 | Transport | Default | Override |
@@ -69,6 +69,7 @@ Local agents already have FS tools — prefer those on stdio. HTTP agents need M
 | `cadrion://doc/slicer-dfm` | slicer gates + DFM |
 | `cadrion://doc/fillet` | fillet doctrine |
 | `cadrion://doc/write-source-policy` | this policy |
+| `cadrion://doc/schema` | schema dump honesty |
 | `cadrion://artifact/index` | local IR/snap/gcode index |
 | `cadrion://artifact/file/<rel>` | read one artifact |
 

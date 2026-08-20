@@ -6,6 +6,12 @@ license.workspace = true
 repository.workspace = true
 description = "MCP server for Cadrion-RS (stdio + streamable HTTP)"
 
+[features]
+default = []
+# Compile-flag mirrors of cadrion-cli (no OCCT dep here). Forwarded so `engine` is honest.
+occt = []
+truck-brep = []
+
 [dependencies]
 cadrion-inspect = { workspace = true }
 cadrion-kernel = { workspace = true }
