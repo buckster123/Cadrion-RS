@@ -79,6 +79,12 @@ pub fn openapi_doc() -> Value {
                     "responses": {"200": {"description": "dfm report"}, "400": {"description": "bad part or unknown profile"}}
                 }
             },
+            "/v1/fab/gcode-check": {
+                "post": {
+                    "summary": "Static G-code check (H6-3 / MCP gcode_check). Not a slicer and not a print.",
+                    "responses": {"200": {"description": "gcode report"}, "400": {"description": "missing file"}}
+                }
+            },
             "/v1/engine": {
                 "post": {
                     "summary": "Kernel inventory (H5-5 / MCP engine). install is fail-closed; no tarball.",

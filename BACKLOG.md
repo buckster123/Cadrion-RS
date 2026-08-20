@@ -141,7 +141,7 @@ Horizon-5 **complete**. Successor: [`docs/HORIZON6.md`](docs/HORIZON6.md).
 |---|-------|--------|
 | H6-1 | CLI + MCP/HTTP parts search \| fetch \| lock | ✅ this slice |
 | H6-2 | MCP/HTTP viewer_open | ✅ this slice |
-| H6-3 | MCP/HTTP gcode_check | ☐ |
+| H6-3 | MCP/HTTP gcode_check | ✅ this slice |
 | H6-4 | MCP/HTTP fab_slice | ☐ |
 | H6-5 | MCP/HTTP printer status + dry-run | ☐ |
 | H6-6 | MCP/HTTP printer_start (D10) | ☐ |
@@ -150,7 +150,7 @@ Horizon-5 **complete**. Successor: [`docs/HORIZON6.md`](docs/HORIZON6.md).
 | H6-9 | MCP/HTTP fab dxf \| profiles | ☐ |
 | H6-10 | project_artifacts + OpenAPI honesty | ☐ |
 
-Default next: **H6-3**.
+Default next: **H6-4**.
 
 ## Post-v1 parking (still deferred)
 

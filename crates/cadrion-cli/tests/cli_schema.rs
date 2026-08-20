@@ -34,6 +34,7 @@ fn schema_all_json() {
     assert!(v["api"]["paths"]["/v1/inspect/diff"].is_object());
     assert!(v["api"]["paths"]["/v1/export"].is_object());
     assert!(v["api"]["paths"]["/v1/fab/check"].is_object());
+    assert!(v["api"]["paths"]["/v1/fab/gcode-check"].is_object());
     assert!(v["api"]["paths"]["/v1/engine"].is_object());
     assert!(v["api"]["paths"]["/v1/schema"].is_object());
     assert!(v["api"]["paths"]["/v1/robot/gen"].is_object());
@@ -96,4 +97,5 @@ fn schema_mcp_matches_tool_names() {
     assert!(names.contains(&"robot"));
     assert!(names.contains(&"parts"));
     assert!(names.contains(&"viewer_open"));
+    assert!(names.contains(&"gcode_check"));
 }

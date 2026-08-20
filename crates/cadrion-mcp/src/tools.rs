@@ -5,8 +5,8 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use cadrion_fab::{
-    apply_override, check_dfm, load_override_json, load_profile_json, resolve_bundled_profile,
-    FlatPart,
+    apply_override, check_dfm, check_gcode, hex_sha256, load_override_json, load_profile_json,
+    resolve_bundled_profile, FlatPart, PrinterVolume,
 };
 use cadrion_inspect::{
     align_refs, build_drawing_packet, diff_snapshots, frame_of, inspect_refs, measure, AlignExpect,
@@ -295,6 +295,22 @@ pub fn tool_defs() -> Value {
                     "once": {"type": "boolean", "default": true}
                 }
             }
+        },
+        {
+            "name": "gcode_check",
+            "description": "Static G-code bbox/temp/flavor. Not a slicer and not a print.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string"},
+                    "bed_x": {"type": "number"},
+                    "bed_y": {"type": "number"},
+                    "bed_z": {"type": "number"},
+                    "max_hotend": {"type": "number"},
+                    "max_bed": {"type": "number"}
+                },
+                "required": ["path"]
+            }
         }
     ])
 }
@@ -320,6 +336,7 @@ pub fn call_tool(name: &str, args: &Value) -> Result<Value, ToolError> {
         "robot" => tool_robot(args),
         "parts" => tool_parts(args),
         "viewer_open" => tool_viewer_open(args),
+        "gcode_check" => tool_gcode_check(args),
         other => Err(ToolError::msg(format!("unknown tool: {other}"))),
     }
 }
@@ -1075,6 +1092,35 @@ fn viewer_kind(p: &Path) -> &'static str {
     }
 }
 
+fn tool_gcode_check(args: &Value) -> Result<Value, ToolError> {
+    let path = PathBuf::from(str_arg(args, "path")?);
+    let text = fs::read_to_string(&path).map_err(|e| ToolError::msg(e.to_string()))?;
+    let vol = PrinterVolume {
+        x_mm: args.get("bed_x").and_then(|v| v.as_f64()).unwrap_or(256.0),
+        y_mm: args.get("bed_y").and_then(|v| v.as_f64()).unwrap_or(256.0),
+        z_mm: args.get("bed_z").and_then(|v| v.as_f64()).unwrap_or(256.0),
+        max_hotend_c: args
+            .get("max_hotend")
+            .and_then(|v| v.as_f64())
+            .unwrap_or(300.0),
+        max_bed_c: args
+            .get("max_bed")
+            .and_then(|v| v.as_f64())
+            .unwrap_or(110.0),
+    };
+    let report = check_gcode(&text, &vol);
+    let payload = json!({
+        "ok": report.ok,
+        "report": report,
+        "sha256": hex_sha256(text.as_bytes()),
+        "path": path,
+        "printer_start": false
+    });
+    Ok(json!({
+        "content": [{"type": "text", "text": serde_json::to_string_pretty(&payload).unwrap()}]
+    }))
+}
+
 fn load_robot_spec(path: &Path) -> Result<RobotSpec, ToolError> {
     let text = fs::read_to_string(path).map_err(|e| ToolError::msg(e.to_string()))?;
     serde_json::from_str(&text).map_err(|e| {
@@ -1588,5 +1634,17 @@ mod tests {
         .unwrap_err();
         assert!(err.to_string().contains("CADRION-E-VIEW"), "{err}");
         assert!(err.to_string().contains("accept loop"), "{err}");
+    }
+
+    #[test]
+    fn gcode_check_sample_is_not_a_print() {
+        let path =
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/fab/sample.gcode");
+        let v = call_tool("gcode_check", &json!({"path": path.display().to_string()})).unwrap();
+        let p: Value = serde_json::from_str(v["content"][0]["text"].as_str().unwrap()).unwrap();
+        assert_eq!(p["ok"], true, "{p}");
+        assert_eq!(p["printer_start"], false);
+        assert_eq!(p["sha256"].as_str().unwrap().len(), 64);
+        assert!(p["report"]["move_count"].as_u64().unwrap() > 0);
     }
 }

@@ -34,6 +34,7 @@ pub fn router(state: AppState) -> Router {
         .route("/v1/inspect/diff", post(inspect_diff))
         .route("/v1/export", post(export))
         .route("/v1/fab/check", post(fab_check))
+        .route("/v1/fab/gcode-check", post(fab_gcode_check))
         .route("/v1/engine", post(engine))
         .route("/v1/schema", post(schema))
         .route("/v1/robot/gen", post(robot_gen))
@@ -298,6 +299,46 @@ async fn fab_check(
         args["override_file"] = json!(resolve_path(&st, &ov)?);
     }
     call_tool("fab_check", &args)
+}
+
+#[derive(Debug, Deserialize)]
+struct GcodeCheckBody {
+    path: String,
+    #[serde(default)]
+    bed_x: Option<f64>,
+    #[serde(default)]
+    bed_y: Option<f64>,
+    #[serde(default)]
+    bed_z: Option<f64>,
+    #[serde(default)]
+    max_hotend: Option<f64>,
+    #[serde(default)]
+    max_bed: Option<f64>,
+}
+
+async fn fab_gcode_check(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<GcodeCheckBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let mut args = json!({"path": resolve_path(&st, &body.path)?});
+    if let Some(v) = body.bed_x {
+        args["bed_x"] = json!(v);
+    }
+    if let Some(v) = body.bed_y {
+        args["bed_y"] = json!(v);
+    }
+    if let Some(v) = body.bed_z {
+        args["bed_z"] = json!(v);
+    }
+    if let Some(v) = body.max_hotend {
+        args["max_hotend"] = json!(v);
+    }
+    if let Some(v) = body.max_bed {
+        args["max_bed"] = json!(v);
+    }
+    call_tool("gcode_check", &args)
 }
 
 #[derive(Debug, Deserialize)]
@@ -670,7 +711,7 @@ async fn run_job(st: AppState, id: String, kind: String, payload: Value) {
 
     let result = match kind.as_str() {
         "build" | "inspect_refs" | "snapshot" | "measure" | "inspect_dims" | "align_check"
-        | "frame" | "export" | "fab_check" | "robot" => {
+        | "frame" | "export" | "fab_check" | "gcode_check" | "robot" => {
             let path = payload.get("path").and_then(|p| p.as_str()).map(|p| {
                 if std::path::Path::new(p).is_absolute() {
                     p.to_string()

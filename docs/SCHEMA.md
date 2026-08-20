@@ -26,5 +26,6 @@ OpenAPI face is HTTP-only; clap remains `cadrion schema`).
 H5-8 added `/v1/robot/gen` and `/v1/robot/validate`.
 H6-1 added MCP `parts` and `/v1/parts/fetch` + `/v1/parts/lock` (`/v1/parts/search` now wraps the same tool).
 H6-2 added MCP `viewer_open` and `/v1/viewer/open` (`once=true` only).
+H6-3 added MCP `gcode_check` and `/v1/fab/gcode-check`.
 Drift tests
 require the dump to match those live functions — they do not invent a second catalog.
