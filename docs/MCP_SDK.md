@@ -30,7 +30,7 @@ See `cadrion_mcp::SUPPORTED_METHODS` (source of truth):
 - `ping`
 - `tools/list` / `tools/call`
 - `resources/list` / `resources/read`
-- `prompts/list` (empty list — honest)
+- `prompts/list` / `prompts/get` (doctrine: cadrion-loop, write-source-policy, hermetic-load)
 
 ### Explicitly unsupported (method-not-found −32601)
 
@@ -66,6 +66,7 @@ See `cadrion_mcp::UNSUPPORTED_BUT_DOCUMENTED`:
 | unsupported → −32601 | `unsupported_methods_are_method_not_found` |
 | core methods OK | `supported_request_methods_do_not_404` |
 | resources policy doc | `resources_read_policy_doc` |
+| prompts list/get | `prompts_list_and_get_doctrine` |
 | write_source gate | H7 tests + policy |
 | HTTP tools/list | `http` module tests |
 | End-to-end loop | `write_build_inspect_snapshot_loop` |

@@ -51,6 +51,7 @@ After reload, tools appear as `mcp_cadrion_*` / deferred catalog names depending
 - **H5-4:** `fab_check` (DFM preflight; no printer start)
 - **H5-5:** `engine` (info / fail-closed install) · `schema` (mcp/errors)
 - resources: `resources/list` · `resources/read` (`cadrion://doc/**`)
+- **H5-6:** `prompts/list` · `prompts/get` (cadrion-loop, write-source-policy, hermetic-load)
 
 ## Drive example
 

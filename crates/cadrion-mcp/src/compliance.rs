@@ -14,6 +14,7 @@ pub const SUPPORTED_METHODS: &[&str] = &[
     "resources/list",
     "resources/read",
     "prompts/list",
+    "prompts/get",
 ];
 
 /// Methods we deliberately do **not** implement (return method-not-found).
@@ -92,6 +93,7 @@ mod tests {
         assert_eq!(r["protocolVersion"], PROTOCOL_VERSION);
         assert!(r["capabilities"]["tools"].is_object());
         assert!(r["capabilities"]["resources"].is_object());
+        assert!(r["capabilities"]["prompts"].is_object());
         assert_eq!(r["serverInfo"]["name"], "cadrion");
         assert!(r["serverInfo"]["transports"]
             .as_array()
@@ -159,5 +161,40 @@ mod tests {
             .unwrap()
             .to_string();
         assert!(text.contains("write_source"));
+    }
+
+    #[test]
+    fn prompts_list_and_get_doctrine() {
+        policy();
+        let list = dispatch(JsonRpcRequest {
+            jsonrpc: "2.0".into(),
+            id: Some(json!(11)),
+            method: "prompts/list".into(),
+            params: Some(json!({})),
+        })
+        .unwrap();
+        let names: Vec<String> = list.result.unwrap()["prompts"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|p| p["name"].as_str().unwrap().to_string())
+            .collect();
+        assert!(names.contains(&"cadrion-loop".into()));
+        assert!(names.contains(&"write-source-policy".into()));
+        assert!(names.contains(&"hermetic-load".into()));
+
+        let got = dispatch(JsonRpcRequest {
+            jsonrpc: "2.0".into(),
+            id: Some(json!(12)),
+            method: "prompts/get".into(),
+            params: Some(json!({"name": "hermetic-load"})),
+        })
+        .unwrap();
+        let text = got.result.unwrap()["messages"][0]["content"]["text"]
+            .as_str()
+            .unwrap()
+            .to_string();
+        assert!(text.contains("CADRION-E-HERMETIC-LOAD"));
+        assert!(text.contains("load()"));
     }
 }

@@ -75,6 +75,10 @@ Local agents already have FS tools — prefer those on stdio. HTTP agents need M
 
 `resources/list` + `resources/read` JSON-RPC methods.
 
+### MCP prompts (H5-6)
+`prompts/list` / `prompts/get`: `cadrion-loop`, `write-source-policy`, `hermetic-load`.
+They teach; they are not a fourth face and not a replacement for this skill.
+
 ## Safety
 - Printer **start** needs allow-list + sha256 + `confirm=START` (+ `--live`)
 - Slicer **execute** needs `--confirm SLICE` (+ optional allowlist)
