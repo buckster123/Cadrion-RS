@@ -1,6 +1,7 @@
 # Horizon-3 — Cadrion depth, honesty, and optional pure-Rust BREP
 
-**Status:** **active** board (chartered 2026-08-06 after Horizon-2 complete)  
+**Status:** **COMPLETE** 2026-08-20 (H3-1…H3-10; H3-2 via PR #60). **Archive.**  
+**Successor (active):** [`docs/HORIZON5.md`](HORIZON5.md)  
 **Predecessor:** [`docs/HORIZON2.md`](HORIZON2.md) — **archive complete** (H2-1…H2-10)  
 **H1 archive:** [`docs/HORIZON.md`](HORIZON.md)
 
@@ -145,16 +146,16 @@ Three pillars:
 5. Default next = next unchecked H3-N  
 6. Truck work must cite bid G-criteria in PR  
 
-**Default next if “cook on” with no pref:** next Horizon-4 follow-up, or a second live harness if you want ≥6.
-Otherwise cook [`docs/HORIZON4.md`](HORIZON4.md). Horizon-3 cook list is complete
-(H3-2 published 2026-08-20: **4.0/10**, below ≥6 — not invented).
+**Default next if “cook on” with no pref:** [`docs/HORIZON5.md`](HORIZON5.md).
+H3-2 live score published 2026-08-20 on [PR #60](https://github.com/buckster123/Cadrion-RS/pull/60)
+(4.0/10 miss). Horizon-4 is archive-complete.
 
 ---
 
 ## 7. Checklist
 
 - [x] **H3-1** Honesty pass (cone + fences + truck naming)  
-- [x] **H3-2** Live harness frontier score — 4.0/10 Qwen3.8-27B Q6 (2026-08-20; miss ≥6)  
+- [x] **H3-2** Live harness frontier score — 4.0/10 Qwen3.8-27B Q6 (PR #60; miss ≥6)  
 - [x] **H3-3** MCP surface depth  
 - [x] **H3-4** Assembly / OQ-4 bite  
 - [x] **H3-5** PMI → viewer overlay  

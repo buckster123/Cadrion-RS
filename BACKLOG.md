@@ -84,14 +84,14 @@ Priority suggestions when resuming:
 | H2-9 | SDF secondary experimental | ✅ PR #45 |
 | H2-10 | Truck parity bid prep (not default) | ✅ PR #46 |
 
-## Horizon-3 board (ordered) — ACTIVE
+## Horizon-3 board (ordered) — COMPLETE
 
 **Source of truth:** [`docs/HORIZON3.md`](docs/HORIZON3.md).
 
 | # | Slice | Status |
 |---|-------|--------|
 | H3-1 | Honesty pass (cone + fences + truck naming) | ✅ this slice |
-| H3-2 | Live harness frontier score | ✅ 4.0/10 2026-08-20 (miss ≥6) |
+| H3-2 | Live harness frontier score | ✅ 4.0/10 PR #60 (miss ≥6) |
 | H3-3 | MCP surface depth (dims/assembly/sdf) | ✅ PR #48 |
 | H3-4 | Assembly / OQ-4 bite | ✅ PR #49 |
 | H3-5 | PMI → viewer overlay | ✅ PR #50 |
@@ -101,18 +101,37 @@ Priority suggestions when resuming:
 | H3-9 | Migrator / WASM polish | ✅ this slice |
 | H3-10 | OQ-1 name decision packet | ✅ this slice — Cadrion-RS |
 
-Default when resuming with no pref: **Horizon-4** ([`docs/HORIZON4.md`](docs/HORIZON4.md)).
-H3-2 published 2026-08-20: **4.0/10** Qwen3.8-27B UD-Q6_K (fair live; below ≥6).
+Default when resuming with no pref: **Horizon-5** ([`docs/HORIZON5.md`](docs/HORIZON5.md)).
+H3-2 published 2026-08-20: **4.0/10** on PR #60 (miss ≥6). Live re-score is not an H5 slice.
 
-## Horizon-4 board (ordered) — ACTIVE
+## Horizon-4 board (ordered) — COMPLETE
 
-**Source of truth:** [`docs/HORIZON4.md`](docs/HORIZON4.md).
+**Archive:** [`docs/HORIZON4.md`](docs/HORIZON4.md). **Active:** [`docs/HORIZON5.md`](docs/HORIZON5.md).
 
 | # | Slice | Status |
 |---|-------|--------|
 | H4-1 | `cadrion schema` (D13) | ✅ PR #57 |
 | H4-2 | `cadrion engine info\|install` (D4) | ✅ PR #58 |
-| H4-3 | HTTP measure / dims / sdf (D5) | ✅ this slice |
+| H4-3 | HTTP measure / dims / sdf (D5) | ✅ PR #59 |
+
+## Horizon-5 board (ordered) — ACTIVE
+
+**Source of truth:** [`docs/HORIZON5.md`](docs/HORIZON5.md).
+
+| # | Slice | Status |
+|---|-------|--------|
+| H5-1 | Harness prompt honesty (A3) | |
+| H5-2 | MCP/HTTP align · frame · diff | |
+| H5-3 | MCP/HTTP export | |
+| H5-4 | MCP/HTTP fab check | |
+| H5-5 | MCP engine + schema | |
+| H5-6 | MCP prompts | |
+| H5-7 | OQ-2 dialect bite | |
+| H5-8 | MCP/HTTP robot gen \| validate | |
+| H5-9 | Migrator bite | |
+| H5-10 | Truck G1 STEP or honest refuse | |
+
+Default next: **H5-1**.
 
 ## Post-v1 parking (still deferred)
 
