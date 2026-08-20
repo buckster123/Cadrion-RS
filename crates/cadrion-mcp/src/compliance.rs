@@ -47,6 +47,7 @@ pub const TOOL_NAMES: &[&str] = &[
     "fab_check",
     "engine",
     "schema",
+    "robot",
 ];
 
 #[cfg(test)]

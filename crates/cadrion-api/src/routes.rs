@@ -36,6 +36,8 @@ pub fn router(state: AppState) -> Router {
         .route("/v1/fab/check", post(fab_check))
         .route("/v1/engine", post(engine))
         .route("/v1/schema", post(schema))
+        .route("/v1/robot/gen", post(robot_gen))
+        .route("/v1/robot/validate", post(robot_validate))
         .route("/v1/sdf/sample", post(sdf_sample))
         .route("/v1/snapshot", post(snapshot))
         .route("/v1/parts/search", post(parts_search))
@@ -352,6 +354,47 @@ async fn schema(
 }
 
 #[derive(Debug, Deserialize)]
+struct RobotBody {
+    path: String,
+    #[serde(default)]
+    out: Option<String>,
+    #[serde(default)]
+    srdf: Option<bool>,
+    #[serde(default)]
+    sdf: Option<bool>,
+}
+
+async fn robot_gen(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<RobotBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let path = resolve_path(&st, &body.path)?;
+    let mut args = json!({"op": "gen", "path": path});
+    if let Some(out) = body.out {
+        args["out"] = json!(resolve_out_path(&st, &out));
+    }
+    if let Some(srdf) = body.srdf {
+        args["srdf"] = json!(srdf);
+    }
+    if let Some(sdf) = body.sdf {
+        args["sdf"] = json!(sdf);
+    }
+    call_tool("robot", &args)
+}
+
+async fn robot_validate(
+    State(st): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<RobotBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    auth(&st, &headers)?;
+    let path = resolve_path(&st, &body.path)?;
+    call_tool("robot", &json!({"op": "validate", "path": path}))
+}
+
+#[derive(Debug, Deserialize)]
 struct SdfBody {
     prim: String,
     a: f64,
@@ -545,7 +588,7 @@ async fn run_job(st: AppState, id: String, kind: String, payload: Value) {
 
     let result = match kind.as_str() {
         "build" | "inspect_refs" | "snapshot" | "measure" | "inspect_dims" | "align_check"
-        | "frame" | "export" | "fab_check" => {
+        | "frame" | "export" | "fab_check" | "robot" => {
             let path = payload.get("path").and_then(|p| p.as_str()).map(|p| {
                 if std::path::Path::new(p).is_absolute() {
                     p.to_string()

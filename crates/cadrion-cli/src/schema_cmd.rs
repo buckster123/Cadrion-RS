@@ -155,6 +155,11 @@ mod tests {
             .unwrap()
             .iter()
             .any(|n| n == "schema"));
+        assert!(v["mcp"]["tool_names"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|n| n == "robot"));
         assert_eq!(v["api"]["openapi"], "3.1.0");
         assert!(v["errors"]["count"].as_u64().unwrap() >= 20);
     }

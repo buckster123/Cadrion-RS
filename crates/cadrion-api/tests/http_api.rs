@@ -41,6 +41,8 @@ async fn health_and_openapi() {
     assert!(v["paths"]["/v1/fab/check"].is_object());
     assert!(v["paths"]["/v1/engine"].is_object());
     assert!(v["paths"]["/v1/schema"].is_object());
+    assert!(v["paths"]["/v1/robot/gen"].is_object());
+    assert!(v["paths"]["/v1/robot/validate"].is_object());
 }
 
 fn mcp_payload(v: &serde_json::Value) -> serde_json::Value {
@@ -387,4 +389,40 @@ async fn engine_info_and_schema_faces() {
     let v: serde_json::Value = api.json();
     assert_eq!(v["api"]["openapi"], "3.1.0");
     assert!(v["api"]["paths"]["/v1/engine"].is_object());
+}
+
+fn simple_arm_json() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/robots/simple_arm.robot.json")
+}
+
+#[tokio::test]
+async fn robot_gen_and_validate_simple_arm() {
+    let dir = tempfile::tempdir().unwrap();
+    let server = TestServer::new(app()).unwrap();
+    let gen = server
+        .post("/v1/robot/gen")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({
+            "path": simple_arm_json().display().to_string(),
+            "out": dir.path().display().to_string()
+        }))
+        .await;
+    gen.assert_status_ok();
+    let p = mcp_payload(&gen.json());
+    assert_eq!(p["ok"], true);
+    assert_eq!(p["inertial_invented"], false);
+    assert!(dir.path().join("simple_arm.urdf").is_file());
+
+    let val = server
+        .post("/v1/robot/validate")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({
+            "path": simple_arm_json().display().to_string()
+        }))
+        .await;
+    val.assert_status_ok();
+    let v = mcp_payload(&val.json());
+    assert_eq!(v["ok"], true);
+    assert_eq!(v["wrote"], false);
+    assert_eq!(v["inertial_invented"], false);
 }

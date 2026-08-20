@@ -246,3 +246,6 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-20** — **H5-7 dialect bite:** pin float→IR f64 and `STDLIB_SYMBOLS` via goldens.
   `STDLIB_DEPTH.md` cone row corrected (OCCT Unsupported, not cylinder). OQ-2 **partial** —
   user modules still open. Default next **H5-8**.
+- **2026-08-21** — **H5-8 robot:** MCP `robot` (`op=gen|validate`) + `/v1/robot/gen` /
+  `/validate`. `simple_arm` green. Validate does not write. Inertials required (not invented).
+  Default next **H5-9**.

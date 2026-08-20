@@ -20,6 +20,7 @@ cadrion-render = { workspace = true }
 cadrion-parts = { workspace = true }
 cadrion-sdf = { workspace = true }
 cadrion-fab = { workspace = true }
+cadrion-robot = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
