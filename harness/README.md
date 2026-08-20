@@ -25,9 +25,10 @@ cargo run -p cadrion-cli -- harness run --suite agent10 \
 
 # Real agent: your process must write $CADRION_HARNESS_PART from the prompt alone.
 # Do not read CADRION_HARNESS_TASK_FILE for solutions (oracle only).
-export CADRION_BIN="$(pwd)/target/debug/cadrion"
+export CADRION_BIN="$(pwd)/target/release/cadrion"
+export CADRION_HARNESS_MODEL_ID="qwen3.8-27b-ud-q6_k"
 cargo run -p cadrion-cli -- harness run --suite agent10 \
-  --cmd 'my-agent-runner' --timeout 600 --json
+  --cmd 'python3 harness/drivers/openai_starlark.py' --timeout 600 --json
 ```
 
 ### Env vars (each loop)

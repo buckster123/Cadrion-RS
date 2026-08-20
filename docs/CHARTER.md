@@ -219,3 +219,6 @@ Dated entries. A decision changes here first, then in the code.
   Checksummed fetch remains a later packaging slice.
 - **2026-08-20** — **H4-3 HTTP catch-up:** `/v1/inspect/measure`, `/v1/inspect/dims`,
   `/v1/sdf/sample` wrap the H3-3 MCP tools. Faces stay co-equal (D5). SDF remains secondary.
+- **2026-08-20** — **H3-2 live harness:** fair `openai_starlark` vs Qwen3.8-27B UD-Q6_K on
+  verified DE RTX 6000 Ada (Vast 48237851). Score **4.0/10** (target ≥6). Published
+  `harness/scores/h3-2-2026-08-20-qwen38-27b-q6.json`. No invented pass.

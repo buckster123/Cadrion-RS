@@ -145,16 +145,16 @@ Three pillars:
 5. Default next = next unchecked H3-N  
 6. Truck work must cite bid G-criteria in PR  
 
-**Default next if “cook on” with no pref:** **H3-2** when a *healthy* router backend exists.
-Otherwise cook [`docs/HORIZON4.md`](HORIZON4.md). Horizon-3 cook list is complete except H3-2
-(H3-10 closed 2026-08-19; backends still down 2026-08-20).
+**Default next if “cook on” with no pref:** next Horizon-4 follow-up, or a second live harness if you want ≥6.
+Otherwise cook [`docs/HORIZON4.md`](HORIZON4.md). Horizon-3 cook list is complete
+(H3-2 published 2026-08-20: **4.0/10**, below ≥6 — not invented).
 
 ---
 
 ## 7. Checklist
 
 - [x] **H3-1** Honesty pass (cone + fences + truck naming)  
-- [ ] **H3-2** Live harness frontier score *(blocked: backends still down 2026-08-20)*  
+- [x] **H3-2** Live harness frontier score — 4.0/10 Qwen3.8-27B Q6 (2026-08-20; miss ≥6)  
 - [x] **H3-3** MCP surface depth  
 - [x] **H3-4** Assembly / OQ-4 bite  
 - [x] **H3-5** PMI → viewer overlay  

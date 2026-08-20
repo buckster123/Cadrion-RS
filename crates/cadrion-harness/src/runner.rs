@@ -77,22 +77,37 @@ pub fn run_suite(suite: &str, opts: &RunOpts) -> Result<Scorecard, String> {
     let mut card =
         Scorecard::from_tasks(suite, mode, results, started.elapsed().as_millis() as u64);
     if let Some(live) = &opts.live {
-        let model = if live.cmd.trim() == "@oracle" {
-            "oracle:in-process"
-        } else if live.cmd.contains("oracle_agent") {
-            "oracle:python"
-        } else {
-            "external-cmd"
-        };
+        let model = live_model_id(&live.cmd);
         card = card.with_provenance(live.cmd.clone(), model);
         if live.cmd.trim() == "@oracle" || live.cmd.contains("oracle_agent") {
             card = card
                 .with_note("oracle cheats via task file — plumbing/control only, not an LLM score");
         }
+        if let Ok(note) = std::env::var("CADRION_HARNESS_NOTES") {
+            let note = note.trim();
+            if !note.is_empty() {
+                card = card.with_note(note);
+            }
+        }
     } else {
         card = card.with_provenance("", "scripted-builtin");
     }
     Ok(card)
+}
+
+/// Live `model_id`: oracle markers, else `$CADRION_HARNESS_MODEL_ID`, else `external-cmd`.
+fn live_model_id(cmd: &str) -> String {
+    if cmd.trim() == "@oracle" {
+        return "oracle:in-process".into();
+    }
+    if cmd.contains("oracle_agent") {
+        return "oracle:python".into();
+    }
+    std::env::var("CADRION_HARNESS_MODEL_ID")
+        .ok()
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty())
+        .unwrap_or_else(|| "external-cmd".into())
 }
 
 fn find_task_file(root: &Path, id_prefix: &str) -> Result<PathBuf, String> {
@@ -443,5 +458,29 @@ mod tests {
         assert!(card.meets_target, "live score {}/10", card.score_over_10);
         assert_eq!(card.mode, "live");
         assert_eq!(card.total, 10);
+    }
+
+    #[test]
+    fn live_model_id_oracle_and_env() {
+        let prev = std::env::var("CADRION_HARNESS_MODEL_ID").ok();
+        std::env::remove_var("CADRION_HARNESS_MODEL_ID");
+        assert_eq!(live_model_id("@oracle"), "oracle:in-process");
+        assert_eq!(
+            live_model_id("python3 harness/drivers/oracle_agent.py"),
+            "oracle:python"
+        );
+        assert_eq!(
+            live_model_id("python3 harness/drivers/openai_starlark.py"),
+            "external-cmd"
+        );
+        std::env::set_var("CADRION_HARNESS_MODEL_ID", "unit-test-model");
+        assert_eq!(
+            live_model_id("python3 harness/drivers/openai_starlark.py"),
+            "unit-test-model"
+        );
+        match prev {
+            Some(v) => std::env::set_var("CADRION_HARNESS_MODEL_ID", v),
+            None => std::env::remove_var("CADRION_HARNESS_MODEL_ID"),
+        }
     }
 }
