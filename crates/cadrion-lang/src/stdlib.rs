@@ -16,6 +16,29 @@ use starlark::values::{UnpackValue, Value};
 
 use crate::ir::{BooleanKind, IrBuilder, IrNode, NodeId};
 
+/// Frozen stdlib function names (H5-7 / OQ-2). `CENTER` is a module global, not a fn.
+pub const STDLIB_SYMBOLS: &[&str] = &[
+    "box",
+    "chamfer",
+    "cone",
+    "cut",
+    "cylinder",
+    "fillet",
+    "intersect",
+    "linear_pattern",
+    "mirror",
+    "params",
+    "polar_pattern",
+    "print",
+    "rotate",
+    "rotate_z",
+    "solid",
+    "sphere",
+    "translate",
+    "union",
+    "union_all",
+];
+
 /// Evaluation side-channel: IR builder + param overrides.
 #[derive(Debug)]
 pub struct EvalStore {

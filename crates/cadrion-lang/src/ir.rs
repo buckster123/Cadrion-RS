@@ -94,6 +94,15 @@ impl FeatureIr {
     pub fn node_count(&self) -> usize {
         self.nodes.len()
     }
+
+    /// Pretty JSON used by dialect goldens (H5-7). serde_json default f64.
+    pub fn golden_json(&self) -> String {
+        let mut s = serde_json::to_string_pretty(self).expect("FeatureIr serializes");
+        if !s.ends_with('\n') {
+            s.push('\n');
+        }
+        s
+    }
 }
 
 /// In-evaluation builder.

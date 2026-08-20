@@ -29,6 +29,7 @@ pub use eval::{evaluate, EvalMeta, EvalOptions, EvalResult};
 pub use execute::execute_ir;
 pub use ir::{BooleanKind, FeatureIr, IrNode, NodeId, IR_VERSION};
 pub use migrate::{migrate_build123d_skeleton, MigrateReport};
+pub use stdlib::STDLIB_SYMBOLS;
 
 /// Crate version.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

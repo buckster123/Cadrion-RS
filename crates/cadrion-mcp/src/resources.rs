@@ -17,6 +17,11 @@ pub fn list_resources(project_root: &Path) -> Value {
         ),
         res("cadrion://doc/stdlib", "Stdlib depth (H2)", "text/markdown"),
         res(
+            "cadrion://doc/dialect",
+            "Starlark dialect pin (H5-7 / OQ-2)",
+            "text/markdown",
+        ),
+        res(
             "cadrion://doc/viewer",
             "Viewer gcode/robot (H5)",
             "text/markdown",
@@ -186,6 +191,7 @@ fn doc_body(id: &str, project_root: &Path) -> Result<String, ToolError> {
     let file = match id {
         "status" => Some("docs/STATUS.md"),
         "stdlib" => Some("docs/STDLIB_DEPTH.md"),
+        "dialect" => Some("docs/DIALECT.md"),
         "viewer" => Some("docs/VIEWER.md"),
         "slicer-dfm" => Some("docs/SLICER_DFM.md"),
         "fillet" => Some("docs/FILLET_CHAMFER.md"),

@@ -18,7 +18,7 @@ resources/read  { "uri": "cadrion://doc/status" }
 
 | URI prefix | Role |
 |------------|------|
-| `cadrion://doc/*` | doctrine markdown (STATUS, STDLIB, VIEWER, SLICER_DFM, FILLET, policy, schema) |
+| `cadrion://doc/*` | doctrine markdown (STATUS, STDLIB, DIALECT, VIEWER, SLICER_DFM, FILLET, policy, schema) |
 | `cadrion://artifact/index` | scan under `CADRION_PROJECT` / cwd |
 | `cadrion://artifact/file/<rel>` | read artifact (path-escape refused) |
 
