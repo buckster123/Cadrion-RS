@@ -39,6 +39,7 @@ async fn health_and_openapi() {
     assert!(v["paths"]["/v1/sdf/sample"].is_object());
     assert!(v["paths"]["/v1/export"].is_object());
     assert!(v["paths"]["/v1/fab/check"].is_object());
+    assert!(v["paths"]["/v1/fab/gcode-check"].is_object());
     assert!(v["paths"]["/v1/engine"].is_object());
     assert!(v["paths"]["/v1/schema"].is_object());
     assert!(v["paths"]["/v1/robot/gen"].is_object());
@@ -374,6 +375,10 @@ fn plate_flat_json() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/fab/plate.flat.json")
 }
 
+fn sample_gcode() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../examples/fab/sample.gcode")
+}
+
 #[tokio::test]
 async fn fab_check_plate_and_unknown_profile() {
     let server = TestServer::new(app()).unwrap();
@@ -390,6 +395,16 @@ async fn fab_check_plate_and_unknown_profile() {
     assert_eq!(p["printer_start"], false);
     assert_eq!(p["report"]["profile_id"], "sendcutsend.laser");
     assert_eq!(p["report"]["profile_version"], "1.0.0");
+
+    let gcode = server
+        .post("/v1/fab/gcode-check")
+        .add_header("Authorization", "Bearer test-token")
+        .json(&json!({"path": sample_gcode().display().to_string()}))
+        .await;
+    gcode.assert_status_ok();
+    let g = mcp_payload(&gcode.json());
+    assert_eq!(g["ok"], true, "{g}");
+    assert_eq!(g["printer_start"], false);
 
     let bad = server
         .post("/v1/fab/check")

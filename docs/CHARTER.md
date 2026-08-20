@@ -268,3 +268,5 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-21** — **H6-2 viewer_open:** MCP + `/v1/viewer/open`. Default `once=true`
   (no accept loop). `once=false` is `CADRION-E-VIEW`. Not wgpu / not interactive CAD.
   Default next **H6-3**.
+- **2026-08-21** — **H6-3 gcode_check:** MCP + `/v1/fab/gcode-check`. Static flavor/bbox/temp.
+  Payload `printer_start: false`. Not a slicer. Default next **H6-4**.

@@ -180,7 +180,7 @@ PR. New `CADRION-E-*` codes go in `ERROR_CATALOG` in the same PR as the first em
 4. Tick this checklist + `BACKLOG.md` on merge
 5. Default next = next unchecked H6-N
 
-**Default next if “cook on” with no pref:** **H6-3**.
+**Default next if “cook on” with no pref:** **H6-4**.
 
 ---
 
@@ -188,7 +188,7 @@ PR. New `CADRION-E-*` codes go in `ERROR_CATALOG` in the same PR as the first em
 
 - [x] **H6-1** CLI + MCP/HTTP parts search \| fetch \| lock
 - [x] **H6-2** MCP/HTTP viewer_open
-- [ ] **H6-3** MCP/HTTP gcode_check
+- [x] **H6-3** MCP/HTTP gcode_check
 - [ ] **H6-4** MCP/HTTP fab_slice
 - [ ] **H6-5** MCP/HTTP printer status + dry-run
 - [ ] **H6-6** MCP/HTTP printer_start (D10)

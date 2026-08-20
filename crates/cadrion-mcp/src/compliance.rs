@@ -50,6 +50,7 @@ pub const TOOL_NAMES: &[&str] = &[
     "robot",
     "parts",
     "viewer_open",
+    "gcode_check",
 ];
 
 #[cfg(test)]
