@@ -237,3 +237,6 @@ Dated entries. A decision changes here first, then in the code.
 - **2026-08-20** — **H5-5 engine + schema:** MCP `engine` / `schema` + `/v1/engine` /
   `/v1/schema`. Install stays fail-closed (`CADRION-E-ENGINE-MISSING`, no tarball).
   MCP schema dumps mcp/errors; clap CLI remains `cadrion schema`. Default next **H5-6**.
+- **2026-08-20** — **H5-6 MCP prompts:** `prompts/list` ships `cadrion-loop`,
+  `write-source-policy`, `hermetic-load`. `prompts/get` returns the text. Not a fourth
+  face. Default next **H5-7**.

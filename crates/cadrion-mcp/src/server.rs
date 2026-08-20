@@ -4,6 +4,7 @@ use std::io::{self, BufReader, Write};
 
 use serde_json::{json, Value};
 
+use crate::prompts::{get_prompt, list_prompts};
 use crate::protocol::{read_message, write_message, JsonRpcRequest, JsonRpcResponse};
 use crate::resources::{list_resources, read_resource};
 use crate::tools::{call_tool, tool_defs};
@@ -63,7 +64,8 @@ pub fn dispatch(req: JsonRpcRequest) -> Option<JsonRpcResponse> {
                 "protocolVersion": crate::compliance::PROTOCOL_VERSION,
                 "capabilities": {
                     "tools": {},
-                    "resources": {}
+                    "resources": {},
+                    "prompts": {}
                 },
                 "serverInfo": {
                     "name": "cadrion",
@@ -110,7 +112,15 @@ pub fn dispatch(req: JsonRpcRequest) -> Option<JsonRpcResponse> {
                 Err(e) => Some(JsonRpcResponse::err(id, -32004, e.to_string())),
             }
         }
-        "prompts/list" => Some(JsonRpcResponse::ok(id, json!({ "prompts": [] }))),
+        "prompts/list" => Some(JsonRpcResponse::ok(id, list_prompts())),
+        "prompts/get" => {
+            let params = req.params.unwrap_or(Value::Null);
+            let name = params.get("name").and_then(|v| v.as_str()).unwrap_or("");
+            match get_prompt(name) {
+                Ok(result) => Some(JsonRpcResponse::ok(id, result)),
+                Err(e) => Some(JsonRpcResponse::err(id, -32602, e)),
+            }
+        }
         other => {
             if id.is_some() {
                 Some(JsonRpcResponse::err(
